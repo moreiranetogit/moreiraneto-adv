@@ -36,7 +36,7 @@ export default function NewsTicker({ noticias }: NewsTickerProps) {
 
       {/* Rótulo fixo à esquerda */}
       <Link
-        href="/despacho"
+        href="/noticias-e-opinioes"
         className="flex-shrink-0 bg-gray-900 text-[#E8941F] font-black text-xs uppercase tracking-wider px-4 h-full flex items-center hover:bg-gray-800 transition-colors whitespace-nowrap"
       >
         📰 Despacho MNA
@@ -57,7 +57,7 @@ export default function NewsTicker({ noticias }: NewsTickerProps) {
             <span key={idx} className="flex items-center">
               {noticia.slug ? (
                 <Link
-                  href={`/despacho/artigo/${noticia.slug}`}
+                  href={`/noticias-e-opinioes/artigo/${noticia.slug}`}
                   className="text-xs font-medium hover:text-gray-900 transition-colors cursor-pointer px-2"
                 >
                   {noticia.title}
@@ -74,7 +74,7 @@ export default function NewsTicker({ noticias }: NewsTickerProps) {
 
       {/* Link "ver mais" fixo à direita */}
       <Link
-        href="/despacho"
+        href="/noticias-e-opinioes"
         className="flex-shrink-0 bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold px-3 h-full flex items-center transition-colors whitespace-nowrap"
       >
         Ver mais →

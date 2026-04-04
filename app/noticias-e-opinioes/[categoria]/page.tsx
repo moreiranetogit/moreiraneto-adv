@@ -86,7 +86,7 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
             {articles.map((article: Article) => (
               <Link
                 key={article.id}
-                href={`/despacho/artigo/${article.slug ?? article.id}`}
+                href={`/noticias-e-opinioes/artigo/${article.slug ?? article.id}`}
                 className="news-card block group"
               >
                 {article.image_url ? (
@@ -130,7 +130,7 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
           {totalPages > 1 && (
             <div className="flex justify-center gap-2">
               {page > 1 && (
-                <Link href={`/despacho/${categoria}?page=${page - 1}`}
+                <Link href={`/noticias-e-opinioes/${categoria}?page=${page - 1}`}
                   className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                   style={{
                     background: 'var(--color-surface)',
@@ -145,7 +145,7 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
                 {page} / {totalPages}
               </span>
               {page < totalPages && (
-                <Link href={`/despacho/${categoria}?page=${page + 1}`}
+                <Link href={`/noticias-e-opinioes/${categoria}?page=${page + 1}`}
                   className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                   style={{
                     background: color,

@@ -72,7 +72,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
         {/* Footer */}
         <div className="px-5 py-4 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-          <Link href="/despacho"
+          <Link href="/noticias-e-opinioes"
             className="flex items-center gap-2 text-xs transition-colors mb-3"
             style={{ color: 'rgba(255,255,255,0.5)' }}>
             ← Ver portal público

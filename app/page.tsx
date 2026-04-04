@@ -141,9 +141,9 @@ export default async function HomePage() {
             <a href="#areas"   className="text-gray-400 hover:text-white transition-colors">Áreas</a>
             <a href="#sobre"   className="text-gray-400 hover:text-white transition-colors">Sobre</a>
             <a href="#contato" className="text-gray-400 hover:text-white transition-colors">Contato</a>
-            <Link href="/despacho"
+            <Link href="/noticias-e-opinioes"
               className="text-gray-400 hover:text-amber-400 transition-colors">
-              Despacho
+              Notícias e Opiniões
             </Link>
             <Link href="/amaa"
               className="text-gray-400 hover:text-emerald-400 transition-colors">
@@ -272,7 +272,7 @@ export default async function HomePage() {
             >
               {/* Overlay escuro */}
               <div className="absolute inset-0 pointer-events-none"
-                style={{ background: 'linear-gradient(135deg, rgba(13, 13, 13, 0.8) 0%, rgba(13, 13, 13, 0.5) 100%)' }}
+                style={{ background: 'linear-gradient(180deg, rgba(13, 13, 13, 0.92) 0%, rgba(13, 13, 13, 0.7) 100%)' }}
               />
               <div className="relative z-10">
                 <div className="text-2xl mb-4">{AREAS[0].icone}</div>
@@ -307,7 +307,7 @@ export default async function HomePage() {
                   {/* Overlay escuro para legibilidade */}
                   {bgImage && (
                     <div className="absolute inset-0 pointer-events-none"
-                      style={{ background: 'linear-gradient(135deg, rgba(13, 13, 13, 0.8) 0%, rgba(13, 13, 13, 0.5) 100%)' }}
+                      style={{ background: 'linear-gradient(180deg, rgba(13, 13, 13, 0.92) 0%, rgba(13, 13, 13, 0.7) 100%)' }}
                     />
                   )}
                   <div className="relative z-10">
@@ -372,10 +372,10 @@ export default async function HomePage() {
                   style={{ backgroundColor: '#14532d' }}>
                   🐾 Conheça a AMAA
                 </Link>
-                <Link href="/despacho"
+                <Link href="/noticias-e-opinioes"
                   className="text-sm font-semibold transition-colors"
                   style={{ color: '#E8941F' }}>
-                  Portal Despacho →
+                  Portal de Notícias →
                 </Link>
               </div>
             </div>
@@ -410,14 +410,14 @@ export default async function HomePage() {
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] mb-2"
                 style={{ color: '#E8941F' }}>Portal de notícias jurídicas</p>
-              <h2 className="text-2xl md:text-3xl font-black text-white mb-2">Despacho, por MNA</h2>
+              <h2 className="text-2xl md:text-3xl font-black text-white mb-2">Notícias e Opiniões</h2>
               <p className="text-sm leading-relaxed max-w-lg" style={{ color: '#6b7280' }}>
                 Notícias jurídicas curadas pelo escritório. Direito Agrário, Civil, Trabalhista,
                 Família e mais — com foco no que interessa ao sudoeste do Paraná.
               </p>
             </div>
             <Link
-              href="/despacho"
+              href="/noticias-e-opinioes"
               className="flex-shrink-0 text-sm font-bold px-6 py-3 rounded-xl transition-colors whitespace-nowrap"
               style={{ backgroundColor: '#E8941F', color: '#fff' }}
             >
@@ -628,7 +628,7 @@ export default async function HomePage() {
                   { href: '#areas',     label: 'Áreas de atuação' },
                   { href: '#sobre',     label: 'Sobre o escritório' },
                   { href: '#contato',   label: 'Contato' },
-                  { href: '/despacho',  label: 'Portal Despacho', next: true },
+                  { href: '/noticias-e-opinioes',  label: 'Portal Despacho', next: true },
                   { href: '/amaa',      label: 'AMAA — Adoção Animal', next: true },
                 ].map(item => (
                   <li key={item.href}>
@@ -670,7 +670,7 @@ export default async function HomePage() {
               © {new Date().getFullYear()} Moreira Neto Advocacia · Realeza/PR · OAB/PR
             </p>
             <p className="text-xs" style={{ color: '#374151' }}>
-              <Link href="/despacho" className="hover:text-amber-400 transition-colors">Portal Despacho</Link>
+              <Link href="/noticias-e-opinioes" className="hover:text-amber-400 transition-colors">Portal Despacho</Link>
               {' · '}
               <Link href="/amaa" className="hover:text-emerald-400 transition-colors">AMAA</Link>
               {' · '}

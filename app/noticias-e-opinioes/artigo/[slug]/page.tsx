@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════════════════════
 // Página de Artigo Individual — Portal Despacho
-// moreiraneto.adv.br/despacho/artigo/[slug]
+// moreiraneto.adv.br/noticias-e-opinioes/artigo/[slug]
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { createClient } from '@/lib/supabase/server'
@@ -120,12 +120,12 @@ export default async function ArtigoPage({ params }: Params) {
 
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm mb-6" style={{ color: 'var(--color-muted)' }}>
-          <Link href="/despacho" className="hover:text-accent transition-colors">
+          <Link href="/noticias-e-opinioes" className="hover:text-accent transition-colors">
             Despacho
           </Link>
           <span>/</span>
           <Link
-            href={`/despacho/${artigo.category}`}
+            href={`/noticias-e-opinioes/${artigo.category}`}
             className="hover:text-accent transition-colors"
           >
             {categoryLabel}
@@ -249,7 +249,7 @@ export default async function ArtigoPage({ params }: Params) {
                 )}
               </div>
               <Link
-                href={`/despacho/${artigo.category}`}
+                href={`/noticias-e-opinioes/${artigo.category}`}
                 className="hover:opacity-80 transition-opacity text-xs font-semibold"
                 style={{ color: 'var(--color-accent)' }}
               >
@@ -278,7 +278,7 @@ export default async function ArtigoPage({ params }: Params) {
                   {relacionados.map(rel => (
                     <Link
                       key={rel.id}
-                      href={`/despacho/artigo/${rel.slug}`}
+                      href={`/noticias-e-opinioes/artigo/${rel.slug}`}
                       className="group flex gap-3 items-start"
                     >
                       {rel.image_url && (
@@ -308,7 +308,7 @@ export default async function ArtigoPage({ params }: Params) {
                   ))}
                 </div>
                 <Link
-                  href={`/despacho/${artigo.category}`}
+                  href={`/noticias-e-opinioes/${artigo.category}`}
                   className="block mt-4 text-xs font-semibold text-center transition-colors hover:opacity-70"
                   style={{ color: 'var(--color-accent)' }}
                 >
@@ -341,7 +341,7 @@ export default async function ArtigoPage({ params }: Params) {
                 Notícias jurídicas selecionadas para o sudoeste paranaense.
               </p>
               <Link
-                href="/despacho"
+                href="/noticias-e-opinioes"
                 className="block text-xs font-semibold transition-colors"
                 style={{ color: 'var(--color-accent)' }}
               >

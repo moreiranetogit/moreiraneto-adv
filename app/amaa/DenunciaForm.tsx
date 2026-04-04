@@ -319,12 +319,4 @@ export default function DenunciaForm() {
         disabled={formState === 'sending'}
         className="w-full bg-red-600 hover:bg-red-700 disabled:bg-red-300 text-white font-black py-4 rounded-xl transition-colors text-base"
       >
-        {formState === 'sending' ? '⏳ Enviando...' : '🚨 Registrar Denúncia'}
-      </button>
-
-      <p className="text-xs text-gray-400 text-center">
-        Todas as denúncias são tratadas com sigilo. Em emergência, ligue <strong>190</strong> (PM) ou <strong>0800 041 2897</strong> (Polícia Ambiental).
-      </p>
-    </form>
-  )
-}
+        {formState ===

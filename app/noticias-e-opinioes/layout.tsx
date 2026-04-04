@@ -54,7 +54,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
           <div className="flex items-center justify-between h-14">
 
             {/* Logo + Nome */}
-            <Link href="/despacho" className="flex items-center gap-3">
+            <Link href="/noticias-e-opinioes" className="flex items-center gap-3">
               {/* Monograma MN */}
               <div className="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-black"
                 style={{ background: 'rgba(232,148,31,0.2)', border: '1px solid rgba(232,148,31,0.4)' }}>
@@ -64,11 +64,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
               <div>
                 <span className="font-black text-base tracking-tight"
                   style={{ color: 'var(--header-text)' }}>
-                  Despacho
-                </span>
-                <span className="text-xs ml-1.5 font-medium"
-                  style={{ color: '#E8941F' }}>
-                  por MNA
+                  Notícias e Opiniões
                 </span>
               </div>
             </Link>
@@ -76,11 +72,11 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             {/* Nav desktop */}
             <nav className="hidden md:flex items-center gap-1">
               <Link
-                href="/despacho"
+                href="/noticias-e-opinioes"
                 className="px-3 py-1.5 rounded text-sm font-medium transition-colors"
                 style={{
-                  color: pathname === '/despacho' ? '#E8941F' : 'rgba(255,255,255,0.7)',
-                  background: pathname === '/despacho' ? 'rgba(232,148,31,0.1)' : 'transparent',
+                  color: pathname === '/noticias-e-opinioes' ? '#E8941F' : 'rgba(255,255,255,0.7)',
+                  background: pathname === '/noticias-e-opinioes' ? 'rgba(232,148,31,0.1)' : 'transparent',
                 }}
               >
                 Início
@@ -88,11 +84,11 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
               {CATEGORIES.map(([slug, label]) => (
                 <Link
                   key={slug}
-                  href={`/despacho/${slug}`}
+                  href={`/noticias-e-opinioes/${slug}`}
                   className="px-3 py-1.5 rounded text-sm font-medium transition-colors"
                   style={{
-                    color: pathname === `/despacho/${slug}` ? '#E8941F' : 'rgba(255,255,255,0.7)',
-                    background: pathname === `/despacho/${slug}` ? 'rgba(232,148,31,0.1)' : 'transparent',
+                    color: pathname === `/noticias-e-opinioes/${slug}` ? '#E8941F' : 'rgba(255,255,255,0.7)',
+                    background: pathname === `/noticias-e-opinioes/${slug}` ? 'rgba(232,148,31,0.1)' : 'transparent',
                   }}
                 >
                   {label.replace('Direito ', '')}
@@ -142,13 +138,13 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         {menuOpen && (
           <div className="md:hidden border-t" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
             <div className="px-4 py-2 flex flex-col gap-1">
-              <Link href="/despacho" onClick={() => setMenuOpen(false)}
+              <Link href="/noticias-e-opinioes" onClick={() => setMenuOpen(false)}
                 className="py-2 px-3 rounded text-sm font-medium"
                 style={{ color: 'rgba(255,255,255,0.8)' }}>
                 Início
               </Link>
               {CATEGORIES.map(([slug, label]) => (
-                <Link key={slug} href={`/despacho/${slug}`} onClick={() => setMenuOpen(false)}
+                <Link key={slug} href={`/noticias-e-opinioes/${slug}`} onClick={() => setMenuOpen(false)}
                   className="py-2 px-3 rounded text-sm font-medium"
                   style={{ color: 'rgba(255,255,255,0.8)' }}>
                   {label}

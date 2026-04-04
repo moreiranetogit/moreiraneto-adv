@@ -58,7 +58,7 @@ function NewsCard({ article, size = 'md' }: { article: Article; size?: 'lg' | 'm
   const isSm = size === 'sm'
 
   return (
-    <Link href={`/despacho/artigo/${article.slug ?? article.id}`} className="news-card block group">
+    <Link href={`/noticias-e-opinioes/artigo/${article.slug ?? article.id}`} className="news-card block group">
       {/* Imagem */}
       {!isSm && (
         <div className="relative overflow-hidden"
@@ -166,7 +166,7 @@ export default async function PortalHomePage() {
                   {label}
                 </h2>
               </div>
-              <Link href={`/despacho/${cat}`}
+              <Link href={`/noticias-e-opinioes/${cat}`}
                 className="text-xs font-semibold hover:underline"
                 style={{ color: color }}>
                 Ver todas →

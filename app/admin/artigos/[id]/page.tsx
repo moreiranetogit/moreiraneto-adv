@@ -251,7 +251,7 @@ export default function ArtigoRevisaoPage() {
 
             {artigo.status === 'published' && artigo.slug && (
               <a
-                href={`/despacho/artigo/${artigo.slug}`}
+                href={`/noticias-e-opinioes/artigo/${artigo.slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full text-center border border-orange-300 text-orange-600 hover:bg-orange-50 font-semibold py-2.5 rounded-xl text-sm transition-colors"
@@ -267,14 +267,4 @@ export default function ArtigoRevisaoPage() {
             <p><span className="font-medium text-gray-600">ID:</span> {artigo.id.slice(0, 8)}...</p>
             <p><span className="font-medium text-gray-600">Slug:</span> {artigo.slug ?? '—'}</p>
             <p><span className="font-medium text-gray-600">Fonte:</span> {artigo.source_name ?? '—'}</p>
-            <p><span className="font-medium text-gray-600">Leituras:</span> {artigo.read_count}</p>
-            <p><span className="font-medium text-gray-600">Criado:</span>{' '}
-              {format(new Date(artigo.created_at), "d MMM yyyy", { locale: ptBR })}
-            </p>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  )
-}
+            <p><span className="font-medium text-gray-600">Leituras:</span

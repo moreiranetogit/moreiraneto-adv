@@ -61,10 +61,4 @@ export default function AnimalStatusActions({ animalId, currentStatus }: Props) 
     return (
       <button onClick={() => update('published')} disabled={loading !== null}
         className={`${btnBase} w-full border border-emerald-300 text-emerald-700 hover:bg-emerald-50`}>
-        {loading === 'published' ? '...' : '↩ Republicar'}
-      </button>
-    )
-  }
-
-  return null
-}
+        {loading === 'published' ? '...' 
