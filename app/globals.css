@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TEMAS: light | dark | sepia
+   Controlados pelo atributo data-theme no <html>
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root,
+[data-theme="light"] {
+  --color-bg:        #F4F6F9;
+  --color-surface:   #FFFFFF;
+  --color-surface2:  #F3F4F6;
+  --color-border:    #E5E7EB;
+  --color-text:      #111827;
+  --color-muted:     #6B7280;
+  --color-accent:    #E8941F;
+  --color-accent-dk: #C47A10;
+
+  /* Portal header */
+  --header-bg:       #1F2937;
+  --header-text:     #FFFFFF;
+
+  /* Cards de notícias */
+  --card-hover-shadow: 0 8px 24px rgba(0,0,0,0.10);
+}
+
+[data-theme="dark"] {
+  --color-bg:        #0D0D0F;
+  --color-surface:   #18181B;
+  --color-surface2:  #27272A;
+  --color-border:    #3F3F46;
+  --color-text:      #F4F4F5;
+  --color-muted:     #A1A1AA;
+  --color-accent:    #E8941F;
+  --color-accent-dk: #FFA83E;
+
+  --header-bg:       #09090B;
+  --header-text:     #F4F4F5;
+  --card-hover-shadow: 0 8px 24px rgba(0,0,0,0.40);
+}
+
+[data-theme="sepia"] {
+  --color-bg:        #F5EFE6;
+  --color-surface:   #FDF6EC;
+  --color-surface2:  #F0E8D8;
+  --color-border:    #D4C5A9;
+  --color-text:      #2D1B0E;
+  --color-muted:     #7D6650;
+  --color-accent:    #C47A10;
+  --color-accent-dk: #A36208;
+
+  --header-bg:       #2D1B0E;
+  --header-text:     #FDF6EC;
+  --card-hover-shadow: 0 8px 24px rgba(45,27,14,0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UTILITÁRIOS DE TEMA
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.bg-surface    { background-color: var(--color-surface); }
+.bg-surface2   { background-color: var(--color-surface2); }
+.border-theme  { border-color: var(--color-border); }
+.text-muted    { color: var(--color-muted); }
+.text-accent   { color: var(--color-accent); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PORTAL — NEWS CARD
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.news-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.news-card:hover {
+  box-shadow: var(--card-hover-shadow);
+  transform: translateY(-2px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PORTAL — CATEGORY BADGE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ADMIN PANEL
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.admin-sidebar {
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  width: 240px;
+  min-height: 100vh;
+  padding: 24px 0;
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  border-radius: 0;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.admin-nav-item:hover {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+
+.admin-nav-item.active {
+  background: rgba(232,148,31,0.15);
+  color: #E8941F;
+  border-left-color: #E8941F;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STATUS BADGES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.status-pending   { background: #FEF3C7; color: #92400E; }
+.status-published { background: #D1FAE5; color: #065F46; }
+.status-rejected  { background: #FEE2E2; color: #991B1B; }
+.status-adopted   { background: #DBEAFE; color: #1E40AF; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLLBAR CUSTOMIZADA (dark mode)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="dark"] ::-webkit-scrollbar { width: 6px; height: 6px; }
+[data-theme="dark"] ::-webkit-scrollbar-track { background: #18181b; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 3px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PRINT — Oculta elementos desnecessários
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media print {
+  .no-print { display: none !important; }
+  .admin-sidebar { display: none !important; }
+}
