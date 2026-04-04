@@ -70,7 +70,6 @@ export async function generateArticleImage(
 
     const parts = result.response.candidates?.[0]?.content?.parts ?? []
     for (const part of parts) {
-      // @ts-expect-error — inlineData é retornado mas não tipado ainda
       if (part.inlineData?.data) {
         const mimeType = part.inlineData.mimeType ?? 'image/png'
         return `data:${mimeType};base64,${part.inlineData.data}`
