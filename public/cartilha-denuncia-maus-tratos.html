@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartilha: Como Denunciar Maus-Tratos a Animais — AMAA + MNA</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --verde:       #2D6A4F;
+      --verde-claro: #52B788;
+      --verde-bg:    #D8F3DC;
+      --laranja:     #E8941F;
+      --laranja-bg:  #FFF3E0;
+      --cinza-esc:   #1F2937;
+      --cinza:       #4B5563;
+      --cinza-med:   #9CA3AF;
+      --cinza-clr:   #F3F4F6;
+      --amaa-pink:   #D81B60;
+      --amaa-blue:   #039BE5;
+      --branco:      #FFFFFF;
+      --vermelho:    #B91C1C;
+    }
+
+    html { font-size: 13px; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #dde5df;
+      color: var(--cinza-esc);
+      line-height: 1.5;
+    }
+
+    /* PÁGINA A4 */
+    .pagina {
+      width: 210mm;
+      background: var(--branco);
+      margin: 20px auto;
+      box-shadow: 0 4px 28px rgba(0,0,0,0.18);
+      overflow: hidden;
+    }
+
+    /* ── CABEÇALHO ────────────────────────────────────────────── */
+    .header {
+      background: var(--verde);
+      display: grid;
+      grid-template-columns: 1fr 200px;
+      gap: 0;
+      min-height: 130px;
+    }
+
+    .header-left {
+      padding: 18px 22px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .header-top-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .logo-amaa {
+      width: 62px;
+      height: 62px;
+      background: white;
+      border-radius: 50%;
+      padding: 3px;
+      object-fit: contain;
+      flex-shrink: 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    }
+
+    .header-brand .assoc {
+      font-size: 8.5px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.72);
+      font-weight: 500;
+    }
+
+    .header-brand h1 {
+      font-size: 17px;
+      font-weight: 900;
+      color: white;
+      line-height: 1.15;
+      margin-top: 2px;
+    }
+
+    .header-brand .subtitle {
+      font-size: 9.5px;
+      color: rgba(255,255,255,0.82);
+      margin-top: 3px;
+    }
+
+    .header-mna {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,0,0,0.15);
+      padding: 6px 10px;
+      border-radius: 8px;
+      margin-top: 2px;
+      width: fit-content;
+    }
+
+    .mna-badge {
+      width: 24px;
+      height: 24px;
+      background: var(--laranja);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: white;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .header-mna-text {
+      font-size: 9px;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.5;
+    }
+
+    .header-mna-text strong {
+      display: block;
+      color: white;
+      font-size: 10px;
+    }
+
+    /* Imagem capa no header */
+    .header-img {
+      width: 200px;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+
+    /* Faixa de acento laranja */
+    .accent-bar {
+      height: 5px;
+      background: linear-gradient(90deg, var(--laranja) 0%, #F59E0B 100%);
+    }
+
+    /* ── CORPO ────────────────────────────────────────────────── */
+    .body {
+      padding: 16px 22px 18px;
+    }
+
+    /* INTRO */
+    .intro-box {
+      background: var(--verde-bg);
+      border-left: 5px solid var(--verde);
+      border-radius: 0 8px 8px 0;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+
+    .intro-box p {
+      font-size: 11px;
+      color: var(--cinza-esc);
+      line-height: 1.6;
+    }
+
+    .intro-box strong { color: var(--verde); }
+
+    /* SECTION TITLE */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 8px;
+      margin-top: 14px;
+    }
+
+    .section-title .icon {
+      width: 26px;
+      height: 26px;
+      background: var(--verde);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .section-title h2 {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--verde);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* TIPOS DE MAUS-TRATOS */
+    .tipos-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      margin-bottom: 13px;
+    }
+
+    .tipo-card {
+      background: var(--cinza-clr);
+      border: 1.5px solid #E5E7EB;
+      border-radius: 7px;
+      padding: 7px 6px;
+      text-align: center;
+    }
+
+    .tipo-card .emoji { font-size: 18px; display: block; margin-bottom: 3px; }
+    .tipo-card .nome { font-size: 9px; font-weight: 700; color: var(--verde); display: block; line-height: 1.2; margin-bottom: 2px; }
+    .tipo-card .desc { font-size: 8px; color: var(--cinza); line-height: 1.3; }
+
+    /* LEI SANSÃO */
+    .lei-box {
+      background: var(--laranja-bg);
+      border: 1.5px solid var(--laranja);
+      border-radius: 8px;
+      padding: 9px 12px;
+      margin-bottom: 13px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .lei-box .lei-icon { font-size: 24px; flex-shrink: 0; margin-top: 1px; }
+
+    .lei-box .lei-text h3 { font-size: 10.5px; font-weight: 800; color: #92400E; margin-bottom: 2px; }
+    .lei-box .lei-text p { font-size: 9.5px; color: #78350F; line-height: 1.5; }
+
+    .lei-box .lei-text .penas { display: flex; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
+    .pena-chip { background: var(--laranja); color: white; font-size: 8.5px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+
+    /* ── PASSO A PASSO COM IMAGEM ─────────────────────────────── */
+    .passos-section {
+      display: grid;
+      grid-template-columns: 1fr 160px;
+      gap: 12px;
+      margin-bottom: 13px;
+      align-items: start;
+    }
+
+    .passos-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+
+    .passo {
+      display: flex;
+      gap: 7px;
+      background: var(--branco);
+      border: 1.5px solid #E5E7EB;
+      border-radius: 7px;
+      padding: 7px 8px;
+      align-items: flex-start;
+    }
+
+    .passo-num {
+      width: 21px;
+      height: 21px;
+      background: var(--verde);
+      color: white;
+      border-radius: 50%;
+      font-size: 10px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .passo-content h4 { font-size: 9.5px; font-weight: 700; color: var(--cinza-esc); margin-bottom: 1px; }
+    .passo-content p { font-size: 8px; color: var(--cinza); line-height: 1.35; }
+
+    .passos-img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+    }
+
+    /* PROVAS */
+    .provas-box {
+      background: #EFF6FF;
+      border: 1.5px solid #BFDBFE;
+      border-radius: 8px;
+      padding: 9px 12px;
+      margin-bottom: 13px;
+    }
+
+    .provas-box h3 { font-size: 10.5px; font-weight: 800; color: #1D4ED8; margin-bottom: 6px; }
+
+    .provas-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+
+    .prova-item { display: flex; align-items: center; gap: 4px; font-size: 9px; color: #1E40AF; }
+    .prova-item::before { content: "✓"; font-weight: 800; color: #1D4ED8; flex-shrink: 0; }
+
+    /* ── CONTATOS COM IMAGEM ──────────────────────────────────── */
+    .contatos-section {
+      margin-bottom: 13px;
+    }
+
+    .contatos-header {
+      background: var(--vermelho);
+      color: white;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 0;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 6px 6px 0 0;
+    }
+
+    .contatos-body {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      border: 1.5px solid var(--vermelho);
+      border-top: none;
+      border-radius: 0 0 6px 6px;
+      overflow: hidden;
+    }
+
+    .contatos-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      min-height: 90px;
+    }
+
+    .contatos-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      background: #FFF1F2;
+    }
+
+    .contato-item {
+      padding: 6px 4px;
+      text-align: center;
+      border-right: 1px solid #FCA5A5;
+    }
+
+    .contato-item:last-child { border-right: none; }
+
+    .contato-item .emoji { font-size: 16px; display: block; margin-bottom: 2px; }
+    .contato-item .numero { font-size: 10.5px; font-weight: 800; color: var(--vermelho); display: block; }
+    .contato-item .orgao { font-size: 7.5px; font-weight: 700; color: var(--cinza-esc); display: block; margin-top: 1px; }
+    .contato-item .desc { font-size: 7px; color: var(--cinza); line-height: 1.3; margin-top: 1px; }
+
+    /* FAIXA AMAA */
+    .amaa-faixa {
+      background: linear-gradient(135deg, var(--amaa-pink) 0%, #AD1457 50%, var(--amaa-blue) 100%);
+      border-radius: 8px;
+      padding: 9px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .amaa-faixa img { width: 46px; height: 46px; border-radius: 50%; background: white; padding: 2px; object-fit: contain; flex-shrink: 0; }
+
+    .amaa-faixa-text { flex: 1; }
+    .amaa-faixa-text h3 { font-size: 11px; font-weight: 800; color: white; margin-bottom: 2px; }
+    .amaa-faixa-text p { font-size: 9px; color: rgba(255,255,255,0.9); line-height: 1.4; }
+
+    .amaa-faixa-contact { text-align: right; flex-shrink: 0; }
+    .amaa-faixa-contact .label { font-size: 7.5px; color: rgba(255,255,255,0.7); display: block; }
+    .amaa-faixa-contact .url { font-size: 9.5px; font-weight: 700; color: white; display: block; }
+
+    /* RODAPÉ */
+    .footer {
+      background: var(--cinza-esc);
+      padding: 7px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer p { font-size: 7.5px; color: var(--cinza-med); line-height: 1.5; }
+    .footer a { color: var(--laranja); text-decoration: none; }
+
+    /* BOTÃO IMPRESSÃO */
+    .print-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--verde);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(45,106,79,0.4);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 999;
+      transition: background 0.2s;
+    }
+
+    .print-btn:hover { background: #1E4D38; }
+
+    @media print {
+      body { background: white; }
+      .print-btn { display: none !important; }
+      .pagina { width: 100%; margin: 0; box-shadow: none; }
+      @page { size: A4; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+
+  <div class="pagina">
+
+    <!-- ══ CABEÇALHO COM IMAGEM CAPA ════════════════════════════ -->
+    <div class="header">
+      <div class="header-left">
+        <div class="header-top-row">
+          <img class="logo-amaa" src="/amaa-logo-web.png" alt="Logo AMAA">
+          <div class="header-brand">
+            <span class="assoc">Associação Melhores Amigos dos Animais — AMAA</span>
+            <h1>Como Denunciar<br>Maus-Tratos a Animais</h1>
+            <span class="subtitle">Guia Prático para Cidadãos · Realeza/PR</span>
+          </div>
+        </div>
+        <div class="header-mna">
+          <div class="mna-badge">M</div>
+          <div class="header-mna-text">
+            <strong>Moreira Neto Advocacia</strong>
+            Apoio Jurídico AMAA · Realeza/PR<br>
+            moreiraneto.adv.br
+          </div>
+        </div>
+      </div>
+      <img class="header-img" src="/amaa-capa-web.jpg" alt="Proteção animal — AMAA">
+    </div>
+    <div class="accent-bar"></div>
+
+    <!-- ══ CORPO ═════════════════════════════════════════════════ -->
+    <div class="body">
+
+      <!-- INTRO -->
+      <div class="intro-box">
+        <p><strong>Maus-tratos a animais é crime!</strong> A <strong>Lei Sansão (Lei nº 14.064/2020)</strong> e a Lei nº 9.605/98 garantem proteção jurídica a todos os animais. Qualquer cidadão pode e deve denunciar — você não precisa ser dono do animal para agir.</p>
+      </div>
+
+      <!-- TIPOS DE MAUS-TRATOS -->
+      <div class="section-title">
+        <div class="icon">⚠️</div>
+        <h2>O que caracteriza maus-tratos</h2>
+      </div>
+
+      <div class="tipos-grid">
+        <div class="tipo-card">
+          <span class="emoji">🥊</span>
+          <span class="nome">Violência Física</span>
+          <span class="desc">Bater, chutar, açoitar, torturar ou mutilar</span>
+        </div>
+        <div class="tipo-card">
+          <span class="emoji">🍽️</span>
+          <span class="nome">Privação</span>
+          <span class="desc">Negar água, comida ou abrigo adequados</span>
+        </div>
+        <div class="tipo-card">
+          <span class="emoji">⛓️</span>
+          <span class="nome">Confinamento Cruel</span>
+          <span class="desc">Correntes curtas, sem espaço ou abrigo</span>
+        </div>
+        <div class="tipo-card">
+          <span class="emoji">🏥</span>
+          <span class="nome">Abandono Médico</span>
+          <span class="desc">Negar atendimento a animal doente</span>
+        </div>
+        <div class="tipo-card">
+          <span class="emoji">🚗</span>
+          <span class="nome">Abandono</span>
+          <span class="desc">Largar o animal na rua ou em lugar ermos</span>
+        </div>
+        <div class="tipo-card">
+          <span class="emoji">☀️</span>
+          <span class="nome">Exposição Extrema</span>
+          <span class="desc">Sem sombra no calor ou abrigo no frio</span>
+        </div>
+        <div class="tipo-card">
+          <span class="emoji">🎭</span>
+          <span class="nome">Rinhas e Lutas</span>
+          <span class="desc">Promoção de brigas de galos e similares</span>
+        </div>
+        <div class="tipo-card">
+          <span class="emoji">🐾</span>
+          <span class="nome">Envenenamento</span>
+          <span class="desc">Intoxicação dolosa de animais</span>
+        </div>
+      </div>
+
+      <!-- LEI SANSÃO -->
+      <div class="lei-box">
+        <div class="lei-icon">⚖️</div>
+        <div class="lei-text">
+          <h3>Lei Sansão (Lei nº 14.064/2020) — Penas Severas para Cães e Gatos</h3>
+          <p>Abusos, maus-tratos, ferimentos ou mutilação de cães e gatos resultam em penas agravadas em relação à Lei de Crimes Ambientais.</p>
+          <div class="penas">
+            <span class="pena-chip">🔒 Reclusão 2 a 5 anos</span>
+            <span class="pena-chip">💸 Multa</span>
+            <span class="pena-chip">⚠️ Agravante se ocorrer morte</span>
+            <span class="pena-chip">📋 Lei 9.605/98 Art. 32 (demais animais)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASSO A PASSO COM IMAGEM -->
+      <div class="section-title">
+        <div class="icon">📋</div>
+        <h2>Como denunciar — passo a passo</h2>
+      </div>
+
+      <div class="passos-section">
+        <div class="passos-grid">
+          <div class="passo">
+            <div class="passo-num">1</div>
+            <div class="passo-content">
+              <h4>📸 Registre evidências</h4>
+              <p>Fotografe ou filme o animal e o local sem se aproximar de forma arriscada. Data e hora ficam salvas automaticamente.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-num">2</div>
+            <div class="passo-content">
+              <h4>📍 Anote o endereço</h4>
+              <p>Rua, número, bairro, ponto de referência e nome do responsável (se souber).</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-num">3</div>
+            <div class="passo-content">
+              <h4>📞 Acione a autoridade</h4>
+              <p>Polícia Militar (190), Polícia Ambiental (0800 041 2897) ou AMAA diretamente.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-num">4</div>
+            <div class="passo-content">
+              <h4>📝 Registre o B.O.</h4>
+              <p>Na Delegacia ou online: <strong>delegaciavirtual.pr.gov.br</strong>. O B.O. é essencial para o processo.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-num">5</div>
+            <div class="passo-content">
+              <h4>🏛️ Fale com o Município</h4>
+              <p>A Prefeitura pode apreender o animal em situação de risco imediato via Vigilância Sanitária.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-num">6</div>
+            <div class="passo-content">
+              <h4>🐾 Acione a AMAA</h4>
+              <p>A AMAA tem rede de voluntários e experiência em casos de Realeza e região.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-num">7</div>
+            <div class="passo-content">
+              <h4>👁️ Acompanhe o caso</h4>
+              <p>Guarde o número do B.O. e monitore o desfecho. Se não houver resposta, insista.</p>
+            </div>
+          </div>
+          <div class="passo">
+            <div class="passo-num">8</div>
+            <div class="passo-content">
+              <h4>⚖️ Apoio Jurídico</h4>
+              <p>Em casos graves, o MP pode ser acionado. Moreira Neto Advocacia oferece orientação às denúncias encaminhadas pela AMAA.</p>
+            </div>
+          </div>
+        </div>
+        <!-- Imagem ilustrativa do passo a passo -->
+        <img class="passos-img" src="/amaa-passos-web.jpg" alt="Passo a passo: foto, ligação, documento">
+      </div>
+
+      <!-- PROVAS -->
+      <div class="provas-box">
+        <h3>📁 Que provas colher para fortalecer a denúncia</h3>
+        <div class="provas-list">
+          <div class="prova-item">Fotos/vídeos com data e hora</div>
+          <div class="prova-item">Depoimento de testemunhas</div>
+          <div class="prova-item">Laudos veterinários</div>
+          <div class="prova-item">Print de publicações em redes</div>
+          <div class="prova-item">Histórico de B.O.s anteriores</div>
+          <div class="prova-item">Notas de moradores/vizinhos</div>
+        </div>
+      </div>
+
+      <!-- CONTATOS COM IMAGEM DOS ÍCONES -->
+      <div class="contatos-section">
+        <div class="contatos-header">🚨 Contatos de Emergência — Denúncia de Maus-Tratos</div>
+        <div class="contatos-body">
+          <img class="contatos-img" src="/amaa-contatos-web.jpg" alt="Ícones de canais de denúncia">
+          <div class="contatos-grid">
+            <div class="contato-item">
+              <span class="emoji">🚔</span>
+              <span class="numero">190</span>
+              <span class="orgao">Polícia Militar</span>
+              <span class="desc">Emergências e flagrante</span>
+            </div>
+            <div class="contato-item">
+              <span class="emoji">🌿</span>
+              <span class="numero">0800 041 2897</span>
+              <span class="orgao">Polícia Ambiental PR</span>
+              <span class="desc">24h — crimes ambientais</span>
+            </div>
+            <div class="contato-item">
+              <span class="emoji">🏛️</span>
+              <span class="numero">156</span>
+              <span class="orgao">Prefeitura</span>
+              <span class="desc">Vigilância Sanitária</span>
+            </div>
+            <div class="contato-item">
+              <span class="emoji">⚖️</span>
+              <span class="numero">MPPR</span>
+              <span class="orgao">Ministério Público</span>
+              <span class="desc">Casos graves ou omissão</span>
+            </div>
+            <div class="contato-item">
+              <span class="emoji">🐾</span>
+              <span class="numero">AMAA</span>
+              <span class="orgao">Melhores Amigos</span>
+              <span class="desc">Realeza/PR — voluntários</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAIXA AMAA -->
+      <div class="amaa-faixa">
+        <img src="/amaa-logo-web.png" alt="AMAA">
+        <div class="amaa-faixa-text">
+          <h3>AMAA — Associação Melhores Amigos dos Animais de Realeza/PR</h3>
+          <p>Resgate, cuidado, adoção responsável e proteção legal. Denuncie, adote, apoie a causa animal.</p>
+        </div>
+        <div class="amaa-faixa-contact">
+          <span class="label">Portal</span>
+          <span class="url">moreiraneto.adv.br/amaa</span>
+          <span class="label" style="margin-top:4px;">Apoio jurídico</span>
+          <span class="url">moreiraneto.adv.br</span>
+        </div>
+      </div>
+
+    </div><!-- /body -->
+
+    <!-- RODAPÉ -->
+    <div class="footer">
+      <p>
+        Material educativo: <strong style="color:#E5E7EB">AMAA — Associação Melhores Amigos dos Animais de Realeza/PR</strong> +
+        <strong style="color:#E5E7EB">Moreira Neto Advocacia</strong> · <a href="https://moreiraneto.adv.br">moreiraneto.adv.br</a>
+      </p>
+      <p style="text-align:right;">
+        Lei nº 9.605/1998 · Lei nº 14.064/2020 (Lei Sansão) · Reprodução livre para fins educativos
+      </p>
+    </div>
+
+  </div><!-- /pagina -->
+
+</body>
+</html>
