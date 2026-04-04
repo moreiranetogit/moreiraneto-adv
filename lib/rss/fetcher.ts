@@ -88,6 +88,7 @@ export async function fetchAllSources(): Promise<{
         if (existing) { skipped++; continue }
 
         // Extrai ou gera imagem
+        // @ts-ignore
         let imageUrl = extractImageUrl(item as Record<string, unknown>)
 
         if (!imageUrl) {
