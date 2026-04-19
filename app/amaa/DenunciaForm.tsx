@@ -20,6 +20,20 @@ const TIPOS_ABUSO = [
 
 type FormState = 'idle' | 'sending' | 'success' | 'error'
 
+function sanitizeText(value: string, maxLength: number): string {
+  return value.trim().slice(0, maxLength)
+}
+
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
+const ALLOWED_TIPOS = new Set([
+  'Violência física', 'Privação de alimento/água', 'Confinamento cruel',
+  'Abandono', 'Falta de atendimento veterinário', 'Exposição a extremos climáticos',
+  'Envenenamento', 'Rinha / briga forçada', 'Outros',
+])
+
 export default function DenunciaForm() {
   const supabase = createClient()
 
@@ -43,44 +57,61 @@ export default function DenunciaForm() {
       return
     }
 
+    const tiposValidos = tiposSelecionados.filter(t => ALLOWED_TIPOS.has(t))
+    if (tiposValidos.length === 0) {
+      setErrorMsg('Tipo de abuso inválido.')
+      return
+    }
+
     setFormState('sending')
     setErrorMsg('')
 
     const fd = new FormData(e.currentTarget)
 
-    const payload = {
-      endereco:      fd.get('endereco') as string,
-      bairro:        (fd.get('bairro') as string) || null,
-      cidade:        (fd.get('cidade') as string) || 'Realeza',
-      estado:        'PR',
-      tipo_animal:   fd.get('tipo_animal') as string,
-      qtd_animais:   (fd.get('qtd_animais') as string) || null,
-      tipo_abuso:    tiposSelecionados,
-      descricao:     fd.get('descricao') as string,
-      frequencia:    (fd.get('frequencia') as string) || null,
-      suspeito_desc: (fd.get('suspeito_desc') as string) || null,
-      anonima,
-      contato_nome:  anonima ? null : (fd.get('contato_nome') as string) || null,
-      contato_tel:   anonima ? null : (fd.get('contato_tel') as string) || null,
-      contato_email: anonima ? null : (fd.get('contato_email') as string) || null,
-      status:        'nova',
-    }
-
-    const { data, error } = await supabase
-      .from('denuncias')
-      .insert(payload)
-      .select('id')
-      .single()
-
-    if (error || !data) {
-      setFormState('error')
-      setErrorMsg('Erro ao enviar denúncia. Tente novamente ou ligue para a AMAA.')
+    const contatoEmail = anonima ? null : sanitizeText((fd.get('contato_email') as string) || '', 254)
+    if (contatoEmail && !isValidEmail(contatoEmail)) {
+      setFormState('idle')
+      setErrorMsg('E-mail inválido.')
       return
     }
 
-    // Protocolo simplificado: 6 chars do UUID
-    setProtocolo(data.id.slice(0, 8).toUpperCase())
-    setFormState('success')
+    const payload = {
+      endereco:      sanitizeText(fd.get('endereco') as string, 500),
+      bairro:        sanitizeText((fd.get('bairro') as string) || '', 100) || null,
+      cidade:        sanitizeText((fd.get('cidade') as string) || 'Realeza', 100),
+      estado:        'PR',
+      tipo_animal:   sanitizeText(fd.get('tipo_animal') as string, 50),
+      qtd_animais:   sanitizeText((fd.get('qtd_animais') as string) || '', 100) || null,
+      tipo_abuso:    tiposValidos,
+      descricao:     sanitizeText(fd.get('descricao') as string, 2000),
+      frequencia:    sanitizeText((fd.get('frequencia') as string) || '', 50) || null,
+      suspeito_desc: sanitizeText((fd.get('suspeito_desc') as string) || '', 500) || null,
+      anonima,
+      contato_nome:  anonima ? null : sanitizeText((fd.get('contato_nome') as string) || '', 150) || null,
+      contato_tel:   anonima ? null : sanitizeText((fd.get('contato_tel') as string) || '', 20) || null,
+      contato_email: contatoEmail || null,
+      status:        'nova',
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('denuncias')
+        .insert(payload)
+        .select('id')
+        .single()
+
+      if (error || !data) {
+        setFormState('error')
+        setErrorMsg('Erro ao enviar denúncia. Tente novamente ou ligue para a AMAA.')
+        return
+      }
+
+      setProtocolo(data.id.slice(0, 8).toUpperCase())
+      setFormState('success')
+    } catch {
+      setFormState('error')
+      setErrorMsg('Erro inesperado. Tente novamente ou ligue para a AMAA.')
+    }
   }
 
   // ── Estado de sucesso ──────────────────────────────────────────────────

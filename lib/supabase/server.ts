@@ -35,10 +35,16 @@ export async function createClient() {
  * Usar apenas em Route Handlers e Server Actions privilegiados.
  */
 export function createAdminClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !serviceRoleKey) {
+    throw new Error(
+      'Variáveis de ambiente obrigatórias não configuradas: ' +
+        [!url && 'NEXT_PUBLIC_SUPABASE_URL', !serviceRoleKey && 'SUPABASE_SERVICE_ROLE_KEY']
+          .filter(Boolean)
+          .join(', ')
+    )
+  }
   const { createClient } = require('@supabase/supabase-js')
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { autoRefreshToken: false, persistSession: false } }
-  )
+  return createClient(url, serviceRoleKey, { auth: { autoRefreshToken: false, persistSession: false } })
 }

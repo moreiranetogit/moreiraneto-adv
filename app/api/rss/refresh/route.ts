@@ -19,9 +19,11 @@ export async function GET(req: NextRequest) {
   try {
     // Verificar secret (proteção básica contra uso não autorizado)
     const secret = req.nextUrl.searchParams.get('secret')
-    const expectedSecret = process.env.CRON_SECRET || 'dev'
-
-    if (secret !== expectedSecret) {
+    if (!process.env.CRON_SECRET) {
+      console.error('[RSS Refresh] CRON_SECRET não configurado!')
+      return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+    }
+    if (secret !== process.env.CRON_SECRET) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 

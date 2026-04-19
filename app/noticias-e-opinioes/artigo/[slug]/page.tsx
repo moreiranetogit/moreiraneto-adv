@@ -4,6 +4,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { createClient } from '@/lib/supabase/server'
+import DOMPurify from 'isomorphic-dompurify'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { formatDistanceToNow, format } from 'date-fns'
@@ -82,14 +83,21 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 function renderContent(content: string | null): string {
   if (!content) return ''
-  // Se já vier com HTML (ex: de RSS), retorna direto
-  if (content.startsWith('<')) return content
-  // Senão, quebra em parágrafos
-  return content
-    .split('\n\n')
-    .filter(Boolean)
-    .map(p => `<p class="mb-4">${p.replace(/\n/g, '<br>')}</p>`)
-    .join('')
+  let html: string
+  if (content.startsWith('<')) {
+    html = content
+  } else {
+    html = content
+      .split('\n\n')
+      .filter(Boolean)
+      .map(p => `<p class="mb-4">${p.replace(/\n/g, '<br>')}</p>`)
+      .join('')
+  }
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['p','br','strong','b','em','i','u','a','blockquote','h2','h3','h4','ul','ol','li','figure','figcaption','img','span','div','table','thead','tbody','tr','th','td','sub','sup'],
+    ALLOWED_ATTR: ['href','title','target','rel','src','alt','class','width','height'],
+    ALLOW_DATA_ATTR: false,
+  })
 }
 
 // ── Página ──────────────────────────────────────────────────────────────────
