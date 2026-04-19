@@ -78,10 +78,17 @@ vercel
 - [x] `app/admin/amaa/page.tsx` + `AnimalFormModal.tsx` + `AnimalStatusActions.tsx` ✅
 
 ### 🟡 Importante (próximos passos)
-- [ ] `app/admin/fontes/page.tsx` — Gerenciamento de fontes RSS
-- [ ] `app/admin/usuarios/page.tsx` — Criação/gerenciamento de usuários
-- [ ] `app/admin/denuncias/page.tsx` — Visualização de denúncias recebidas
-- [ ] `vercel.json` — Configuração de cron job para RSS automático
+- [x] `app/admin/fontes/page.tsx` — Gerenciamento de fontes RSS ✅
+- [x] `app/admin/usuarios/page.tsx` — Criação/gerenciamento de usuários ✅
+- [x] `app/admin/denuncias/page.tsx` — Visualização de denúncias recebidas ✅
+- [x] `vercel.json` — Configuração de cron job para RSS automático ✅
+- [x] `app/api/rss/refresh/route.ts` — Sincronização automática de RSS ✅
+- [x] Sistema de Interesse de Adoção (modal + API + banco) ✅
+  - `app/amaa/AdoptionInterestModal.tsx` — Formulário com validação de CPF ✅
+  - `app/api/amaa/adoption-interests/route.ts` — Endpoint POST + WhatsApp fallback ✅
+  - `supabase/migrations/001_create_adoption_interests.sql` — Schema + RLS ✅
+  - `SISTEMA_INTERESSE_ADOCAO.md` — Documentação completa ✅
+- [ ] Painel admin para gerenciar interesses: `app/admin/amaa/interests/page.tsx`
 - [ ] Página de erro 404 personalizada (`app/not-found.tsx`)
 - [ ] Upload de fotos de animais via Supabase Storage (já tem bucket configurado no schema)
 - [ ] Atualizar número de WhatsApp em `app/page.tsx` e `app/amaa/page.tsx` (buscar "46999999999")

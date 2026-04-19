@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: #F4F6F9; padding: 20px; display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+  .group { background: #fff; border-radius: 10px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); min-width: 140px; }
+  .label { font-size: 10px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .theme-swatch { display: flex; gap: 6px; margin-top: 8px; }
+  .ts { height: 28px; flex: 1; border-radius: 4px; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+</style></head>
+<body>
+  <div class="group">
+    <div class="label">Status Badges</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <span class="badge" style="background:#FEF3C7;color:#92400E;"><span class="dot" style="background:#92400E;"></span>Pendente</span>
+      <span class="badge" style="background:#D1FAE5;color:#065F46;"><span class="dot" style="background:#065F46;"></span>Publicado</span>
+      <span class="badge" style="background:#FEE2E2;color:#991B1B;"><span class="dot" style="background:#991B1B;"></span>Rejeitado</span>
+      <span class="badge" style="background:#DBEAFE;color:#1E40AF;"><span class="dot" style="background:#1E40AF;"></span>Adotado</span>
+    </div>
+  </div>
+  <div class="group">
+    <div class="label">Theme Modes</div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div class="theme-swatch">
+        <div class="ts" style="background:#F4F6F9;color:#111827;border:1px solid #e5e7eb;">Light</div>
+        <div class="ts" style="background:#0D0D0F;color:#F4F4F5;">Dark</div>
+        <div class="ts" style="background:#F5EFE6;color:#2D1B0E;">Sepia</div>
+      </div>
+      <div style="font-size:10px;color:#9CA3AF;margin-top:4px;">Accent: <span style="color:#E8941F;font-weight:700;">#E8941F</span> (all themes)</div>
+    </div>
+  </div>
+  <div class="group">
+    <div class="label">Category Badge</div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <span class="badge" style="background:#D1FAE5;color:#065F46;">Agrário</span>
+      <span class="badge" style="background:#DBEAFE;color:#1E40AF;">Civil</span>
+      <span class="badge" style="background:#FEF3C7;color:#92400E;">Trabalhista</span>
+      <span class="badge" style="background:#FEEAC7;color:#78350F;">Família</span>
+      <span class="badge" style="background:#FEF9C3;color:#854D0E;">Animal</span>
+      <span class="badge" style="background:#F3E8FF;color:#7C3AED;">Geral</span>
+    </div>
+  </div>
+</body></html>

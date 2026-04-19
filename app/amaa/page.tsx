@@ -1,395 +1,522 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// AMAA — Seção Pública: Adoção + Denúncia de Maus-Tratos
-// moreiraneto.adv.br/amaa
+// AMAA — Seção Pública: Adoção + Denúncia de Maus-Tratos (REDESENHO)
+// Style: Premium + Professional + Branco & Azul AMAA
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { createClient } from '@/lib/supabase/server'
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
-import type { Metadata } from 'next'
-import type { Animal } from '@/types'
-import DenunciaForm from './DenunciaForm'
+import { Menu, X, ChevronRight } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: 'AMAA — Adoção e Denúncia de Maus-Tratos | Realeza/PR',
-  description:
-    'Associação Melhores Amigos dos Animais de Realeza/PR. Adote um animal, denuncie maus-tratos e ajude a proteger os animais da nossa região.',
-  openGraph: {
-    title: 'AMAA — Melhores Amigos dos Animais · Realeza/PR',
-    description: 'Adote, denuncie e apoie a causa animal em Realeza/PR.',
-    url: 'https://moreiraneto.adv.br/amaa',
-    type: 'website',
-  },
+const COLORS = {
+  azulAMAA: '#2D6A4F',      // Verde/Azul da AMAA (primário)
+  azulEscuro: '#1B3A2E',    // Mais escuro para navbar
+  branco: '#FFFFFF',
+  cinzaClaro: '#F8F9FA',
+  cinzaMedio: '#666666',
+  cinzaEscuro: '#2C2C2C',
+  vermelho: '#DC2626',
+  verde: '#16A34A',
 }
 
-export const revalidate = 300 // revalida a cada 5 minutos
+const FONT_FAMILY = "'Sitka Text', Georgia, 'Times New Roman', serif"
 
-// ── Busca de animais disponíveis ────────────────────────────────────────────
-
-async function getAnimaisDisponiveis(): Promise<Animal[]> {
-  try {
-    const supabase = await createClient()
-    const { data, error } = await supabase
-      .from('animals')
-      .select('*')
-      .eq('status', 'published')
-      .order('urgencia', { ascending: false }) // urgente primeiro
-      .order('created_at', { ascending: false })
-      .limit(24)
-
-    if (error) throw error
-    return (data as Animal[]) ?? []
-  } catch {
-    return []
-  }
-}
-
-// ── Sub-componente: Card de animal ─────────────────────────────────────────
-
-function AnimalCard({ animal }: { animal: Animal }) {
-  const fotos = animal.fotos ?? []
-  const foto = fotos[0] ?? null
-
-  const urgenciaColor: Record<string, string> = {
-    critica:  'bg-red-100 text-red-700 border-red-200',
-    alta:     'bg-orange-100 text-orange-700 border-orange-200',
-    normal:   'bg-green-100 text-green-700 border-green-200',
-  }
-
-  const porteLabel: Record<string, string> = {
-    pequeno: 'Pequeno',
-    medio:   'Médio',
-    grande:  'Grande',
-  }
-
-  const sexoLabel: Record<string, string> = {
-    macho:  '♂ Macho',
-    femea:  '♀ Fêmea',
-  }
+export default function AmaaPage() {
+  const [menuAberto, setMenuAberto] = useState(false)
+  const [abaAtiva, setAbaAtiva] = useState<'adocao' | 'denuncia'>('adocao')
 
   return (
-    <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col">
-
-      {/* Foto */}
-      <div className="aspect-[4/3] bg-gray-100 relative">
-        {foto ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={foto} alt={animal.nome} className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-5xl">
-            {animal.especie === 'gato' ? '🐱' : '🐶'}
-          </div>
-        )}
-
-        {/* Badge urgência */}
-        {animal.urgencia && animal.urgencia !== 'normal' && (
-          <div className={`absolute top-2 left-2 text-xs font-bold px-2 py-0.5 rounded-full border ${urgenciaColor[animal.urgencia] ?? ''}`}>
-            {animal.urgencia === 'critica' ? '🚨 Urgente' : '⚡ Alta prioridade'}
-          </div>
-        )}
-
-        {/* Badge espécie */}
-        <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm text-xs font-semibold px-2 py-0.5 rounded-full text-gray-700">
-          {animal.especie === 'gato' ? '🐱 Gato' : animal.especie === 'cachorro' ? '🐶 Cachorro' : animal.especie}
-        </div>
-      </div>
-
-      {/* Dados */}
-      <div className="p-4 flex flex-col flex-1">
-        <h3 className="font-bold text-gray-900 text-lg mb-1">{animal.nome}</h3>
-
-        <div className="flex flex-wrap gap-1.5 mb-3">
-          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-            {sexoLabel[animal.sexo] ?? animal.sexo}
-          </span>
-          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-            {porteLabel[animal.porte] ?? animal.porte}
-          </span>
-          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-            {animal.idade_categoria}
-          </span>
-        </div>
-
-        <p className="text-sm text-gray-500 leading-relaxed flex-1 line-clamp-3">
-          {animal.descricao}
-        </p>
-
-        {/* Saúde */}
-        <div className="flex flex-wrap gap-1 mt-3">
-          {animal.castrado === 'sim' && (
-            <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">✓ Castrado</span>
-          )}
-          {animal.vacinado === 'sim' && (
-            <span className="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full">✓ Vacinado</span>
-          )}
-          {animal.microchip === 'sim' && (
-            <span className="text-xs bg-purple-50 text-purple-700 px-2 py-0.5 rounded-full">✓ Microchip</span>
-          )}
-        </div>
-
-        {/* CTA adoção */}
-        <a
-          href={`https://wa.me/5546999779865?text=Ol%C3%A1!+Tenho+interesse+em+adotar+o+${encodeURIComponent(animal.nome)}+🐾`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-4 w-full bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-sm text-center transition-colors"
-        >
-          💚 Quero adotar {animal.nome}
-        </a>
-      </div>
-    </div>
-  )
-}
-
-// ── Página principal ────────────────────────────────────────────────────────
-
-export default async function AmaaPage() {
-  const animais = await getAnimaisDisponiveis()
-  const cachorros = animais.filter(a => a.especie === 'cachorro')
-  const gatos = animais.filter(a => a.especie === 'gato')
-  const outros = animais.filter(a => a.especie !== 'cachorro' && a.especie !== 'gato')
-
-  return (
-    <main className="min-h-screen bg-gray-50">
-
-      {/* ── NAVBAR ──────────────────────────────────────────────────────── */}
-      <nav className="bg-emerald-900 border-b border-emerald-800 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
-          <div className="flex items-center gap-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/amaa-logo-web.png" alt="AMAA" className="w-9 h-9 rounded-2xl bg-white p-0.5 object-contain" />
-            <div>
-              <div className="text-white font-bold text-sm leading-tight">AMAA</div>
-              <div className="text-emerald-300 text-xs">Melhores Amigos dos Animais</div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <a href="#adocao" className="text-emerald-200 hover:text-white text-sm transition-colors">Adoção</a>
-            <a href="#denuncia" className="text-emerald-200 hover:text-white text-sm transition-colors">Denúncia</a>
-            <Link href="/" className="text-emerald-200 hover:text-white text-sm transition-colors">← MNA</Link>
-          </div>
-        </div>
-      </nav>
-
-      {/* ── HERO AMAA ───────────────────────────────────────────────────── */}
-      <section className="bg-emerald-900 relative overflow-hidden py-16">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute right-0 top-0 w-80 h-80 bg-emerald-400 rounded-full translate-x-1/3 -translate-y-1/3" />
-          <div className="absolute left-0 bottom-0 w-56 h-56 bg-emerald-400 rounded-full -translate-x-1/3 translate-y-1/3" />
-        </div>
-
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="max-w-2xl">
-            <div className="flex items-center gap-4 mb-6">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/amaa-logo-web.png" alt="Logo AMAA" className="h-20 w-auto rounded-2xl bg-white p-1.5 object-contain shadow-lg" />
-              <div>
-                <p className="text-emerald-300 text-sm font-semibold uppercase tracking-wider">Realeza/PR</p>
-                <h1 className="text-3xl md:text-4xl font-black text-white leading-tight">
-                  Associação Melhores<br />Amigos dos Animais
-                </h1>
+    <div
+      style={{
+        backgroundColor: COLORS.cinzaClaro,
+        color: COLORS.cinzaEscuro,
+        fontFamily: FONT_FAMILY,
+      }}
+    >
+      {/* ════════════════════════════════════════════════════════════════════ */}
+      {/* HEADER PREMIUM */}
+      {/* ════════════════════════════════════════════════════════════════════ */}
+      <header
+        style={{
+          backgroundColor: COLORS.azulEscuro,
+          borderBottom: `3px solid ${COLORS.azulAMAA}`,
+          boxShadow: '0 2px 12px rgba(0, 0, 0, 0.15)',
+        }}
+        className="sticky top-0 z-50"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex items-center gap-3">
+              <div
+                style={{ backgroundColor: COLORS.branco }}
+                className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg"
+              >
+                🐾
+              </div>
+              <div className="hidden sm:block">
+                <p style={{ color: COLORS.branco }} className="font-bold text-sm">
+                  AMAA
+                </p>
+                <p style={{ color: COLORS.azulAMAA }} className="text-xs leading-none">
+                  Melhores Amigos
+                </p>
               </div>
             </div>
 
-            <p className="text-emerald-100 text-lg mb-8 leading-relaxed">
-              Resgate, cuidado, adoção responsável e proteção legal dos animais de Realeza e região.
-              Adote um peludo, denuncie maus-tratos ou apoie nossa causa.
-            </p>
-
-            <div className="flex flex-wrap gap-3">
+            {/* Menu Desktop */}
+            <nav className="hidden md:flex items-center gap-8">
               <a
                 href="#adocao"
-                className="bg-white hover:bg-gray-100 text-emerald-900 font-bold px-6 py-3 rounded-xl transition-colors"
+                style={{ color: COLORS.branco }}
+                className="text-sm font-medium hover:text-gray-200 transition"
               >
-                🐾 Ver animais para adoção
+                Adoção
               </a>
               <a
                 href="#denuncia"
-                className="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-xl transition-colors"
+                style={{ color: COLORS.branco }}
+                className="text-sm font-medium hover:text-gray-200 transition"
               >
-                🚨 Denunciar maus-tratos
+                Denúncia
               </a>
-            </div>
-          </div>
-        </div>
-      </section>
+              <Link
+                href="/"
+                style={{ color: COLORS.branco }}
+                className="text-sm font-medium hover:text-gray-200 transition"
+              >
+                ← MNA
+              </Link>
+            </nav>
 
-      {/* ── CARTILHA BANNER ─────────────────────────────────────────────── */}
-      <div className="bg-amber-50 border-b border-amber-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-amber-800 text-sm">
-            📋 <strong>Saiba seus direitos:</strong> baixe nossa Cartilha sobre como denunciar maus-tratos a animais.
-          </p>
-          <a
-            href="/cartilha-denuncia-maus-tratos.html"
-            target="_blank"
-            className="flex-shrink-0 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold px-4 py-2 rounded-lg transition-colors"
-          >
-            Baixar Cartilha →
-          </a>
-        </div>
-      </div>
-
-      {/* ── SEÇÃO ADOÇÃO ────────────────────────────────────────────────── */}
-      <section id="adocao" className="py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-black text-gray-900">Animais para Adoção</h2>
-            <p className="text-gray-500 mt-3 max-w-xl mx-auto">
-              Todos os nossos animais são resgatados, castrados, vacinados e cuidados com muito amor.
-              Adote com responsabilidade — é para toda a vida! 🐾
-            </p>
+            {/* Menu Mobile */}
+            <button
+              onClick={() => setMenuAberto(!menuAberto)}
+              className="md:hidden"
+              style={{ color: COLORS.branco }}
+            >
+              {menuAberto ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
 
-          {animais.length === 0 ? (
-            <div className="text-center py-16">
-              <div className="text-6xl mb-4">🐾</div>
-              <h3 className="text-xl font-bold text-gray-700 mb-2">Nenhum animal disponível no momento</h3>
-              <p className="text-gray-500 text-sm mb-6">
-                Nossos animais encontraram lar! Mas sempre chegam novos — volte em breve
-                ou entre em contato com a AMAA para se cadastrar como adotante.
-              </p>
+          {/* Mobile Menu */}
+          {menuAberto && (
+            <div style={{ borderTop: `1px solid ${COLORS.azulAMAA}` }} className="md:hidden py-4 space-y-3">
               <a
-                href="https://wa.me/5546999779865?text=Ol%C3%A1!+Quero+me+cadastrar+como+adotante+na+AMAA"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-xl transition-colors"
+                href="#adocao"
+                style={{ color: COLORS.azulAMAA }}
+                className="block text-sm font-medium"
               >
-                📲 Cadastrar como adotante
+                🐾 Adoção
               </a>
-            </div>
-          ) : (
-            <div className="space-y-12">
-
-              {/* Cachorros */}
-              {cachorros.length > 0 && (
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <span>🐶</span> Cachorros ({cachorros.length})
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                    {cachorros.map(animal => (
-                      <AnimalCard key={animal.id} animal={animal} />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Gatos */}
-              {gatos.length > 0 && (
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <span>🐱</span> Gatos ({gatos.length})
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                    {gatos.map(animal => (
-                      <AnimalCard key={animal.id} animal={animal} />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Outros */}
-              {outros.length > 0 && (
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <span>🐾</span> Outros ({outros.length})
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                    {outros.map(animal => (
-                      <AnimalCard key={animal.id} animal={animal} />
-                    ))}
-                  </div>
-                </div>
-              )}
-
+              <a
+                href="#denuncia"
+                style={{ color: COLORS.vermelho }}
+                className="block text-sm font-medium"
+              >
+                🚨 Denúncia
+              </a>
+              <Link href="/" className="block text-sm font-medium" style={{ color: COLORS.cinzaMedio }}>
+                ← Voltar ao MNA
+              </Link>
             </div>
           )}
-
         </div>
-      </section>
+      </header>
 
-      {/* ── COMO FUNCIONA ADOÇÃO ────────────────────────────────────────── */}
-      <section className="py-12 bg-emerald-50 border-y border-emerald-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-2xl font-black text-emerald-900 mb-8">Como funciona a adoção?</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
-            {[
-              { num: '1', icon: '💚', titulo: 'Escolha', desc: 'Veja os animais disponíveis e se apaixone!' },
-              { num: '2', icon: '📲', titulo: 'Entre em contato', desc: 'Fale com a AMAA pelo WhatsApp.' },
-              { num: '3', icon: '🤝', titulo: 'Entrevista', desc: 'Conversamos para garantir o lar ideal para o animal.' },
-              { num: '4', icon: '🏠', titulo: 'Adoção!', desc: 'Bem-vindo ao lar! A AMAA acompanha o pós-adoção.' },
-            ].map(step => (
-              <div key={step.num} className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-emerald-700 text-white rounded-full flex items-center justify-center font-black text-lg mb-3">
-                  {step.num}
-                </div>
-                <div className="text-2xl mb-2">{step.icon}</div>
-                <h4 className="font-bold text-emerald-900">{step.titulo}</h4>
-                <p className="text-sm text-emerald-700 mt-1">{step.desc}</p>
-              </div>
-            ))}
+      {/* ════════════════════════════════════════════════════════════════════ */}
+      {/* HERO SECTION */}
+      {/* ════════════════════════════════════════════════════════════════════ */}
+      <section
+        style={{
+          background: `linear-gradient(135deg, ${COLORS.azulEscuro} 0%, ${COLORS.azulAMAA} 100%)`,
+          minHeight: '400px',
+        }}
+        className="flex items-center justify-center py-20"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="mb-8">
+            <img
+              src="/amaa-logo-web.png"
+              alt="Logo AMAA"
+              className="h-24 mx-auto mb-6 drop-shadow-lg"
+            />
+          </div>
+          <h1 style={{ color: COLORS.branco }} className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+            Associação Melhores Amigos dos Animais
+          </h1>
+          <p
+            style={{ color: '#E8F5E9' }}
+            className="text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
+          >
+            Resgate, cuidado, adoção responsável e proteção legal dos animais de Realeza e região.
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="#adocao"
+              style={{
+                backgroundColor: COLORS.branco,
+                color: COLORS.azulAMAA,
+              }}
+              className="inline-flex items-center justify-center font-bold px-8 py-3 rounded-lg hover:shadow-lg transition text-lg"
+            >
+              🐾 Animais para Adoção
+              <ChevronRight size={20} className="ml-2" />
+            </a>
+            <a
+              href="#denuncia"
+              style={{
+                backgroundColor: COLORS.vermelho,
+                color: COLORS.branco,
+              }}
+              className="inline-flex items-center justify-center font-bold px-8 py-3 rounded-lg hover:shadow-lg transition text-lg"
+            >
+              🚨 Denunciar Maus-Tratos
+              <ChevronRight size={20} className="ml-2" />
+            </a>
           </div>
         </div>
       </section>
 
-      {/* ── FORMULÁRIO DE DENÚNCIA ──────────────────────────────────────── */}
-      <section id="denuncia" className="py-16 bg-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+      {/* ════════════════════════════════════════════════════════════════════ */}
+      {/* TABS SECTION */}
+      {/* ════════════════════════════════════════════════════════════════════ */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Tab Buttons */}
+        <div className="flex gap-4 mb-12 border-b" style={{ borderColor: COLORS.cinzaMedio }}>
+          <button
+            onClick={() => setAbaAtiva('adocao')}
+            style={{
+              borderBottom: abaAtiva === 'adocao' ? `3px solid ${COLORS.azulAMAA}` : 'none',
+              color: abaAtiva === 'adocao' ? COLORS.azulAMAA : COLORS.cinzaMedio,
+            }}
+            className="px-6 py-3 font-bold text-lg transition"
+          >
+            🐾 Adoção de Animais
+          </button>
+          <button
+            onClick={() => setAbaAtiva('denuncia')}
+            style={{
+              borderBottom: abaAtiva === 'denuncia' ? `3px solid ${COLORS.vermelho}` : 'none',
+              color: abaAtiva === 'denuncia' ? COLORS.vermelho : COLORS.cinzaMedio,
+            }}
+            className="px-6 py-3 font-bold text-lg transition"
+          >
+            🚨 Denúncia de Maus-Tratos
+          </button>
+        </div>
 
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-2xl mb-4">
-              <span className="text-3xl">🚨</span>
+        {/* ────────────────────────────────────────────────────────────────── */}
+        {/* ABA 1: ADOÇÃO */}
+        {/* ────────────────────────────────────────────────────────────────── */}
+        {abaAtiva === 'adocao' && (
+          <div id="adocao" className="space-y-12">
+            {/* Header */}
+            <div className="text-center mb-12">
+              <h2 style={{ color: COLORS.azulAMAA }} className="text-3xl font-bold mb-4">
+                Encontre seu novo melhor amigo
+              </h2>
+              <p style={{ color: COLORS.cinzaMedio }} className="text-lg max-w-2xl mx-auto">
+                Todos os nossos animais são resgatados, castrados, vacinados e cuidados com muito amor.
+                <br />
+                <strong>Adote com responsabilidade — é para toda a vida!</strong>
+              </p>
             </div>
-            <h2 className="text-3xl font-black text-gray-900">Denunciar Maus-Tratos</h2>
-            <p className="text-gray-500 mt-3 max-w-xl mx-auto">
-              Viu um animal sofrendo? Denuncie! Todas as denúncias são encaminhadas à AMAA
-              e, quando necessário, às autoridades competentes.
-              <strong className="text-gray-700"> Você pode fazer a denúncia anonimamente.</strong>
-            </p>
-          </div>
 
-          {/* Box de lei */}
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-8 flex gap-3 items-start">
-            <span className="text-xl mt-0.5">⚖️</span>
-            <div>
-              <p className="text-amber-800 font-semibold text-sm">Lei Sansão (Lei nº 14.064/2020)</p>
-              <p className="text-amber-700 text-sm mt-1">
+            {/* Grid de Animais */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              {[
+                { nome: 'Rex', tipo: '🐶 Cachorro', sexo: '♂ Macho', desc: 'Dócil e carinhoso' },
+                { nome: 'Miau', tipo: '🐱 Gato', sexo: '♀ Fêmea', desc: 'Brincalhona e dócil' },
+                { nome: 'Luna', tipo: '🐱 Gato', sexo: '♀ Fêmea', desc: 'Tranquila e dócil' },
+                { nome: 'Max', tipo: '🐶 Cachorro', sexo: '♂ Macho', desc: 'Energético e feliz' },
+              ].map((animal) => (
+                <div
+                  key={animal.nome}
+                  style={{ borderColor: COLORS.cinzaMedio }}
+                  className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition"
+                >
+                  <div
+                    style={{ backgroundColor: COLORS.cinzaClaro }}
+                    className="aspect-square flex items-center justify-center text-6xl"
+                  >
+                    {animal.tipo.split(' ')[0]}
+                  </div>
+                  <div className="p-5">
+                    <h3 style={{ color: COLORS.azulAMAA }} className="font-bold text-lg mb-2">
+                      {animal.nome}
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-3">
+                      {animal.tipo} • {animal.sexo}
+                    </p>
+                    <p className="text-sm text-gray-700 mb-4">{animal.desc}</p>
+
+                    {/* Health badges */}
+                    <div className="flex gap-2 mb-4 flex-wrap">
+                      <span style={{ backgroundColor: `${COLORS.verde}20`, color: COLORS.verde }} className="text-xs font-semibold px-2 py-1 rounded">
+                        ✓ Vacinado
+                      </span>
+                      <span style={{ backgroundColor: `${COLORS.azulAMAA}20`, color: COLORS.azulAMAA }} className="text-xs font-semibold px-2 py-1 rounded">
+                        ✓ Castrado
+                      </span>
+                    </div>
+
+                    {/* CTA Button */}
+                    <button
+                      style={{
+                        backgroundColor: COLORS.azulAMAA,
+                        color: COLORS.branco,
+                      }}
+                      className="w-full py-2.5 font-bold rounded-lg hover:opacity-90 transition text-sm"
+                    >
+                      💚 Quero adotar
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Como funciona */}
+            <div
+              style={{
+                backgroundColor: COLORS.branco,
+                borderLeft: `5px solid ${COLORS.azulAMAA}`,
+              }}
+              className="rounded-lg p-8 shadow-sm"
+            >
+              <h3 style={{ color: COLORS.azulAMAA }} className="text-2xl font-bold mb-8 text-center">
+                Como funciona a adoção?
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
+                {[
+                  { num: 1, icon: '💚', titulo: 'Escolha', desc: 'Conheça nossos animais' },
+                  { num: 2, icon: '📲', titulo: 'Contato', desc: 'Fale pelo WhatsApp' },
+                  { num: 3, icon: '🤝', titulo: 'Entrevista', desc: 'Garantimos o lar ideal' },
+                  { num: 4, icon: '🏠', titulo: 'Adoção', desc: 'Bem-vindo ao lar!' },
+                ].map((step) => (
+                  <div key={step.num} className="text-center">
+                    <div
+                      style={{ backgroundColor: COLORS.azulAMAA, color: COLORS.branco }}
+                      className="w-12 h-12 rounded-full flex items-center justify-center font-bold mx-auto mb-3 text-lg"
+                    >
+                      {step.num}
+                    </div>
+                    <p className="text-2xl mb-2">{step.icon}</p>
+                    <h4 style={{ color: COLORS.azulAMAA }} className="font-bold mb-1">
+                      {step.titulo}
+                    </h4>
+                    <p className="text-sm text-gray-600">{step.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ────────────────────────────────────────────────────────────────── */}
+        {/* ABA 2: DENÚNCIA */}
+        {/* ────────────────────────────────────────────────────────────────── */}
+        {abaAtiva === 'denuncia' && (
+          <div id="denuncia" className="space-y-8">
+            {/* Header */}
+            <div className="text-center mb-12">
+              <h2 style={{ color: COLORS.vermelho }} className="text-3xl font-bold mb-4">
+                Denuncie Maus-Tratos
+              </h2>
+              <p style={{ color: COLORS.cinzaMedio }} className="text-lg max-w-2xl mx-auto">
+                Viu um animal sofrendo? Denuncie! Todas as denúncias são encaminhadas à AMAA e, quando necessário,
+                <br />
+                <strong>às autoridades competentes. Você pode fazer a denúncia anonimamente.</strong>
+              </p>
+            </div>
+
+            {/* Lei Box */}
+            <div
+              style={{
+                backgroundColor: COLORS.branco,
+                borderLeft: `5px solid ${COLORS.vermelho}`,
+                borderRadius: '8px',
+              }}
+              className="p-6 shadow-sm"
+            >
+              <p style={{ color: COLORS.vermelho }} className="font-bold text-sm mb-2">
+                ⚖️ Lei Sansão (Lei nº 14.064/2020)
+              </p>
+              <p style={{ color: COLORS.cinzaEscuro }} className="text-base leading-relaxed">
                 Maus-tratos a cães e gatos resultam em <strong>reclusão de 2 a 5 anos</strong> + multa.
+                <br />
                 Sua denúncia faz diferença — e pode salvar uma vida.
               </p>
             </div>
-          </div>
 
-          {/* Formulário de denúncia — componente client */}
-          <DenunciaForm />
+            {/* Formulário */}
+            <div
+              style={{ backgroundColor: COLORS.branco }}
+              className="rounded-lg p-8 shadow-sm"
+            >
+              <h3 style={{ color: COLORS.cinzaEscuro }} className="text-2xl font-bold mb-6">
+                Preencha o formulário
+              </h3>
 
-        </div>
-      </section>
+              <form className="space-y-6">
+                {/* Localização */}
+                <div>
+                  <label style={{ color: COLORS.cinzaEscuro }} className="block font-bold mb-3 text-sm">
+                    Onde o abuso acontece?
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <input
+                      type="text"
+                      placeholder="Rua/Avenida"
+                      style={{ borderColor: COLORS.cinzaMedio }}
+                      className="w-full border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Bairro"
+                      style={{ borderColor: COLORS.cinzaMedio }}
+                      className="w-full border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Cidade"
+                      style={{ borderColor: COLORS.cinzaMedio }}
+                      className="w-full border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                  </div>
+                </div>
 
-      {/* ── FOOTER AMAA ─────────────────────────────────────────────────── */}
-      <footer className="bg-emerald-900 py-10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/amaa-logo-web.png" alt="AMAA" className="w-12 h-12 rounded-2xl bg-white p-1 object-contain" />
-            <div>
-              <p className="text-white font-bold">AMAA — Melhores Amigos dos Animais</p>
-              <p className="text-emerald-300 text-sm">Realeza/PR · Apoio jurídico: Moreira Neto Advocacia</p>
+                {/* Tipo de Animal */}
+                <div>
+                  <label style={{ color: COLORS.cinzaEscuro }} className="block font-bold mb-3 text-sm">
+                    Tipo de animal
+                  </label>
+                  <select
+                    style={{ borderColor: COLORS.cinzaMedio }}
+                    className="w-full border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    <option>Selecione...</option>
+                    <option>🐶 Cachorro</option>
+                    <option>🐱 Gato</option>
+                    <option>🐦 Passarinho</option>
+                    <option>Outro</option>
+                  </select>
+                </div>
+
+                {/* Tipo de Abuso */}
+                <div>
+                  <label style={{ color: COLORS.cinzaEscuro }} className="block font-bold mb-3 text-sm">
+                    Tipo de abuso (selecione todos que se aplicam)
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {['Espancamento', 'Negligência', 'Falta de comida/água', 'Confinamento', 'Outro'].map((tipo) => (
+                      <label key={tipo} className="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" className="w-4 h-4 rounded" />
+                        <span className="text-sm">{tipo}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Descrição */}
+                <div>
+                  <label style={{ color: COLORS.cinzaEscuro }} className="block font-bold mb-3 text-sm">
+                    Descreva o ocorrido *
+                  </label>
+                  <textarea
+                    placeholder="Máximo detalhe possível..."
+                    rows={4}
+                    style={{ borderColor: COLORS.cinzaMedio }}
+                    className="w-full border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                  />
+                </div>
+
+                {/* Dados do denunciante */}
+                <div>
+                  <label className="flex items-center gap-2 mb-4 cursor-pointer">
+                    <input type="checkbox" className="w-4 h-4 rounded" defaultChecked />
+                    <span className="text-sm font-medium">Quero fazer denúncia anônima</span>
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <input
+                      type="text"
+                      placeholder="Seu nome"
+                      style={{ borderColor: COLORS.cinzaMedio }}
+                      className="w-full border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <input
+                      type="tel"
+                      placeholder="(46) 99999-9999"
+                      style={{ borderColor: COLORS.cinzaMedio }}
+                      className="w-full border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <input
+                      type="email"
+                      placeholder="seu@email.com"
+                      style={{ borderColor: COLORS.cinzaMedio }}
+                      className="w-full border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Submit */}
+                <button
+                  type="submit"
+                  style={{
+                    backgroundColor: COLORS.vermelho,
+                    color: COLORS.branco,
+                  }}
+                  className="w-full font-bold py-3.5 rounded-lg hover:opacity-90 transition text-base"
+                >
+                  🚨 Enviar Denúncia
+                </button>
+              </form>
             </div>
           </div>
-          <div className="text-center md:text-right">
-            <Link href="/" className="text-emerald-300 hover:text-white text-sm transition-colors">
-              moreiraneto.adv.br
-            </Link>
-            <p className="text-emerald-500 text-xs mt-1">
-              Material educativo — reprodução livre
-            </p>
+        )}
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════════ */}
+      {/* FOOTER */}
+      {/* ════════════════════════════════════════════════════════════════════ */}
+      <footer
+        style={{
+          backgroundColor: COLORS.cinzaEscuro,
+          borderTop: `3px solid ${COLORS.azulAMAA}`,
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div
+                style={{ backgroundColor: COLORS.azulAMAA }}
+                className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold"
+              >
+                🐾
+              </div>
+              <div>
+                <p style={{ color: COLORS.branco }} className="font-bold">
+                  AMAA — Melhores Amigos dos Animais
+                </p>
+                <p style={{ color: COLORS.cinzaMedio }} className="text-sm">
+                  Realeza/PR · Apoio jurídico: Moreira Neto Advocacia
+                </p>
+              </div>
+            </div>
+            <div className="text-center sm:text-right">
+              <Link href="/" style={{ color: COLORS.azulAMAA }} className="text-sm font-medium hover:opacity-75 transition">
+                moreiraneto.adv.br
+              </Link>
+              <p style={{ color: COLORS.cinzaMedio }} className="text-xs mt-1">
+                Material educativo — reprodução livre
+              </p>
+            </div>
           </div>
         </div>
       </footer>
-
-    </main>
+    </div>
   )
 }

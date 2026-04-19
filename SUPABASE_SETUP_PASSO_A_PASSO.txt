@@ -1,0 +1,184 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║     GUIA PASSO-A-PASSO: CONFIGURAR SUPABASE PARA O PAINEL EDITORIAL        ║
+║                   Para quem nunca fez isso antes                             ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+PASSO 1: ABRA O SUPABASE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Acesse: https://supabase.com
+2. Faça login (ou crie conta se não tiver)
+3. Clique no seu projeto "moreiraneto-adv" (ou o nome que você deu)
+4. Você vai ver a dashboard do Supabase
+
+
+PASSO 2: ENCONTRE O SQL EDITOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Na sidebar esquerda do Supabase, procure por:
+
+┌─ SQL Editor (ícone de código <>)
+│
+Clique lá!
+
+[Você verá uma página branca com um editor de texto]
+
+
+PASSO 3: ABRA O ARQUIVO DO SCHEMA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+No seu computador, abra:
+   /moreiraneto-adv/supabase/artigos-schema.sql
+
+Com um editor de texto (VS Code, Notepad, etc)
+
+
+PASSO 4: COPIE TODO O CONTEÚDO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+No arquivo artigos-schema.sql:
+   CTRL+A (selecionar tudo)
+   CTRL+C (copiar)
+
+
+PASSO 5: COLE NO SUPABASE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Volta ao Supabase (aquele editor branco do SQL Editor):
+   CTRL+V (colar)
+
+Você vai ver MUITO texto de SQL aparecer lá. É normal!
+
+
+PASSO 6: EXECUTE O SCRIPT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+No canto superior direito do Supabase, procure por um botão:
+
+   ▶️  RUN (ou "Execute" ou um ícone de play)
+
+Clique nele!
+
+[Aguarde alguns segundos...]
+
+
+PASSO 7: VERIFIQUE SE DEU CERTO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Depois que executar, você deve ver:
+   ✅ "Success" ou mensagens verdes
+
+Se vir vermelho/erro, anote a mensagem de erro!
+
+
+PASSO 8: VERIFIQUE SE AS TABELAS FORAM CRIADAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Na sidebar esquerda, clique em:
+   "Table Editor" (ícone de tabela)
+
+Você deve ver estas tabelas:
+   ✓ artigos
+   ✓ fontes_rss
+   ✓ categorias
+   ✓ artigos_acoes
+   ✓ artigos_analise_historico
+
+Se ver essas 5 tabelas = SUCESSO! 🎉
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCREENSHOTS / ONDE CLICAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SUPABASE - DASHBOARD (início)
+┌────────────────────────────────────────────────────┐
+│ 🔒 supabase                                         │
+├────────────────────────────────────────────────────┤
+│ Sidebar esquerdo:                                  │
+│ ├─ 📊 Project                                     │
+│ ├─ 📋 Table Editor     ← clique aqui depois     │
+│ ├─ <> SQL Editor       ← clique AQUI AGORA     │
+│ ├─ 🔑 Authentication                             │
+│ ├─ 📡 Realtime                                   │
+│ └─ ⚙️ Settings                                    │
+└────────────────────────────────────────────────────┘
+
+
+SUPABASE - SQL EDITOR (com schema colado)
+┌────────────────────────────────────────────────────┐
+│ <> SQL Editor                                       │
+├────────────────────────────────────────────────────┤
+│  [▶️ RUN] [Save] [New query]                       │
+│  ════════════════════════════════════════════════  │
+│  -- ============================================   │
+│  -- SCHEMA: PAINEL EDITORIAL                     │
+│  -- ============================================   │
+│  CREATE TABLE IF NOT EXISTS categorias (          │
+│    id BIGSERIAL PRIMARY KEY,                      │
+│    slug TEXT UNIQUE NOT NULL,                     │
+│    ...                                            │
+│    ...                                            │
+│  );                                               │
+│                                                   │
+│  [▶️ RUN] ← clique aqui depois de colar tudo     │
+└────────────────────────────────────────────────────┘
+
+
+SUPABASE - TABLE EDITOR (resultado sucesso)
+┌────────────────────────────────────────────────────┐
+│ 📋 Table Editor                                     │
+├────────────────────────────────────────────────────┤
+│ Tables:                                            │
+│ ├─ ✅ artigos                                     │
+│ ├─ ✅ artigos_acoes                               │
+│ ├─ ✅ artigos_analise_historico                   │
+│ ├─ ✅ categorias                                  │
+│ └─ ✅ fontes_rss                                  │
+│                                                   │
+│ Clique em qualquer tabela para ver os dados      │
+└────────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TROUBLESHOOTING (Se der erro)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ "ERROR: syntax error"
+   → Certifique-se de que COPIOU O ARQUIVO INTEIRO (desde a primeira linha)
+   → Tente copiar novamente e colar
+
+❌ "table already exists"
+   → Isso é normal! Significa que já criou antes.
+   → Continua, as tabelas já estão lá
+
+❌ "ERROR: role postgres..."
+   → Isso é um erro de permissão
+   → Verifique se você é admin do projeto Supabase
+   → Ou recrie o projeto
+
+❌ Nada acontece ao clicar RUN
+   → Selecione TODO O TEXTO (CTRL+A)
+   → Depois clique RUN
+
+✅ Se vir "Success" ou verde
+   → PRONTO! As tabelas foram criadas
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DEPOIS: TESTAR O PAINEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Quando as tabelas estiverem criadas no Supabase:
+
+1. Volte ao terminal/VS Code
+2. Rode: npm run dev
+3. Acesse: http://localhost:3000/admin/artigos
+4. Teste: Crie uma notícia no painel
+5. Volte ao Supabase e procure na tabela "artigos"
+   → A notícia que criou deve aparecer lá!
+
+
+═══════════════════════════════════════════════════════════════════════════════
+É ISSO! Qualquer dúvida, avisa! 🚀
+═══════════════════════════════════════════════════════════════════════════════

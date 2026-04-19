@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',sans-serif; background:#F5E6D3; padding:20px; display:flex; gap:16px; align-items:flex-start; }
+  .label { font-size:9px; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; font-family:monospace; }
+  .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; }
+</style>
+</head>
+<body>
+  <!-- Practice Area Card — Direito Agrário (imagem correta) -->
+  <div style="width:200px;">
+    <div class="label">Área — Direito Agrário</div>
+    <div style="border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.10);background:#fff;">
+      <div style="height:110px;overflow:hidden;">
+        <img src="../assets/mna-direito-agrario.png" alt="Direito Agrário"
+          style="width:100%;height:100%;object-fit:cover;"
+          onerror="this.parentElement.style.background='linear-gradient(135deg,#065F46,#2D2D2D)';this.style.display='none';">
+      </div>
+      <div style="padding:16px;">
+        <h3 style="font-family:'Lora',serif;font-size:15px;font-weight:700;color:#2D2D2D;margin-bottom:6px;">Direito Agrário</h3>
+        <p style="font-size:11px;color:#666;line-height:1.5;margin-bottom:10px;">Assessoria completa em negócios rurais, arrendamento e financiamento.</p>
+        <span style="font-size:12px;font-weight:600;color:#E8941F;">Saiba Mais ›</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- News Cards — com cor de área e miniatura -->
+  <div style="width:210px;">
+    <div class="label">Notícia — Agrário (verde)</div>
+    <div style="border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);background:#fff;border:1px solid #E5E7EB;margin-bottom:10px;">
+      <div style="height:70px;overflow:hidden;position:relative;">
+        <img src="../assets/mna-direito-agrario.png" alt="Agrário"
+          style="width:100%;height:100%;object-fit:cover;opacity:0.75;"
+          onerror="this.parentElement.style.background='#D1FAE5';this.style.display='none';">
+        <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(6,95,70,0.55),transparent);"></div>
+      </div>
+      <div style="padding:12px;">
+        <span class="badge" style="background:#D1FAE5;color:#065F46;margin-bottom:7px;">Agrário</span>
+        <div style="font-family:'Lora',serif;font-size:13px;font-weight:700;color:#2D2D2D;line-height:1.3;margin-bottom:5px;">Nova lei de arrendamento rural: o que muda?</div>
+        <div style="font-size:10px;color:#9CA3AF;">12 Jan 2025</div>
+      </div>
+    </div>
+
+    <div class="label">Notícia — Animal (amarelo)</div>
+    <div style="border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);background:#fff;border:1px solid #E5E7EB;">
+      <div style="height:70px;overflow:hidden;position:relative;">
+        <img src="../assets/mna-area-animal-web.jpg" alt="Animal"
+          style="width:100%;height:100%;object-fit:cover;opacity:0.75;"
+          onerror="this.parentElement.style.background='#FEF9C3';this.style.display='none';">
+        <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(133,77,14,0.45),transparent);"></div>
+      </div>
+      <div style="padding:12px;">
+        <span class="badge" style="background:#FEF9C3;color:#854D0E;margin-bottom:7px;">Animal</span>
+        <div style="font-family:'Lora',serif;font-size:13px;font-weight:700;color:#2D2D2D;line-height:1.3;margin-bottom:5px;">Guarda de pets na separação: como funciona?</div>
+        <div style="font-size:10px;color:#9CA3AF;">03 Jan 2025</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Diferencial Card -->
+  <div style="width:200px;">
+    <div class="label">Diferencial Card</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="padding:14px;border-radius:8px;background:#fff;border-left:4px solid #E8941F;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <p style="font-size:12px;font-weight:600;color:#2D2D2D;">✓ Experiência de 20+ anos em Direito Agrário</p>
+      </div>
+      <div style="padding:14px;border-radius:8px;background:#fff;border-left:4px solid #E8941F;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <p style="font-size:12px;font-weight:600;color:#2D2D2D;">✓ Soluções criativas dentro da lei</p>
+      </div>
+      <div style="padding:14px;border-radius:8px;background:#fff;border-left:4px solid #E8941F;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <p style="font-size:12px;font-weight:600;color:#2D2D2D;">✓ Conhecimento profundo do mercado local</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

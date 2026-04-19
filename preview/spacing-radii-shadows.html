@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',system-ui,sans-serif; background:#F4F6F9; padding:20px; display:flex; gap:24px; flex-wrap:wrap; }
+  .group { background:#fff; border-radius:10px; padding:16px; }
+  .label { font-size:10px; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
+  .row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .box { width:48px; height:48px; background:#E8941F22; border:1.5px solid #E8941F; }
+  .meta { font-size:10px; color:#666; font-family:monospace; }
+  .shadow-box { width:80px; height:48px; background:#fff; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:10px; color:#666; }
+  .border-demo { height:32px; display:flex; align-items:center; padding:0 12px; font-size:12px; font-weight:600; }
+</style></head>
+<body>
+  <div class="group">
+    <div class="label">Border Radius</div>
+    <div class="row"><div class="box" style="border-radius:4px;"></div><div class="meta">sm · 4px<br>Smalls</div></div>
+    <div class="row"><div class="box" style="border-radius:6px;"></div><div class="meta">md · 6px<br>Buttons</div></div>
+    <div class="row"><div class="box" style="border-radius:8px;"></div><div class="meta">lg · 8px<br>Boxes</div></div>
+    <div class="row"><div class="box" style="border-radius:12px;"></div><div class="meta">card · 12px<br>Cards</div></div>
+    <div class="row"><div class="box" style="border-radius:999px;width:80px;height:28px;"></div><div class="meta">pill · 999px<br>Badges</div></div>
+  </div>
+  <div class="group">
+    <div class="label">Shadow System</div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div><div class="shadow-box" style="box-shadow:0 2px 12px rgba(0,0,0,0.06);">card</div><div class="meta" style="margin-top:4px;">0 2px 12px rgba(0,0,0,.06)</div></div>
+      <div><div class="shadow-box" style="box-shadow:0 8px 24px rgba(0,0,0,0.10);">hover</div><div class="meta" style="margin-top:4px;">0 8px 24px rgba(0,0,0,.10)</div></div>
+      <div><div class="shadow-box" style="box-shadow:0 8px 16px rgba(232,148,31,0.30);background:#E8941F;color:#fff;">gold</div><div class="meta" style="margin-top:4px;">0 8px 16px rgba(232,148,31,.3)</div></div>
+    </div>
+  </div>
+  <div class="group">
+    <div class="label">Signature Borders</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div>
+        <div class="meta" style="margin-bottom:4px;">Header gold border — 3px bottom</div>
+        <div style="background:#2C2C2C;height:36px;border-bottom:3px solid #E8941F;border-radius:4px;display:flex;align-items:center;padding:0 12px;">
+          <span style="color:#fff;font-size:11px;font-weight:600;">MNA Header</span>
+        </div>
+      </div>
+      <div>
+        <div class="meta" style="margin-bottom:4px;">Diferencial — 4px left gold border</div>
+        <div style="border-left:4px solid #E8941F;padding:8px 12px;background:#fff;border-radius:0 6px 6px 0;font-size:12px;font-weight:600;color:#2D2D2D;">20+ anos em Direito Agrário</div>
+      </div>
+      <div>
+        <div class="meta" style="margin-bottom:4px;">Admin nav active — 3px left</div>
+        <div style="border-left:3px solid #E8941F;background:rgba(232,148,31,0.12);padding:8px 12px;font-size:12px;font-weight:600;color:#E8941F;">Artigos</div>
+      </div>
+    </div>
+  </div>
+</body></html>

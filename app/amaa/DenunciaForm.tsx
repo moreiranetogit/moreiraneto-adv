@@ -319,4 +319,8 @@ export default function DenunciaForm() {
         disabled={formState === 'sending'}
         className="w-full bg-red-600 hover:bg-red-700 disabled:bg-red-300 text-white font-black py-4 rounded-xl transition-colors text-base"
       >
-        {formState ===
+        {formState === 'sending' ? '⏳ Enviando denúncia...' : '🚨 Enviar Denúncia'}
+      </button>
+    </form>
+  )
+}

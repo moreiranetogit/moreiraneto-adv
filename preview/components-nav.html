@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',sans-serif; background:#F5E6D3; }
+  .label { font-size:9px; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:1px; padding:10px 12px 4px; font-family:monospace; }
+  @keyframes ticker-scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+  .theme-btn { background:rgba(255,255,255,0.10); color:#fff; border:none; padding:4px 9px; border-radius:4px; font-size:10px; cursor:pointer; font-weight:600; }
+  .theme-btn.active { background:#E8941F; color:#2D2D2D; }
+</style>
+</head>
+<body>
+
+  <div class="label">Website Header — com seletor de tema e nav completo</div>
+  <header style="background:#2C2C2C;border-bottom:3px solid #E8941F;box-shadow:0 2px 12px rgba(0,0,0,0.15);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;">
+    <!-- Logo -->
+    <img src="../assets/mna-logo-web.png" alt="MNA" style="height:38px;width:auto;flex-shrink:0;" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <div style="display:none;color:#E8941F;font-weight:700;font-size:16px;flex-shrink:0;">MNA</div>
+
+    <!-- Nav -->
+    <nav style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;flex:1;">
+      <a style="color:#fff;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;">Início</a>
+      <a style="color:#fff;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;">Quem Somos</a>
+      <a style="color:#E8941F;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;">Áreas</a>
+      <a style="color:#fff;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;">Radar Jurídico</a>
+      <a style="color:#fff;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;">Adoção AMAA</a>
+      <a style="color:#fff;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;">Denúncias de Maus-Tratos Contra Animais</a>
+    </nav>
+
+    <!-- Right: icons + theme buttons stacked below -->
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+        <a href="#contact" style="color:#E8941F;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap;border:1.5px solid #E8941F;padding:3px 10px;border-radius:4px;">Contato</a>
+        <div style="display:flex;gap:3px;">
+          <button class="theme-btn active">Light</button>
+          <button class="theme-btn">Dark</button>
+          <button class="theme-btn">Sepia</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- News ticker -->
+  <div style="background:#D3D3D3;padding:8px 20px;border-bottom:1px solid #aaa;overflow:hidden;">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <span style="font-size:10px;font-weight:700;color:#555;white-space:nowrap;flex-shrink:0;">ÚLTIMAS NOTÍCIAS</span>
+      <div style="flex:1;overflow:hidden;">
+        <div style="display:flex;gap:48px;animation:ticker-scroll 32s linear infinite;white-space:nowrap;">
+          <span style="font-size:11px;color:#555;flex-shrink:0;">• Nova lei de arrendamento rural aprovada pelo Congresso</span>
+          <span style="font-size:11px;color:#555;flex-shrink:0;">• STJ reforça direitos previdenciários de trabalhadores rurais</span>
+          <span style="font-size:11px;color:#555;flex-shrink:0;">• Moratória agrícola prorrogada até dezembro de 2025</span>
+          <span style="font-size:11px;color:#555;flex-shrink:0;">• Novas penalidades para maus-tratos a animais em vigor</span>
+          <!-- repeat for seamless loop -->
+          <span style="font-size:11px;color:#555;flex-shrink:0;">• Nova lei de arrendamento rural aprovada pelo Congresso</span>
+          <span style="font-size:11px;color:#555;flex-shrink:0;">• STJ reforça direitos previdenciários de trabalhadores rurais</span>
+          <span style="font-size:11px;color:#555;flex-shrink:0;">• Moratória agrícola prorrogada até dezembro de 2025</span>
+          <span style="font-size:11px;color:#555;flex-shrink:0;">• Novas penalidades para maus-tratos a animais em vigor</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Portal header -->
+  <div class="label" style="margin-top:16px;">Portal Header (Radar Jurídico / AMAA / Denúncias)</div>
+  <header style="background:#1F2937;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;">
+    <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
+      <img src="../assets/mna-logo-web.png" alt="MNA" style="height:28px;opacity:0.9;" onerror="this.style.display='none'">
+      <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);"></div>
+      <span style="color:#E8941F;font-weight:700;font-size:15px;">Radar Jurídico</span>
+    </div>
+    <nav style="display:flex;gap:16px;">
+      <a style="color:#fff;font-size:12px;opacity:0.8;text-decoration:none;cursor:pointer;">Notícias</a>
+      <a style="color:#E8941F;font-size:12px;font-weight:600;text-decoration:none;cursor:pointer;">Opiniões</a>
+      <a style="color:#fff;font-size:12px;opacity:0.8;text-decoration:none;cursor:pointer;">Análise</a>
+    </nav>
+    <div style="display:flex;gap:4px;">
+      <button class="theme-btn active">Light</button>
+      <button class="theme-btn">Dark</button>
+      <button class="theme-btn">Sepia</button>
+    </div>
+  </header>
+
+</body>
+</html>

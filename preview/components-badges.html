@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',sans-serif; background:#F4F6F9; padding:16px; display:flex; gap:20px; }
+  .group { background:#fff; border-radius:10px; padding:16px; }
+  .label { font-size:9px; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; font-family:monospace; }
+  .badge { display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; }
+</style>
+</head>
+<body>
+  <!-- Category badges -->
+  <div class="group">
+    <div class="label">Category Badges</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <span class="badge" style="background:#D1FAE5;color:#065F46;">Agrário</span>
+      <span class="badge" style="background:#DBEAFE;color:#1E40AF;">Civil</span>
+      <span class="badge" style="background:#FEF3C7;color:#92400E;">Trabalhista</span>
+      <span class="badge" style="background:#FEEAC7;color:#78350F;">Família</span>
+      <span class="badge" style="background:#FEF9C3;color:#854D0E;">Animal</span>
+      <span class="badge" style="background:#F3E8FF;color:#7C3AED;">Geral</span>
+    </div>
+  </div>
+
+  <!-- Admin sidebar -->
+  <div style="background:#1F2937;border-radius:10px;width:200px;padding:16px 0;">
+    <div style="padding:0 16px;margin-bottom:16px;">
+      <div style="color:#E8941F;font-weight:700;font-size:14px;">Admin Panel</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:2px;">
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:13px;color:rgba(255,255,255,0.7);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Dashboard
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:13px;color:#E8941F;background:rgba(232,148,31,0.15);border-left:3px solid #E8941F;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2z"/></svg>
+        Artigos
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:13px;color:rgba(255,255,255,0.7);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Adoções
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:13px;color:rgba(255,255,255,0.7);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        Configurações
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,270 +1,505 @@
-'use client'
-// ═══════════════════════════════════════════════════════════════════════════
-// Admin — Revisão de Artigo Individual
-// moreiraneto.adv.br/admin/artigos/[id]
-// ═══════════════════════════════════════════════════════════════════════════
+'use client';
 
-import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
-import Link from 'next/link'
-import { format } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
-import { CATEGORY_LABELS, CATEGORY_COLORS } from '@/types'
-import type { Article } from '@/types'
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { ArrowLeft, CheckCircle, XCircle, Save } from 'lucide-react';
+import AnalysisGenerator from './AnalysisGenerator';
+import type { Article } from '@/types';
 
-export default function ArtigoRevisaoPage() {
-  const params  = useParams()
-  const router  = useRouter()
-  const supabase = createClient()
+const COLORS = {
+  dourado: '#E8941F',
+  branco: '#FFFFFF',
+  areia: '#F5E6D3',
+  cinzaClaro: '#D3D3D3',
+  cinzaEscuro: '#2D2D2D',
+  cinzaMedio: '#666666',
+  verde: '#10B981',
+  vermelho: '#EF4444',
+};
 
-  const [artigo, setArtigo]   = useState<Article | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving]   = useState<string | null>(null)
-  const [editTitle, setEditTitle]     = useState('')
-  const [editExcerpt, setEditExcerpt] = useState('')
-  const [editContent, setEditContent] = useState('')
-  const [isDirty, setIsDirty] = useState(false)
-  const [saved, setSaved] = useState(false)
+const FONT_FAMILY = "'Sitka Text', Georgia, 'Times New Roman', serif";
+
+export default function ArtigoReviewPage() {
+  const params = useParams();
+  const router = useRouter();
+  const id = params?.id as string;
+
+  const [artigo, setArtigo] = useState<Article | null>(null);
+  const [analise, setAnalise] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [salvando, setSalvando] = useState(false);
+  const [erro, setErro] = useState('');
+
+  // ── Carregar artigo ──────────────────────────────────────────────────
 
   useEffect(() => {
-    async function load() {
-      const { data } = await supabase
-        .from('articles')
-        .select('*')
-        .eq('id', params.id as string)
-        .single()
-      setArtigo(data as Article)
-      setEditTitle(data?.title ?? '')
-      setEditExcerpt(data?.excerpt ?? '')
-      setEditContent(data?.content ?? '')
-      setLoading(false)
+    async function fetchArtigo() {
+      try {
+        const res = await fetch(`/api/artigos/${id}`);
+        if (!res.ok) throw new Error('Artigo não encontrado');
+
+        const data = await res.json();
+        setArtigo(data);
+        setAnalise(data.analise_texto || '');
+      } catch (err) {
+        setErro(String(err));
+      } finally {
+        setLoading(false);
+      }
     }
-    load()
-  }, [params.id, supabase])
 
-  async function handleSave() {
-    if (!artigo) return
-    setSaving('save')
-    await supabase.from('articles').update({
-      title: editTitle,
-      excerpt: editExcerpt,
-      content: editContent,
-    }).eq('id', artigo.id)
-    setSaving(null)
-    setIsDirty(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2500)
+    if (id) fetchArtigo();
+  }, [id]);
+
+  // ── Salvar rascunho ──────────────────────────────────────────────────
+
+  async function handleSalvar() {
+    if (!artigo) return;
+
+    setSalvando(true);
+    try {
+      const res = await fetch(`/api/artigos/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          analise_texto: analise,
+          analise_editada_manualmente: true,
+        }),
+      });
+
+      if (!res.ok) throw new Error('Erro ao salvar');
+
+      alert('✓ Análise salva!');
+    } catch (err) {
+      alert(`Erro: ${err}`);
+    } finally {
+      setSalvando(false);
+    }
   }
 
-  async function handleStatus(newStatus: 'published' | 'rejected') {
-    if (!artigo) return
-    setSaving(newStatus)
-    const updates: Record<string, unknown> = { status: newStatus }
-    if (newStatus === 'published') updates.published_at = new Date().toISOString()
-    await supabase.from('articles').update(updates).eq('id', artigo.id)
-    setSaving(null)
-    router.push('/admin/artigos')
+  // ── Aprovar e publicar ────────────────────────────────────────────────
+
+  async function handleAprovar() {
+    if (!artigo) return;
+
+    if (!analise.trim()) {
+      alert('⚠️ Adicione uma análise antes de publicar');
+      return;
+    }
+
+    setSalvando(true);
+    try {
+      const res = await fetch(`/api/artigos/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          status: 'publicado',
+          analise_texto: analise,
+          analise_editada_manualmente: true,
+        }),
+      });
+
+      if (!res.ok) throw new Error('Erro ao publicar');
+
+      alert('✓ Artigo publicado com sucesso!');
+      router.push('/admin/artigos');
+    } catch (err) {
+      alert(`Erro: ${err}`);
+    } finally {
+      setSalvando(false);
+    }
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-gray-400 text-sm">Carregando artigo...</div>
-      </div>
-    )
+  // ── Descartar ────────────────────────────────────────────────────────
+
+  async function handleDescartar() {
+    if (!confirm('Tem certeza? Esta ação não pode ser desfeita.')) return;
+
+    setSalvando(true);
+    try {
+      const res = await fetch(`/api/artigos/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) throw new Error('Erro ao descartar');
+
+      alert('✓ Artigo descartado');
+      router.push('/admin/artigos');
+    } catch (err) {
+      alert(`Erro: ${err}`);
+    } finally {
+      setSalvando(false);
+    }
   }
 
-  if (!artigo) {
-    return (
-      <div className="p-8 text-center">
-        <p className="text-gray-500">Artigo não encontrado.</p>
-        <Link href="/admin/artigos" className="text-orange-500 text-sm mt-2 inline-block">
-          ← Voltar à fila
-        </Link>
-      </div>
-    )
-  }
-
-  const categoryLabel = CATEGORY_LABELS[artigo.category] ?? artigo.category
-  const categoryColor = CATEGORY_COLORS[artigo.category] ?? '#E8941F'
+  // ── Renderizar ───────────────────────────────────────────────────────
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-
+    <div style={{
+      backgroundColor: COLORS.areia,
+      color: COLORS.cinzaEscuro,
+      fontFamily: FONT_FAMILY,
+      minHeight: '100vh',
+    }}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/admin/artigos"
-            className="text-gray-400 hover:text-gray-600 transition-colors text-sm"
-          >
-            ← Fila editorial
+      <header style={{
+        backgroundColor: COLORS.cinzaEscuro,
+        color: COLORS.branco,
+        padding: '20px',
+        borderBottom: `3px solid ${COLORS.dourado}`,
+      }}>
+        <div style={{
+          maxWidth: '1280px',
+          margin: '0 auto',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '16px',
+        }}>
+          <Link href="/admin/artigos" style={{
+            color: COLORS.branco,
+            textDecoration: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+          }}>
+            <ArrowLeft size={20} /> Voltar
           </Link>
-          <span className="text-gray-300">/</span>
-          <span className="text-sm text-gray-600 truncate max-w-xs">
-            {artigo.title.slice(0, 50)}...
-          </span>
+          <h1 style={{ fontSize: '28px', fontWeight: 'bold' }}>📝 Revisar Notícia</h1>
         </div>
+      </header>
 
-        <div className="flex items-center gap-2">
-          {isDirty && (
-            <button
-              onClick={handleSave}
-              disabled={saving !== null}
-              className="px-4 py-2 bg-gray-900 text-white text-sm font-bold rounded-xl hover:bg-gray-700 transition-colors disabled:opacity-50"
-            >
-              {saving === 'save' ? 'Salvando...' : 'Salvar edições'}
-            </button>
-          )}
-          {saved && (
-            <span className="text-green-600 text-sm font-semibold">✓ Salvo</span>
-          )}
-        </div>
+      {/* Conteúdo */}
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '32px 20px' }}>
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '40px', opacity: 0.6 }}>
+            ⏳ Carregando artigo...
+          </div>
+        ) : erro ? (
+          <div style={{
+            backgroundColor: '#FFCDD2',
+            color: '#C62828',
+            padding: '20px',
+            borderRadius: '8px',
+            textAlign: 'center',
+          }}>
+            ❌ {erro}
+          </div>
+        ) : !artigo ? (
+          <div style={{
+            backgroundColor: '#FFF3E0',
+            color: '#E65100',
+            padding: '20px',
+            borderRadius: '8px',
+            textAlign: 'center',
+          }}>
+            📭 Artigo não encontrado
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '32px' }}>
+            {/* ── CONTEÚDO PRINCIPAL ── */}
+            <div>
+              {/* NOTÍCIA ORIGINAL */}
+              <div style={{
+                backgroundColor: COLORS.branco,
+                borderRadius: '8px',
+                padding: '24px',
+                marginBottom: '24px',
+                border: `1px solid ${COLORS.cinzaClaro}`,
+              }}>
+                <h2 style={{
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  marginBottom: '16px',
+                  color: COLORS.dourado,
+                }}>
+                  📰 Notícia Original
+                </h2>
+
+                <p style={{
+                  fontSize: '12px',
+                  opacity: 0.6,
+                  marginBottom: '8px',
+                }}>
+                  Fonte: <strong>{artigo.source_name}</strong> | {new Date(artigo.published_at || '').toLocaleDateString('pt-BR')}
+                </p>
+
+                <h3 style={{
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  marginBottom: '12px',
+                  lineHeight: 1.3,
+                }}>
+                  {artigo.title}
+                </h3>
+
+                {artigo.excerpt && (
+                  <p style={{
+                    fontSize: '14px',
+                    fontStyle: 'italic',
+                    opacity: 0.8,
+                    marginBottom: '16px',
+                    paddingLeft: '12px',
+                    borderLeft: `3px solid ${COLORS.dourado}`,
+                  }}>
+                    {artigo.excerpt}
+                  </p>
+                )}
+
+                {artigo.content && (
+                  <div style={{
+                    fontSize: '14px',
+                    lineHeight: 1.7,
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
+                    maxHeight: '400px',
+                    overflowY: 'auto',
+                    paddingRight: '12px',
+                  }}>
+                    {artigo.content}
+                  </div>
+                )}
+
+                {artigo.source_url && (
+                  <a
+                    href={artigo.source_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-block',
+                      marginTop: '16px',
+                      color: COLORS.dourado,
+                      textDecoration: 'none',
+                      fontSize: '13px',
+                      fontWeight: '600',
+                    }}
+                  >
+                    🔗 Ler artigo original →
+                  </a>
+                )}
+              </div>
+
+              {/* ANÁLISE */}
+              <div style={{
+                backgroundColor: COLORS.branco,
+                borderRadius: '8px',
+                padding: '24px',
+                marginBottom: '24px',
+                border: `1px solid ${COLORS.cinzaClaro}`,
+              }}>
+                <h2 style={{
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  marginBottom: '16px',
+                  color: COLORS.dourado,
+                }}>
+                  ⚖️ Análise Jurídica
+                </h2>
+
+                {/* Gerador de Análise */}
+                <AnalysisGenerator
+                  artigo={artigo}
+                  analiseExistente={artigo.analise_texto}
+                />
+
+                {/* Textarea de edição */}
+                <label style={{
+                  display: 'block',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  marginBottom: '6px',
+                  opacity: 0.7,
+                }}>
+                  Editar Análise:
+                </label>
+
+                <textarea
+                  value={analise}
+                  onChange={(e) => setAnalise(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: `1px solid ${COLORS.cinzaClaro}`,
+                    borderRadius: '6px',
+                    fontSize: '14px',
+                    lineHeight: 1.6,
+                    minHeight: '280px',
+                    boxSizing: 'border-box',
+                    fontFamily: FONT_FAMILY,
+                  }}
+                  placeholder="Edite ou cole a análise jurídica gerada pela skill aqui..."
+                />
+
+                <p style={{
+                  fontSize: '12px',
+                  opacity: 0.6,
+                  marginTop: '8px',
+                  marginBottom: 0,
+                }}>
+                  💡 Clique em "Gerar com IA" acima para copiar os dados e usar a skill de análise.
+                </p>
+              </div>
+            </div>
+
+            {/* ── SIDEBAR ── */}
+            <div style={{ position: 'sticky', top: '20px', height: 'fit-content' }}>
+              {/* Card de Status */}
+              <div style={{
+                backgroundColor: COLORS.branco,
+                borderRadius: '8px',
+                padding: '16px',
+                marginBottom: '16px',
+                border: `2px solid ${COLORS.dourado}`,
+              }}>
+                <p style={{
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  opacity: 0.6,
+                  marginBottom: '6px',
+                  textTransform: 'uppercase',
+                }}>
+                  Status
+                </p>
+                <span style={{
+                  display: 'inline-block',
+                  backgroundColor: '#FFF3E0',
+                  color: '#E65100',
+                  padding: '6px 12px',
+                  borderRadius: '4px',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                }}>
+                  🆕 {artigo.status === 'pending' ? 'Pendente' : artigo.status}
+                </span>
+
+                <div style={{
+                  marginTop: '12px',
+                  fontSize: '12px',
+                  opacity: 0.7,
+                  lineHeight: 1.5,
+                }}>
+                  <p style={{ margin: '4px 0' }}>
+                    📅 {new Date(artigo.published_at || '').toLocaleDateString('pt-BR')}
+                  </p>
+                  <p style={{ margin: '4px 0' }}>
+                    👁️ {artigo.read_count || 0} leituras
+                  </p>
+                </div>
+              </div>
+
+              {/* Card de Ações */}
+              <div style={{
+                backgroundColor: COLORS.branco,
+                borderRadius: '8px',
+                padding: '20px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              }}>
+                <p style={{
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  marginBottom: '14px',
+                  textTransform: 'uppercase',
+                  opacity: 0.6,
+                }}>
+                  Ações
+                </p>
+
+                <div style={{ display: 'grid', gap: '10px' }}>
+                  <button
+                    onClick={handleAprovar}
+                    disabled={salvando}
+                    style={{
+                      backgroundColor: COLORS.verde,
+                      color: COLORS.branco,
+                      padding: '12px 16px',
+                      borderRadius: '6px',
+                      border: 'none',
+                      fontSize: '13px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      opacity: salvando ? 0.6 : 1,
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!salvando) e.currentTarget.style.backgroundColor = '#059669'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = COLORS.verde
+                    }}
+                  >
+                    <CheckCircle size={16} />
+                    {salvando ? 'Salvando...' : 'Publicar'}
+                  </button>
+
+                  <button
+                    onClick={handleSalvar}
+                    disabled={salvando}
+                    style={{
+                      backgroundColor: COLORS.dourado,
+                      color: COLORS.cinzaEscuro,
+                      padding: '12px 16px',
+                      borderRadius: '6px',
+                      border: 'none',
+                      fontSize: '13px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      opacity: salvando ? 0.6 : 1,
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!salvando) e.currentTarget.style.backgroundColor = '#d47a0f'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = COLORS.dourado
+                    }}
+                  >
+                    <Save size={16} />
+                    {salvando ? 'Salvando...' : 'Salvar Rascunho'}
+                  </button>
+
+                  <button
+                    onClick={handleDescartar}
+                    disabled={salvando}
+                    style={{
+                      backgroundColor: COLORS.vermelho,
+                      color: COLORS.branco,
+                      padding: '12px 16px',
+                      borderRadius: '6px',
+                      border: 'none',
+                      fontSize: '13px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      opacity: salvando ? 0.6 : 1,
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!salvando) e.currentTarget.style.backgroundColor = '#dc2626'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = COLORS.vermelho
+                    }}
+                  >
+                    <XCircle size={16} />
+                    Descartar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-6">
-
-        {/* Editor principal */}
-        <div className="space-y-5">
-
-          {/* Categoria + Fonte */}
-          <div className="flex flex-wrap items-center gap-3">
-            <span
-              className="px-3 py-1 rounded-full text-xs font-bold"
-              style={{ backgroundColor: categoryColor + '20', color: categoryColor }}
-            >
-              {categoryLabel}
-            </span>
-            {artigo.source_name && (
-              <span className="text-sm text-gray-500">{artigo.source_name}</span>
-            )}
-            {artigo.source_url && (
-              <a
-                href={artigo.source_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-orange-500 hover:underline"
-              >
-                🔗 Fonte original
-              </a>
-            )}
-          </div>
-
-          {/* Imagem */}
-          {artigo.image_url && (
-            <div className="rounded-xl overflow-hidden border border-gray-100">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={artigo.image_url}
-                alt=""
-                className="w-full max-h-56 object-cover"
-              />
-            </div>
-          )}
-
-          {/* Título editável */}
-          <div>
-            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Título</label>
-            <textarea
-              value={editTitle}
-              onChange={e => { setEditTitle(e.target.value); setIsDirty(true) }}
-              rows={2}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-lg font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
-            />
-          </div>
-
-          {/* Excerpt editável */}
-          <div>
-            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
-              Resumo / Excerpt
-            </label>
-            <textarea
-              value={editExcerpt}
-              onChange={e => { setEditExcerpt(e.target.value); setIsDirty(true) }}
-              rows={3}
-              placeholder="Resumo exibido na listagem..."
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
-            />
-          </div>
-
-          {/* Conteúdo editável */}
-          <div>
-            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
-              Conteúdo
-            </label>
-            <textarea
-              value={editContent}
-              onChange={e => { setEditContent(e.target.value); setIsDirty(true) }}
-              rows={12}
-              placeholder="Conteúdo do artigo..."
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none font-mono"
-            />
-            <p className="text-xs text-gray-400 mt-1">HTML básico é suportado.</p>
-          </div>
-
-        </div>
-
-        {/* Sidebar de ações */}
-        <div className="space-y-4">
-
-          {/* Status atual */}
-          <div className="bg-white border border-gray-100 rounded-2xl p-4">
-            <h3 className="text-xs font-bold text-gray-500 uppercase mb-3">Status atual</h3>
-            <div className={`inline-flex px-3 py-1.5 rounded-full text-sm font-bold ${
-              artigo.status === 'published' ? 'status-published' :
-              artigo.status === 'rejected'  ? 'status-rejected'  : 'status-pending'
-            }`}>
-              {artigo.status === 'published' ? '✓ Publicado' :
-               artigo.status === 'rejected'  ? '✕ Rejeitado' : '⏳ Pendente'}
-            </div>
-            {artigo.published_at && (
-              <p className="text-xs text-gray-400 mt-2">
-                Publicado em {format(new Date(artigo.published_at), "d MMM yyyy 'às' HH:mm", { locale: ptBR })}
-              </p>
-            )}
-          </div>
-
-          {/* Ações de publicação */}
-          <div className="bg-white border border-gray-100 rounded-2xl p-4 space-y-2">
-            <h3 className="text-xs font-bold text-gray-500 uppercase mb-3">Ações</h3>
-
-            {artigo.status !== 'published' && (
-              <button
-                onClick={() => handleStatus('published')}
-                disabled={saving !== null}
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-50"
-              >
-                {saving === 'published' ? 'Publicando...' : '✓ Aprovar e Publicar'}
-              </button>
-            )}
-
-            {artigo.status !== 'rejected' && (
-              <button
-                onClick={() => handleStatus('rejected')}
-                disabled={saving !== null}
-                className="w-full bg-red-100 hover:bg-red-200 text-red-700 font-bold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-50"
-              >
-                {saving === 'rejected' ? 'Rejeitando...' : '✕ Rejeitar'}
-              </button>
-            )}
-
-            {artigo.status === 'published' && artigo.slug && (
-              <a
-                href={`/noticias-e-opinioes/artigo/${artigo.slug}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full text-center border border-orange-300 text-orange-600 hover:bg-orange-50 font-semibold py-2.5 rounded-xl text-sm transition-colors"
-              >
-                👁️ Ver no portal
-              </a>
-            )}
-          </div>
-
-          {/* Metadados */}
-          <div className="bg-gray-50 border border-gray-100 rounded-2xl p-4 text-xs text-gray-400 space-y-1.5">
-            <h3 className="text-xs font-bold text-gray-500 uppercase mb-2">Metadados</h3>
-            <p><span className="font-medium text-gray-600">ID:</span> {artigo.id.slice(0, 8)}...</p>
-            <p><span className="font-medium text-gray-600">Slug:</span> {artigo.slug ?? '—'}</p>
-            <p><span className="font-medium text-gray-600">Fonte:</span> {artigo.source_name ?? '—'}</p>
-            <p><span className="font-medium text-gray-600">Leituras:</span
+    </div>
+  );
+}

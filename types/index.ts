@@ -86,17 +86,16 @@ export interface Article {
   updated_at:    string
 }
 
-export interface RssSource {
-  id:           string
-  name:         string
+export interface RSSSource {
+  id:           number
+  nome:         string
   url:          string
-  site_url:     string | null
-  category:     ArticleCategory
-  active:       boolean
-  last_fetched: string | null
-  fetch_count:  number
-  error_count:  number
+  tipo:         'rss' | 'web'
+  categoria_id: number | null
+  ativo:        boolean
+  ultima_busca: string | null
   created_at:   string
+  updated_at:   string
 }
 
 export interface Animal {

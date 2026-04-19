@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moreira Neto — Website UI Kit</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { font-family: 'Inter', system-ui, sans-serif; background: #F5E6D3; color: #2D2D2D; }
+  @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  .page { animation: fadeIn 0.35s ease; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="Header.jsx"></script>
+<script type="text/babel" src="HeroSection.jsx"></script>
+<script type="text/babel" src="AboutSection.jsx"></script>
+<script type="text/babel" src="AreaCard.jsx"></script>
+<script type="text/babel" src="ContactSection.jsx"></script>
+
+<script type="text/babel">
+// ── News Ticker ──────────────────────────────────────────────
+function NewsTicker({ theme }) {
+  const items = [
+    'Nova regulamentação de arrendamento rural aprovada pelo Congresso',
+    'STJ decide sobre direitos previdenciários de trabalhadores rurais',
+    'Moratória para dívidas agrícolas prorrogada até dezembro de 2025',
+    'Lei de proteção animal: novas penalidades para maus-tratos',
+    'Cooperativas agropecuárias: mudanças tributárias para 2025',
+  ];
+  const doubled = [...items, ...items];
+  const bg = theme==='dark'?'#27272A':theme==='sepia'?'#E8DFD0':'#D3D3D3';
+  const border = theme==='dark'?'#3F3F46':theme==='sepia'?'#D4C5A9':'#aaa';
+  const textColor = theme==='dark'?'#A1A1AA':theme==='sepia'?'#7D6650':'#555';
+  return (
+    <div style={{ background:bg, padding:'8px 20px', borderBottom:`1px solid ${border}`, overflow:'hidden' }}>
+      <div style={{ display:'flex', alignItems:'center', gap:20 }}>
+        <span style={{ fontSize:10, fontWeight:600, color:textColor, whiteSpace:'nowrap', flexShrink:0 }}>ÚLTIMAS NOTÍCIAS</span>
+        <div style={{ flex:1, overflow:'hidden', position:'relative' }}>
+          <div style={{ display:'flex', gap:48, animation:'ticker-scroll 35s linear infinite', whiteSpace:'nowrap' }}>
+            {doubled.map((item,i) => (
+              <span key={i} style={{ fontSize:11, color:textColor, flexShrink:0 }}>• {item}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Area Detail Modal ────────────────────────────────────────
+function AreaModal({ area, onClose }) {
+  if (!area) return null;
+  return (
+    <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', zIndex:200, display:'flex', alignItems:'flex-start', justifyContent:'center', padding:40, overflowY:'auto' }}
+      onClick={e => { if(e.target===e.currentTarget) onClose(); }}>
+      <div style={{ background:'#fff', borderRadius:16, maxWidth:720, width:'100%', overflow:'hidden', boxShadow:'0 24px 64px rgba(0,0,0,0.3)' }}>
+        <div style={{ height:240, overflow:'hidden', background:'#2C2C2C', position:'relative' }}>
+          <img src={area.imagem} alt={area.titulo} style={{ width:'100%', height:'100%', objectFit:'cover', opacity:0.7 }}
+            onError={e => { e.target.style.display='none'; }} />
+          <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', justifyContent:'flex-end', padding:28, background:'linear-gradient(transparent,rgba(0,0,0,0.7))' }}>
+            <h2 style={{ fontFamily:"'Lora',Georgia,serif", fontSize:32, fontWeight:700, color:'#fff', marginBottom:6 }}>{area.titulo}</h2>
+            <p style={{ fontSize:15, color:'rgba(255,255,255,0.8)' }}>{area.descricaoCurta}</p>
+          </div>
+          <button onClick={onClose} style={{ position:'absolute', top:16, right:16, background:'rgba(0,0,0,0.4)', border:'none', color:'#fff', width:36, height:36, borderRadius:'50%', cursor:'pointer', fontSize:18, display:'flex', alignItems:'center', justifyContent:'center' }}>×</button>
+        </div>
+        <div style={{ padding:32 }}>
+          <div style={{ display:'flex', gap:12, marginBottom:28, flexWrap:'wrap' }}>
+            <a href="https://wa.me/5546999779865" target="_blank" style={{ display:'inline-flex', alignItems:'center', gap:8, background:'#25D366', color:'#fff', padding:'10px 20px', borderRadius:6, textDecoration:'none', fontSize:14, fontWeight:600 }}>💬 WhatsApp</a>
+            <a href="mailto:contato@moreiraneto.adv.br" style={{ display:'inline-flex', alignItems:'center', gap:8, background:'#E8941F', color:'#2D2D2D', padding:'10px 20px', borderRadius:6, textDecoration:'none', fontSize:14, fontWeight:600 }}>✉ Agendar Consulta</a>
+          </div>
+          <p style={{ fontSize:15, color:'#444', lineHeight:1.7 }}>
+            Nossa equipe especializada em {area.titulo} oferece assessoria completa, desde a análise inicial até a resolução definitiva do seu caso. Priorizamos soluções extrajudiciais quando possível, com atuação judicial estratégica e eficiente quando necessário.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Radar Jurídico Portal ────────────────────────────────────
+const NOTICIAS = [
+  { id:1, titulo:'Nova lei de arrendamento rural: o que muda para o produtor?', categoria:'Agrário', data:'12 Jan 2025', resumo:'Análise das mudanças trazidas pela nova regulamentação e seus impactos práticos nos contratos vigentes.' },
+  { id:2, titulo:'STJ e os direitos previdenciários no trabalho rural', categoria:'Trabalhista', data:'08 Jan 2025', resumo:'Decisão recente do Superior Tribunal de Justiça reforça direitos de aposentadoria para trabalhadores do campo.' },
+  { id:3, titulo:'Guarda de pets na separação: como funciona juridicamente', categoria:'Animal', data:'03 Jan 2025', resumo:'Com o Direito Animal ganhando espaço, entenda como tribunais têm decidido sobre custódia de animais de estimação.' },
+  { id:4, titulo:'Recuperação judicial para produtores rurais: passo a passo', categoria:'Agrário', data:'28 Dez 2024', resumo:'Guia completo sobre quando e como acionar o processo de recuperação judicial no contexto do agronegócio.' },
+  { id:5, titulo:'NR-31 atualizada: conformidade no trabalho rural em 2025', categoria:'Trabalhista', data:'20 Dez 2024', resumo:'As novas exigências da norma regulamentadora e como sua empresa pode se adequar sem interromper operações.' },
+  { id:6, titulo:'Proteção animal: denunciar maus-tratos de forma eficaz', categoria:'Animal', data:'15 Dez 2024', resumo:'Um guia prático para fazer denúncias que realmente funcionam, com respaldo jurídico e documental adequado.' },
+];
+const CAT_COLORS = {
+  'Agrário':     { bg:'#FEF3C7', text:'#92400E' },
+  'Civil':       { bg:'#DBEAFE', text:'#1E40AF' },
+  'Trabalhista': { bg:'#D1FAE5', text:'#065F46' },
+  'Família':     { bg:'#FEE2E2', text:'#991B1B' },
+  'Animal':      { bg:'#E0E7FF', text:'#4338CA' },
+  'Geral':       { bg:'#F3E8FF', text:'#7C3AED' },
+};
+
+function NewsCard({ noticia }) {
+  const [hov, setHov] = React.useState(false);
+  const cat = CAT_COLORS[noticia.categoria] || { bg:'#F3F4F6', text:'#374151' };
+  return (
+    <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} style={{ background:'#fff', border:'1px solid #E5E7EB', borderRadius:12, overflow:'hidden', transition:'all 0.2s', boxShadow: hov ? '0 8px 24px rgba(0,0,0,0.10)' : '0 2px 8px rgba(0,0,0,0.04)', transform: hov ? 'translateY(-2px)' : 'translateY(0)', cursor:'pointer' }}>
+      <div style={{ height:140, background:'linear-gradient(135deg,#2C2C2C,#3a3a3a)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+        <span style={{ fontSize:36, opacity:0.3 }}>⚖</span>
+      </div>
+      <div style={{ padding:16 }}>
+        <span style={{ display:'inline-block', background:cat.bg, color:cat.text, fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.4px', padding:'2px 8px', borderRadius:999, marginBottom:8 }}>{noticia.categoria}</span>
+        <h3 style={{ fontFamily:"'Lora',Georgia,serif", fontSize:15, fontWeight:700, color:'#111827', lineHeight:1.35, marginBottom:8 }}>{noticia.titulo}</h3>
+        <p style={{ fontSize:12, color:'#6B7280', lineHeight:1.5, marginBottom:10 }}>{noticia.resumo}</p>
+        <div style={{ fontSize:11, color:'#9CA3AF' }}>{noticia.data}</div>
+      </div>
+    </div>
+  );
+}
+
+function RadarPortal({ theme, setTheme }) {
+  const pageBg = theme==='dark'?'#0D0D0F':theme==='sepia'?'#F5EFE6':'#F4F6F9';
+  const textColor = theme==='dark'?'#F4F4F5':theme==='sepia'?'#2D1B0E':'#111827';
+  const mutedColor = theme==='dark'?'#A1A1AA':theme==='sepia'?'#7D6650':'#6B7280';
+  return (
+    <div style={{ minHeight:'100vh', background:pageBg, color:textColor, transition:'background 0.2s, color 0.2s' }}>
+      {/* Portal Header */}
+      <header style={{ background: theme==='dark'?'#09090B':'#1F2937', color:'#fff', boxShadow:'0 2px 8px rgba(0,0,0,0.2)', position:'sticky', top:0, zIndex:40 }}>
+        <div style={{ maxWidth:1280, margin:'0 auto', padding:'12px 20px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:16 }}>
+            <img src="../../assets/mna-logo-web.png" alt="MNA" style={{ height:32, opacity:0.9 }} onError={e=>e.target.style.display='none'} />
+            <div style={{ width:1, height:24, background:'rgba(255,255,255,0.2)' }} />
+            <span style={{ color:'#E8941F', fontWeight:700, fontSize:16 }}>Radar Jurídico</span>
+          </div>
+          <nav style={{ display:'flex', gap:20 }}>
+            {['Notícias','Opiniões','Análise Jurídica'].map(n=>(
+              <a key={n} style={{ color:'#fff', fontSize:13, opacity:0.8, textDecoration:'none', cursor:'pointer' }}
+                onMouseEnter={e=>e.target.style.color='#E8941F'}
+                onMouseLeave={e=>e.target.style.color='#fff'}>{n}</a>
+            ))}
+          </nav>
+          <div style={{ display:'flex', gap:6 }}>
+            {['light','dark','sepia'].map(t=>(
+              <button key={t} onClick={()=>setTheme(t)} style={{ background: theme===t?'#E8941F':'rgba(255,255,255,0.1)', color: theme===t?'#2D2D2D':'#fff', border:'none', padding:'4px 10px', borderRadius:4, fontSize:11, cursor:'pointer', fontWeight:600, textTransform:'capitalize' }}>{t}</button>
+            ))}
+          </div>
+        </div>
+      </header>
+      <div style={{ maxWidth:1280, margin:'0 auto', padding:'40px 20px' }}>
+        <h1 style={{ fontFamily:"'Lora',Georgia,serif", fontSize:36, fontWeight:700, marginBottom:8, color:textColor }}>Radar Jurídico</h1>
+        <p style={{ fontSize:16, color:mutedColor, marginBottom:40 }}>Acompanhe as últimas notícias e análises do mundo jurídico agrorural</p>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:20 }}>
+          {NOTICIAS.map(n=><NewsCard key={n.id} noticia={n} />)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Admin Panel ──────────────────────────────────────────────
+function AdminPanel() {
+  const [active, setActive] = React.useState('artigos');
+  const nav = [
+    { id:'dashboard', icon:'⊞', label:'Dashboard' },
+    { id:'artigos', icon:'📄', label:'Artigos' },
+    { id:'adocoes', icon:'🐾', label:'Adoções AMAA' },
+    { id:'denuncias', icon:'🚨', label:'Denúncias' },
+    { id:'config', icon:'⚙', label:'Configurações' },
+  ];
+  const artigos = [
+    { titulo:'Nova lei de arrendamento rural', autor:'Dr. Moreira Neto', status:'published', data:'12 Jan 2025' },
+    { titulo:'NR-31 atualizada: conformidade 2025', autor:'Equipe MNA', status:'pending', data:'10 Jan 2025' },
+    { titulo:'Guarda de pets na separação', autor:'Dr. Moreira Neto', status:'published', data:'03 Jan 2025' },
+    { titulo:'Recuperação judicial para produtores', autor:'Equipe MNA', status:'rejected', data:'28 Dez 2024' },
+  ];
+  const statusStyle = { published:{bg:'#D1FAE5',text:'#065F46',label:'Publicado'}, pending:{bg:'#FEF3C7',text:'#92400E',label:'Pendente'}, rejected:{bg:'#FEE2E2',text:'#991B1B',label:'Rejeitado'} };
+  return (
+    <div style={{ display:'flex', minHeight:'100vh', fontFamily:"'Inter',sans-serif" }}>
+      {/* Sidebar */}
+      <div style={{ width:220, background:'#1F2937', flexShrink:0 }}>
+        <div style={{ padding:'20px 0 16px' }}>
+          <div style={{ padding:'0 16px 16px', borderBottom:'1px solid rgba(255,255,255,0.08)' }}>
+            <img src="../../assets/mna-logo-web.png" alt="MNA" style={{ height:32 }} onError={e=>e.target.style.display='none'} />
+            <div style={{ color:'#9CA3AF', fontSize:11, marginTop:6 }}>Painel Administrativo</div>
+          </div>
+          {nav.map(item=>(
+            <div key={item.id} onClick={()=>setActive(item.id)} style={{
+              display:'flex', alignItems:'center', gap:10, padding:'10px 16px',
+              fontSize:13, color: active===item.id?'#E8941F':'rgba(255,255,255,0.7)',
+              background: active===item.id?'rgba(232,148,31,0.12)':'transparent',
+              borderLeft: `3px solid ${active===item.id?'#E8941F':'transparent'}`,
+              cursor:'pointer', transition:'all 0.15s',
+            }}
+            onMouseEnter={e=>{ if(active!==item.id){e.currentTarget.style.background='rgba(255,255,255,0.05)';e.currentTarget.style.color='#fff';}}}
+            onMouseLeave={e=>{ if(active!==item.id){e.currentTarget.style.background='transparent';e.currentTarget.style.color='rgba(255,255,255,0.7)';}}}
+            >
+              <span>{item.icon}</span>{item.label}
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Main */}
+      <div style={{ flex:1, background:'#F4F6F9', padding:28 }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
+          <h1 style={{ fontSize:22, fontWeight:700, color:'#111827' }}>Artigos</h1>
+          <button style={{ background:'#E8941F', color:'#2D2D2D', border:'none', padding:'10px 20px', borderRadius:6, fontWeight:600, fontSize:13, cursor:'pointer' }}>+ Novo Artigo</button>
+        </div>
+        {/* Stats */}
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16, marginBottom:24 }}>
+          {[{label:'Total',val:48,color:'#1F2937'},{label:'Publicados',val:32,color:'#065F46'},{label:'Pendentes',val:11,color:'#92400E'},{label:'Rejeitados',val:5,color:'#991B1B'}].map(s=>(
+            <div key={s.label} style={{ background:'#fff', borderRadius:10, padding:'16px 20px', boxShadow:'0 2px 8px rgba(0,0,0,0.04)' }}>
+              <div style={{ fontSize:11, fontWeight:600, color:'#9CA3AF', textTransform:'uppercase', letterSpacing:'0.5px', marginBottom:6 }}>{s.label}</div>
+              <div style={{ fontSize:28, fontWeight:700, color:s.color }}>{s.val}</div>
+            </div>
+          ))}
+        </div>
+        {/* Table */}
+        <div style={{ background:'#fff', borderRadius:10, boxShadow:'0 2px 8px rgba(0,0,0,0.04)', overflow:'hidden' }}>
+          <table style={{ width:'100%', borderCollapse:'collapse' }}>
+            <thead>
+              <tr style={{ background:'#F9FAFB', borderBottom:'1px solid #E5E7EB' }}>
+                {['Título','Autor','Status','Data','Ações'].map(h=>(
+                  <th key={h} style={{ padding:'10px 16px', fontSize:11, fontWeight:700, color:'#6B7280', textTransform:'uppercase', letterSpacing:'0.5px', textAlign:'left' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {artigos.map((a,i)=>{
+                const s = statusStyle[a.status];
+                return (
+                  <tr key={i} style={{ borderBottom:'1px solid #F3F4F6' }}>
+                    <td style={{ padding:'12px 16px', fontSize:13, fontWeight:600, color:'#111827' }}>{a.titulo}</td>
+                    <td style={{ padding:'12px 16px', fontSize:13, color:'#6B7280' }}>{a.autor}</td>
+                    <td style={{ padding:'12px 16px' }}>
+                      <span style={{ background:s.bg, color:s.text, fontSize:10, fontWeight:700, padding:'3px 10px', borderRadius:999, textTransform:'uppercase' }}>{s.label}</span>
+                    </td>
+                    <td style={{ padding:'12px 16px', fontSize:12, color:'#9CA3AF' }}>{a.data}</td>
+                    <td style={{ padding:'12px 16px' }}>
+                      <button style={{ fontSize:12, color:'#E8941F', background:'none', border:'none', cursor:'pointer', fontWeight:600 }}>Editar</button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── App Shell ────────────────────────────────────────────────
+const THEMES = {
+  light: {
+    pageBg: '#F5E6D3', surface: '#fff', text: '#2D2D2D', muted: '#666',
+    border: '#E5E7EB', surface2: '#F4F6F9',
+  },
+  dark: {
+    pageBg: '#0D0D0F', surface: '#18181B', text: '#F4F4F5', muted: '#A1A1AA',
+    border: '#3F3F46', surface2: '#27272A',
+  },
+  sepia: {
+    pageBg: '#F5EFE6', surface: '#FDF6EC', text: '#2D1B0E', muted: '#7D6650',
+    border: '#D4C5A9', surface2: '#F0E8D8',
+  },
+};
+
+function App() {
+  const [page, setPage] = React.useState(() => localStorage.getItem('mna_page') || 'website');
+  const [section, setSection] = React.useState('home');
+  const [selectedArea, setSelectedArea] = React.useState(null);
+  const [theme, setTheme] = React.useState(() => localStorage.getItem('mna_theme') || 'light');
+
+  React.useEffect(()=>{ localStorage.setItem('mna_page', page); }, [page]);
+  React.useEffect(()=>{ localStorage.setItem('mna_theme', theme); }, [theme]);
+
+  const t = THEMES[theme];
+
+  React.useEffect(()=>{ localStorage.setItem('mna_page', page); }, [page]);
+
+  const navTo = (sec) => {
+    setSection(sec);
+    if (sec === 'radar') { setPage('portal'); return; }
+    if (sec === 'amaa')  { setPage('amaa');   return; }
+    const el = document.getElementById(sec);
+    if (el) el.scrollIntoView({ behavior:'smooth' });
+  };
+
+  const tabs = [
+    { id:'website', label:'🌐 Website' },
+    { id:'portal',  label:'📰 Radar Jurídico' },
+    { id:'admin',   label:'⚙ Admin' },
+  ];
+
+  return (
+    <div>
+      {/* Surface Switcher */}
+      <div style={{ background:'#111', padding:'6px 16px', display:'flex', gap:4, alignItems:'center', zIndex:100, position:'relative' }}>
+        <span style={{ color:'#666', fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'1px', marginRight:8 }}>Surface:</span>
+        {tabs.map(t2=>(
+          <button key={t2.id} onClick={()=>setPage(t2.id)} style={{ background: page===t2.id?'#E8941F':'rgba(255,255,255,0.05)', color: page===t2.id?'#111':'#aaa', border:'none', padding:'5px 14px', borderRadius:4, fontSize:12, cursor:'pointer', fontWeight:600 }}>{t2.label}</button>
+        ))}
+      </div>
+
+      {/* Website */}
+      {page === 'website' && (
+        <div className="page" style={{ background: t.pageBg, color: t.text, transition:'background 0.2s, color 0.2s' }}>
+          <MNAHeader activeSection={section} onNav={navTo} theme={theme} setTheme={setTheme} />
+          <NewsTicker theme={theme} t={t} />
+          <MNAHero onNav={navTo} t={t} />
+          <AboutSection onNav={navTo} t={t} />
+          <AreasSection onAreaClick={setSelectedArea} t={t} />
+          <MNAContact t={t} />
+          <MNAFooter onNav={navTo} t={t} />
+          {selectedArea && <AreaModal area={selectedArea} onClose={()=>setSelectedArea(null)} />}
+        </div>
+      )}
+
+      {/* Portal */}
+      {page === 'portal' && (
+        <div className="page">
+          <RadarPortal theme={theme} setTheme={setTheme} />
+        </div>
+      )}
+
+      {/* Admin */}
+      {page === 'admin' && (
+        <div className="page">
+          <AdminPanel />
+        </div>
+      )}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(App));
+</script>
+</body>
+</html>

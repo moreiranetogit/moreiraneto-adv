@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',system-ui,sans-serif; background:#F5E6D3; padding:20px; display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; }
+  .label { font-size:9px; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; font-family:monospace; }
+  .note { font-size:9px; color:#9CA3AF; margin-top:5px; font-style:italic; max-width:165px; line-height:1.4; }
+</style>
+</head>
+<body>
+
+  <!-- Logo versão fundo escuro (arquivo próprio) -->
+  <div>
+    <div class="label">Fundo escuro — versão oficial</div>
+    <div style="border-radius:10px;overflow:hidden;width:165px;height:110px;">
+      <img src="../assets/marca_fundopreto2.jpg" alt="MNA logo fundo escuro"
+        style="width:100%;height:100%;object-fit:cover;">
+    </div>
+  </div>
+
+  <!-- Logo versão fundo branco (arquivo próprio) -->
+  <div>
+    <div class="label">Fundo branco — versão oficial</div>
+    <div style="border-radius:10px;overflow:hidden;border:1px solid #E5E7EB;width:165px;height:110px;background:#fff;display:flex;align-items:center;justify-content:center;padding:12px;">
+      <img src="../assets/marca.png" alt="MNA logo fundo branco"
+        style="max-height:86px;max-width:141px;object-fit:contain;">
+    </div>
+  </div>
+
+  <!-- Logo transparente sobre fundo areia -->
+  <div>
+    <div class="label">Transparente — fundo areia</div>
+    <div style="border-radius:10px;width:165px;height:110px;background:#F5E6D3;border:1px solid #e0d0bc;display:flex;align-items:center;justify-content:center;padding:12px;">
+      <img src="../assets/mna-marca-transparente.png" alt="MNA"
+        style="max-height:86px;max-width:141px;object-fit:contain;">
+    </div>
+  </div>
+
+  <!-- Logo transparente sobre fundo dourado -->
+  <div>
+    <div class="label">Transparente — fundo dourado</div>
+    <div style="border-radius:10px;width:165px;height:110px;background:#E8941F;display:flex;align-items:center;justify-content:center;padding:12px;">
+      <img src="../assets/mna-marca-transparente.png" alt="MNA"
+        style="max-height:86px;max-width:141px;object-fit:contain;">
+    </div>
+  </div>
+
+  <!-- Logo transparente sobre imagem -->
+  <div>
+    <div class="label">Transparente — sobre foto</div>
+    <div style="border-radius:10px;width:165px;height:110px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+      <div style="position:absolute;inset:0;background:url('../assets/mna-area-geral-web.jpg') center/cover;"></div>
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);"></div>
+      <img src="../assets/mna-marca-transparente.png" alt="MNA"
+        style="max-height:86px;max-width:141px;object-fit:contain;position:relative;z-index:1;">
+    </div>
+  </div>
+
+  <!-- AMAA logo with attribution -->
+  <div>
+    <div class="label">Logo AMAA — com autorização</div>
+    <div style="border-radius:10px;overflow:hidden;border:1px solid #E5E7EB;width:165px;">
+      <div style="background:#fff;height:80px;display:flex;align-items:center;justify-content:center;padding:12px;">
+        <img src="../assets/amaa-logo-web.png" alt="AMAA"
+          style="max-height:56px;max-width:141px;object-fit:contain;"
+          onerror="this.parentElement.innerHTML='<div style=\'font-size:11px;color:#9CA3AF;text-align:center;\'>AMAA Logo</div>'">
+      </div>
+      <div style="background:#FFFBEB;border-top:1px solid #FDE68A;padding:7px 10px;">
+        <div style="font-size:9px;color:#92400E;line-height:1.5;">© AMAA — uso autorizado. Não reproduzir sem permissão.</div>
+      </div>
+    </div>
+    <div class="note">⚠ Sempre exibir nota de autorização junto ao logo da AMAA.</div>
+  </div>
+
+</body>
+</html>

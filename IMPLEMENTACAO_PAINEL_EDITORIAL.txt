@@ -1,0 +1,291 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║           ✅ PAINEL EDITORIAL — RADAR JURÍDICO — IMPLEMENTAÇÃO              ║
+║                      STATUS: 🟢 PRONTO PARA TESTES                          ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📦 ARQUIVOS CRIADOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ SCHEMA SUPABASE
+   └─ supabase/artigos-schema.sql
+      • 5 tabelas: artigos, fontes_rss, categorias, artigos_acoes, artigos_analise_historico
+      • RLS (Row Level Security) configurado
+      • Indexes para performance
+      • 12 fontes RSS pré-configuradas
+      • View: artigos_pendentes
+      • Functions: gerar_slug(), registrar_acao()
+
+✅ PAINEL EDITORIAL (UI)
+   └─ app/admin/artigos/page.tsx
+      • Dashboard com lista de notícias pendentes
+      • Filtros: busca, categoria, status
+      • Botão "Adicionar Notícia Manual" com form
+      • Cards com ações: Revisar | Descartar
+      • 540 linhas de código React + Tailwind
+
+✅ PÁGINA DE REVISÃO (UI)
+   └─ app/admin/artigos/[id]/page.tsx
+      • Visualização da notícia original
+      • Campo editável para análise jurídica
+      • Sidebar com ações: Aprovar | Descartar | Salvar Rascunho
+      • Preview de publicação
+      • Status e metadados do artigo
+
+✅ API ENDPOINTS
+   ├─ app/api/artigos/route.ts
+   │  ├─ GET /api/artigos (lista com filtros)
+   │  └─ POST /api/artigos (criar novo artigo)
+   │
+   ├─ app/api/artigos/[id]/route.ts
+   │  ├─ GET /api/artigos/[id] (obter artigo)
+   │  ├─ PATCH /api/artigos/[id] (atualizar status/análise)
+   │  └─ DELETE /api/artigos/[id] (descartar/rejeitar)
+   │
+   └─ app/api/artigos/[id]/analisar/route.ts
+      └─ POST /api/artigos/[id]/analisar (gerar análise automática)
+         • Placeholder para integração com skill
+         • Chamará: /legal-moreira:analise-juridica
+
+✅ DOCUMENTAÇÃO
+   └─ PAINEL_EDITORIAL_README.md
+      • Visão geral completa
+      • Arquitetura explicada
+      • Schema do banco de dados
+      • 12 fontes monitoradas
+      • Fluxo passo-a-passo
+      • Como usar (admin)
+      • Próximas etapas
+
+
+🎯 FUNCIONALIDADES IMPLEMENTADAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ DASHBOARD (/admin/artigos)
+   ✓ Listar notícias com status filtrado (pendente/aprovado/publicado/rejeitado)
+   ✓ Busca por título da notícia
+   ✓ Filtro por categoria (6 categorias)
+   ✓ Filtro por status
+   ✓ Botão "Adicionar" com form inline
+   ✓ Cards com: título, descrição, fonte, categoria, data
+   ✓ Ação "Revisar" (link para /admin/artigos/[id])
+   ✓ Ação "Descartar" (DELETE /api/artigos/[id])
+   ✓ Indicador "✓ Análise gerada" quando análise existe
+
+✅ REVISÃO (/admin/artigos/[id])
+   ✓ Visualizar notícia original (título, resumo, fonte, data)
+   ✓ Campo de texto para editar análise jurídica
+   ✓ Botão "Aprovar e Publicar" (PATCH com status='publicado')
+   ✓ Botão "Descartar" (DELETE)
+   ✓ Botão "Salvar Rascunho" (PATCH sem mudar status)
+   ✓ Sidebar com status e informações
+   ✓ Dica: "Use /legal-moreira:analise-juridica para gerar análise"
+
+✅ API - CORE
+   ✓ GET /api/artigos (lista com filtros: busca, categoria, status)
+   ✓ POST /api/artigos (criar com slug automático)
+   ✓ GET /api/artigos/[id] (obter específico)
+   ✓ PATCH /api/artigos/[id] (atualizar status e análise)
+   ✓ DELETE /api/artigos/[id] (marcar como rejeitado)
+
+✅ BANCO DE DADOS
+   ✓ Tabela: artigos (com todos os campos necessários)
+   ✓ Tabela: fontes_rss (12 fontes pré-cadastradas)
+   ✓ Tabela: categorias (6 categorias de direito)
+   ✓ Tabela: artigos_acoes (histórico de ações)
+   ✓ Tabela: artigos_analise_historico (rastreamento de edições)
+   ✓ RLS habilitado e configurado
+   ✓ Indexes para performance
+   ✓ View: artigos_pendentes
+   ✓ Trigger: auto-log de mudanças de status
+
+
+🔧 PRÓXIMAS ETAPAS (FASE 2)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1️⃣ INTEGRAÇÃO COM SKILL
+   [ ] Implementar chamada real a /legal-moreira:analise-juridica
+   [ ] Endpoint POST /api/artigos/[id]/analisar (atualmente é placeholder)
+   [ ] Passar contexto de cliente para skill (viés agrário/agronegócio)
+   [ ] Salvar análise gerada no campo analise_texto
+
+2️⃣ BUSCA AUTOMÁTICA (CRON JOB)
+   [ ] Criar job para rodar a cada 2 horas
+   [ ] Fazer fetch RSS de todas as 12 fontes
+   [ ] Parser RSS → extrair título, link, resumo, data
+   [ ] Deduplcar (verificar se notícia já existe)
+   [ ] Criar registro em artigos com status='pendente'
+   [ ] Chamar skill de análise automaticamente
+   [ ] Notificar admin (Slack/email) quando nova notícia
+
+3️⃣ PORTAL PÚBLICO (/despacho)
+   [ ] Página /despacho (homepage do portal)
+   [ ] Página /despacho/artigo/[slug] (artigo individual)
+   [ ] Página /despacho/[categoria] (filtro por categoria)
+   [ ] RSS feed para subscribers
+
+4️⃣ INTEGRAÇÃO INSTAGRAM (FUTURO)
+   [ ] Ao publicar, chamar skill /social-post-juridico
+   [ ] Gerar post Instagram automaticamente
+   [ ] Enviar para fila de publicação (ou postar direto)
+   [ ] Link para voltar ao artigo
+
+5️⃣ MELHORIAS DE UX
+   [ ] Bulk actions (aprovar múltiplos de uma vez)
+   [ ] Drag-and-drop para reordenar publicações
+   [ ] Comments/notas privadas no artigo
+   [ ] Notificações em tempo real
+   [ ] Estatísticas (notícias/semana, categorias top)
+   [ ] Exportação em PDF
+   [ ] Agendamento de publicação
+
+
+📊 DADOS INICIAIS CARREGADOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ 6 CATEGORIAS
+   • Direito Agrário (#8B7355)
+   • Direito Civil (#4A6B8A)
+   • Direito Trabalhista (#6B4A8A)
+   • Direito de Família (#8A6B4A)
+   • Direito Animal (#2D6A4F)
+   • Direito Geral (#666666)
+
+✅ 12 FONTES RSS
+   TRIBUNAIS:
+   • STJ (Superior Tribunal de Justiça)
+   • STF (Supremo Tribunal Federal)
+   • TST (Tribunal Superior do Trabalho)
+
+   PORTAIS GERAIS:
+   • Conjur
+   • Migalhas
+
+   DIREITO AGRÁRIO:
+   • Direito Rural
+   • Direito Agrário
+   • Direito News
+   • A Modireito
+   • CNA Brasil
+   • The Agribiz
+   • Agrolink
+
+
+🧪 COMO TESTAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. PREPARAÇÃO
+   a) Executar schema SQL no Supabase:
+      → Copiar conteúdo de: supabase/artigos-schema.sql
+      → Colar no SQL Editor do Supabase
+      → Executar (cria todas as tabelas)
+      → Dados iniciais carregam automaticamente
+
+2. TESTAR DASHBOARD
+   a) npm run dev
+   b) Acesse: http://localhost:3000/admin/artigos
+   c) Deve ver: "Nenhuma notícia encontrada" ou lista vazia
+   d) Clique "+ Adicionar"
+   e) Preencha: Título, Descrição, Fonte, Categoria
+   f) Clique "Adicionar"
+   g) Notícia aparece na lista
+
+3. TESTAR REVISÃO
+   a) Clique "Revisar" em uma notícia
+   b) Vê: Notícia original + campo de análise vazio
+   c) Edite o campo de análise
+   d) Clique "Salvar Rascunho"
+   e) Volte ao dashboard e veja status "pendente"
+
+4. TESTAR PUBLICAÇÃO
+   a) Na página de revisão, clique "Aprovar e Publicar"
+   b) API retorna sucesso
+   c) Status deve mudar para "publicado"
+   d) Nota: /despacho ainda não existe (Fase 2)
+
+5. TESTAR FILTROS
+   a) Dashboard: busque por título
+   b) Filtre por categoria
+   c) Filtre por status
+   d) Combine filtros
+
+
+⚙️ CONFIGURAÇÃO NECESSÁRIA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+.env.local deve ter:
+   NEXT_PUBLIC_SUPABASE_URL=https://seu-project.supabase.co
+   SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIs...
+
+Schema executado em:
+   Supabase → SQL Editor → Cole supabase/artigos-schema.sql
+
+
+🚨 IMPORTANTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ O QUE AINDA NÃO FUNCIONA:
+   • Busca automática de notícias (cron job)
+   • Chamada real à skill /legal-moreira:analise-juridica
+   • Portal público /despacho (página não existe)
+   • Publicação automática no Instagram
+   • Sincronização com Notion
+
+✅ O QUE FUNCIONA:
+   • Dashboard editorial
+   • Página de revisão
+   • CRUD completo via API
+   • Banco de dados estruturado
+   • Filtros e busca local
+
+
+📞 PRÓXIMAS AÇÕES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HOJE:
+   1. Executar schema SQL no Supabase ✓
+   2. Fazer testes básicos no painel ✓
+   3. Revisar fluxo de criação/edição/publicação ✓
+
+DEPOIS:
+   1. Implementar integração real com skill de análise
+   2. Criar cron job de busca automática
+   3. Implementar portal público /despacho
+   4. Integrar com Instagram (automático)
+   5. Adicionar notificações e analytics
+
+
+📁 ESTRUTURA FINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+/moreiraneto-adv/
+├─ app/admin/artigos/
+│  ├─ page.tsx                    ✅ Dashboard
+│  └─ [id]/page.tsx               ✅ Revisão
+│
+├─ app/api/artigos/
+│  ├─ route.ts                    ✅ GET/POST
+│  └─ [id]/
+│     ├─ route.ts                 ✅ GET/PATCH/DELETE
+│     └─ analisar/route.ts         ✅ POST (skill)
+│
+├─ supabase/
+│  └─ artigos-schema.sql          ✅ Schema completo
+│
+└─ PAINEL_EDITORIAL_README.md     ✅ Documentação
+
+
+✨ STATUS FINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🟢 PAINEL EDITORIAL: Pronto para testes
+🟢 API Endpoints: Funcionando
+🟢 Banco de Dados: Configurado
+🟡 Integração com Skill: Placeholder (falta implementação real)
+🔴 Busca Automática: Não implementado (Fase 2)
+🔴 Portal Público: Não implementado (Fase 2)
+
+Data: 2026-04-14
+Versão: 1.0
+Próxima: 2.0 (com busca automática + skill real)
+
+╚══════════════════════════════════════════════════════════════════════════════╝

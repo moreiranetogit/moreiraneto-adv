@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: #F5E6D3; padding: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .swatch { border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.10); }
+  .chip { height: 72px; }
+  .info { background: #fff; padding: 8px 10px; }
+  .name { font-size: 11px; font-weight: 600; color: #2D2D2D; }
+  .hex  { font-size: 10px; color: #666; font-family: monospace; margin-top: 2px; }
+  .var  { font-size: 9px; color: #999; margin-top: 1px; font-family: monospace; }
+</style></head>
+<body>
+<div class="grid">
+  <div class="swatch">
+    <div class="chip" style="background: linear-gradient(135deg, #E8941F 0%, #F5B55A 100%);"></div>
+    <div class="info"><div class="name">Gold</div><div class="hex">#E8941F</div><div class="var">--mna-gold</div></div>
+  </div>
+  <div class="swatch">
+    <div class="chip" style="background: #C47A10;"></div>
+    <div class="info"><div class="name">Gold Dark</div><div class="hex">#C47A10</div><div class="var">--mna-gold-dark</div></div>
+  </div>
+  <div class="swatch">
+    <div class="chip" style="background: #F5B55A;"></div>
+    <div class="info"><div class="name">Gold Light</div><div class="hex">#F5B55A</div><div class="var">--mna-gold-light</div></div>
+  </div>
+  <div class="swatch">
+    <div class="chip" style="background: linear-gradient(135deg, #B0B8C1 0%, #9CA3AF 100%);"></div>
+    <div class="info"><div class="name">Silver</div><div class="hex">#9CA3AF</div><div class="var">--mna-silver</div></div>
+  </div>
+  <div class="swatch">
+    <div class="chip" style="background: #2C2C2C;"></div>
+    <div class="info"><div class="name">Charcoal</div><div class="hex">#2C2C2C</div><div class="var">--mna-charcoal</div></div>
+  </div>
+  <div class="swatch">
+    <div class="chip" style="background: #1F2937;"></div>
+    <div class="info"><div class="name">Dark</div><div class="hex">#1F2937</div><div class="var">--mna-dark</div></div>
+  </div>
+  <div class="swatch">
+    <div class="chip" style="background: #666666;"></div>
+    <div class="info"><div class="name">Mid Gray</div><div class="hex">#666666</div><div class="var">--mna-mid</div></div>
+  </div>
+  <div class="swatch">
+    <div class="chip" style="background: #F5E6D3; border: 1px solid #e0d0bc;"></div>
+    <div class="info"><div class="name">Sand</div><div class="hex">#F5E6D3</div><div class="var">--mna-sand</div></div>
+  </div>
+  <div class="swatch">
+    <div class="chip" style="background: #F4F6F9; border: 1px solid #e5e7eb;"></div>
+    <div class="info"><div class="name">Off-White</div><div class="hex">#F4F6F9</div><div class="var">--mna-off-white</div></div>
+  </div>
+  <div class="swatch">
+    <div class="chip" style="background: #fff; border: 1px solid #e5e7eb;"></div>
+    <div class="info"><div class="name">White</div><div class="hex">#FFFFFF</div><div class="var">--mna-surface</div></div>
+  </div>
+</div>
+</body></html>
