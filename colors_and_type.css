@@ -1,0 +1,402 @@
+/* ============================================================
+   MOREIRA NETO ADVOCACIA — Design Tokens
+   colors_and_type.css
+   ============================================================ */
+
+/* ── Custom Fonts ─────────────────────────────────────────── */
+@font-face {
+  font-family: 'MankSans';
+  src: url('./fonts/MankSans.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'MankSans';
+  src: url('./fonts/MankSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'MankSans';
+  src: url('./fonts/MankSans-Oblique.ttf') format('truetype');
+  font-weight: 400;
+  font-style: oblique;
+}
+@font-face {
+  font-family: 'Poorich';
+  src: url('./fonts/POORICH.TTF') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* ── Color Palette ────────────────────────────────────────── */
+:root {
+
+  /* Brand Core */
+  --mna-gold:         #E8941F;   /* Dourado — accent principal */
+  --mna-gold-dark:    #C47A10;   /* Dourado escuro — hover/deep */
+  --mna-gold-light:   #F5B55A;   /* Dourado claro — highlight */
+  --mna-silver:       #9CA3AF;   /* Prata — logo M, texto auxiliar */
+
+  /* Neutrals — Dark Spectrum */
+  --mna-charcoal:     #2C2C2C;   /* Header/footer background */
+  --mna-dark:         #1F2937;   /* Portal header, admin sidebar */
+  --mna-graphite:     #2D2D2D;   /* Section backgrounds */
+  --mna-mid:          #666666;   /* Muted text */
+  --mna-light-gray:   #D3D3D3;   /* Ticker bar, dividers */
+  --mna-border:       #E5E7EB;   /* Card borders, thin lines */
+
+  /* Backgrounds */
+  --mna-sand:         #F5E6D3;   /* Areia — page bg (website) */
+  --mna-off-white:    #F4F6F9;   /* Portal bg */
+  --mna-surface:      #FFFFFF;   /* Cards, surfaces */
+  --mna-surface2:     #F3F4F6;   /* Secondary surface */
+
+  /* Semantic — Light Theme */
+  --color-bg:         var(--mna-sand);
+  --color-surface:    var(--mna-surface);
+  --color-surface2:   var(--mna-surface2);
+  --color-border:     var(--mna-border);
+  --color-text:       var(--mna-graphite);
+  --color-muted:      var(--mna-mid);
+  --color-accent:     var(--mna-gold);
+  --color-accent-dk:  var(--mna-gold-dark);
+  --header-bg:        var(--mna-charcoal);
+  --header-text:      #FFFFFF;
+
+  /* Status Colors */
+  --status-pending-bg:   #FEF3C7;
+  --status-pending-text: #92400E;
+  --status-pub-bg:       #D1FAE5;
+  --status-pub-text:     #065F46;
+  --status-reject-bg:    #FEE2E2;
+  --status-reject-text:  #991B1B;
+  --status-adopted-bg:   #DBEAFE;
+  --status-adopted-text: #1E40AF;
+
+  /* Shadows */
+  --shadow-card:       0 2px 12px rgba(0,0,0,0.06);
+  --shadow-card-hover: 0 8px 24px rgba(0,0,0,0.10);
+  --shadow-gold:       0 8px 16px rgba(232,148,31,0.30);
+  --shadow-dark:       0 2px 12px rgba(0,0,0,0.15);
+
+  /* Border Radius */
+  --radius-sm:    4px;
+  --radius-md:    6px;
+  --radius-lg:    8px;
+  --radius-card:  12px;
+  --radius-pill:  999px;
+
+  /* Spacing Scale */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* Typography — Font Families */
+  --font-serif:      'Lora', 'Sitka Text', Georgia, 'Times New Roman', serif;
+  --font-sans:       'Inter', system-ui, sans-serif;
+  --font-manksans:   'MankSans', 'Inter', sans-serif;
+  --font-poorich:    'Poorich', Georgia, serif;
+  --font-display:    var(--font-serif);   /* Headlines, section titles */
+  --font-body:       var(--font-sans);    /* Body copy, UI labels */
+  --font-brand:      var(--font-poorich); /* Brand accent, special headings */
+
+  /* Typography — Scale */
+  --text-xs:   11px;
+  --text-sm:   13px;
+  --text-base: 15px;
+  --text-md:   16px;
+  --text-lg:   18px;
+  --text-xl:   24px;
+  --text-2xl:  32px;
+  --text-3xl:  40px;
+  --text-4xl:  48px;
+
+  /* Typography — Semantic Roles */
+  --type-h1-size:     48px;
+  --type-h1-weight:   700;
+  --type-h1-family:   var(--font-display);
+  --type-h1-leading:  1.1;
+  --type-h1-tracking: -1px;
+
+  --type-h2-size:     32px;
+  --type-h2-weight:   700;
+  --type-h2-family:   var(--font-display);
+  --type-h2-leading:  1.2;
+  --type-h2-tracking: -0.5px;
+
+  --type-h3-size:     24px;
+  --type-h3-weight:   700;
+  --type-h3-family:   var(--font-display);
+  --type-h3-leading:  1.3;
+
+  --type-overline-size:    13px;
+  --type-overline-weight:  600;
+  --type-overline-family:  var(--font-sans);
+  --type-overline-spacing: 2px;
+  --type-overline-case:    uppercase;
+
+  --type-body-size:    16px;
+  --type-body-family:  var(--font-sans);
+  --type-body-weight:  400;
+  --type-body-leading: 1.7;
+
+  --type-caption-size:   14px;
+  --type-caption-family: var(--font-sans);
+  --type-caption-weight: 400;
+  --type-caption-leading: 1.6;
+
+  --type-label-size:   14px;
+  --type-label-family: var(--font-sans);
+  --type-label-weight: 500;
+
+  --type-nav-size:     14px;
+  --type-nav-family:   var(--font-sans);
+  --type-nav-weight:   500;
+
+  /* Transitions */
+  --transition-fast:   all 0.15s ease;
+  --transition-base:   all 0.2s ease;
+  --transition-slow:   all 0.3s ease;
+}
+
+/* ── Dark Theme Override ──────────────────────────────────── */
+[data-theme="dark"] {
+  --color-bg:       #0D0D0F;
+  --color-surface:  #18181B;
+  --color-surface2: #27272A;
+  --color-border:   #3F3F46;
+  --color-text:     #F4F4F5;
+  --color-muted:    #A1A1AA;
+  --header-bg:      #09090B;
+}
+
+/* ── Sepia Theme Override ─────────────────────────────────── */
+[data-theme="sepia"] {
+  --color-bg:       #F5EFE6;
+  --color-surface:  #FDF6EC;
+  --color-surface2: #F0E8D8;
+  --color-border:   #D4C5A9;
+  --color-text:     #2D1B0E;
+  --color-muted:    #7D6650;
+  --color-accent:   #C47A10;
+  --color-accent-dk:#A36208;
+  --header-bg:      #2D1B0E;
+}
+
+/* ── Utility Classes ──────────────────────────────────────── */
+
+/* Colors */
+.mna-gold    { color: var(--mna-gold); }
+.mna-dark    { color: var(--mna-dark); }
+.bg-gold     { background: var(--mna-gold); }
+.bg-dark     { background: var(--mna-charcoal); }
+.bg-sand     { background: var(--mna-sand); }
+.bg-surface  { background: var(--color-surface); }
+
+/* Typography */
+.font-serif   { font-family: var(--font-serif); }
+.font-sans    { font-family: var(--font-sans); }
+.font-manksans{ font-family: var(--font-manksans); }
+.font-brand   { font-family: var(--font-brand); }
+
+.type-h1 {
+  font-family: var(--type-h1-family);
+  font-size: var(--type-h1-size);
+  font-weight: var(--type-h1-weight);
+  line-height: var(--type-h1-leading);
+  letter-spacing: var(--type-h1-tracking);
+}
+.type-h2 {
+  font-family: var(--type-h2-family);
+  font-size: var(--type-h2-size);
+  font-weight: var(--type-h2-weight);
+  line-height: var(--type-h2-leading);
+  letter-spacing: var(--type-h2-tracking);
+}
+.type-h3 {
+  font-family: var(--type-h3-family);
+  font-size: var(--type-h3-size);
+  font-weight: var(--type-h3-weight);
+  line-height: var(--type-h3-leading);
+}
+.type-overline {
+  font-family: var(--type-overline-family);
+  font-size: var(--type-overline-size);
+  font-weight: var(--type-overline-weight);
+  letter-spacing: var(--type-overline-spacing);
+  text-transform: var(--type-overline-case);
+}
+.type-body {
+  font-family: var(--type-body-family);
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+}
+.type-caption {
+  font-family: var(--type-caption-family);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-leading);
+}
+.type-label {
+  font-family: var(--type-label-family);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+}
+
+/* Cards */
+.mna-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-slow);
+}
+.mna-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 32px;
+  background: var(--mna-gold);
+  color: var(--mna-graphite);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition-slow);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 32px;
+  background: #1a1a1a;
+  color: var(--mna-gold);
+  border: 2px solid var(--mna-gold);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition-slow);
+}
+.btn-secondary:hover {
+  background: var(--mna-gold);
+  color: #1a1a1a;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: transparent;
+  color: var(--mna-gold);
+  border: 2px solid var(--mna-gold);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition-slow);
+}
+.btn-ghost:hover {
+  background: var(--mna-gold);
+  color: var(--mna-charcoal);
+}
+
+/* Badge / Category */
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* Differential card */
+.diferencial-card {
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  background: var(--mna-surface, #fff);
+  border-left: 4px solid var(--mna-gold);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-slow);
+}
+.diferencial-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+/* News card */
+.news-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  transition: var(--transition-base);
+}
+.news-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+/* Header Gold Border */
+.mna-header {
+  background: var(--mna-charcoal);
+  border-bottom: 3px solid var(--mna-gold);
+  box-shadow: var(--shadow-dark);
+}
+
+/* Footer */
+.mna-footer {
+  background: var(--mna-graphite);
+  color: #fff;
+}
+
+/* Admin sidebar */
+.admin-sidebar { background: var(--mna-dark); color: #fff; }
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  border-left: 3px solid transparent;
+  transition: var(--transition-fast);
+}
+.admin-nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.admin-nav-item.active {
+  background: rgba(232,148,31,0.15);
+  color: var(--mna-gold);
+  border-left-color: var(--mna-gold);
+}
