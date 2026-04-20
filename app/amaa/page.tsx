@@ -20,7 +20,7 @@ const COLORS = {
   verde: '#16A34A',
 }
 
-const FONT_FAMILY = "'Sitka Text', Georgia, 'Times New Roman', serif"
+const FONT_SERIF = 'var(--font-serif)'
 
 export default function AmaaPage() {
   const [menuAberto, setMenuAberto] = useState(false)
@@ -31,7 +31,7 @@ export default function AmaaPage() {
       style={{
         backgroundColor: COLORS.cinzaClaro,
         color: COLORS.cinzaEscuro,
-        fontFamily: FONT_FAMILY,
+        fontFamily: FONT_SERIF,
       }}
     >
       {/* ════════════════════════════════════════════════════════════════════ */}

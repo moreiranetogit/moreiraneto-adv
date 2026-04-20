@@ -1,68 +1,63 @@
-import { createClient } from '@supabase/supabase-js';
-import { NextRequest, NextResponse } from 'next/server';
+import { requireRole } from '@/lib/auth'
+import { createClient } from '@/lib/supabase/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+const VALID_STATUSES = new Set(['pending', 'published', 'rejected'])
+const VALID_CATEGORIES = new Set(['agrario', 'civil', 'trabalhista', 'familia', 'animal', 'advocacia', 'oab'])
 
-// GET /api/artigos - Listar artigos com filtros
-export async function GET(request: NextRequest) {
-  try {
-    const searchParams = request.nextUrl.searchParams;
-    const busca = searchParams.get('busca');
-    const categoria = searchParams.get('categoria');
-    const status = searchParams.get('status') || 'pendente';
+export async function GET(req: NextRequest) {
+  await requireRole(['admin', 'editor'])
+  const supabase = await createClient()
+  const { searchParams } = req.nextUrl
 
-    let query = supabase
-      .from('artigos')
-      .select('*');
+  const status = searchParams.get('status') || 'pending'
+  const category = searchParams.get('category')
+  const search = searchParams.get('search')
 
-    if (status) query = query.eq('status', status);
-    if (categoria) query = query.eq('categoria_id', categoria);
-    if (busca) query = query.ilike('titulo', `%${busca}%`);
+  const resolvedStatus = VALID_STATUSES.has(status) ? status : 'pending'
 
-    const { data, error } = await query.order('criado_em', { ascending: false });
+  let query = supabase
+    .from('articles')
+    .select('id, title, slug, category, status, source_name, published_at, created_at, read_count')
+    .eq('status', resolvedStatus)
+    .order('created_at', { ascending: false })
+    .limit(100)
 
-    if (error) throw error;
+  if (category && VALID_CATEGORIES.has(category)) query = query.eq('category', category)
+  if (search) query = query.ilike('title', `%${search.trim().slice(0, 100)}%`)
 
-    return NextResponse.json({ artigos: data || [] });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+  const { data, error } = await query
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json(data ?? [])
 }
 
-// POST /api/artigos - Criar novo artigo
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { titulo, descricao, conteudo, fonte_url, fonte_nome, categoria_id } = body;
+export async function POST(req: NextRequest) {
+  await requireRole(['admin', 'editor'])
+  const supabase = await createClient()
+  const body = await req.json()
+  const { title, excerpt, content, source_url, source_name, category } = body
 
-    // Gerar slug
-    const slug = titulo
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-');
-
-    const { data, error } = await supabase
-      .from('artigos')
-      .insert({
-        titulo,
-        descricao,
-        conteudo,
-        fonte_url,
-        fonte_nome,
-        categoria_id,
-        slug,
-        status: 'pendente',
-        // TODO: Chamar skill de análise aqui
-      })
-      .select();
-
-    if (error) throw error;
-
-    return NextResponse.json({ artigo: data?.[0] }, { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  if (!title || !category) {
+    return NextResponse.json({ error: 'title e category são obrigatórios' }, { status: 400 })
   }
+  if (!VALID_CATEGORIES.has(category)) {
+    return NextResponse.json({ error: 'Categoria inválida' }, { status: 400 })
+  }
+
+  const { data, error } = await supabase
+    .from('articles')
+    .insert({
+      title: String(title).trim().slice(0, 500),
+      excerpt: excerpt ? String(excerpt).trim().slice(0, 1000) : null,
+      content: content ? String(content).trim() : null,
+      source_url: source_url ? String(source_url).slice(0, 2048) : null,
+      source_name: source_name ? String(source_name).trim().slice(0, 200) : null,
+      category,
+      status: 'pending',
+    })
+    .select()
+    .single()
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json(data, { status: 201 })
 }

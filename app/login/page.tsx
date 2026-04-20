@@ -69,11 +69,12 @@ function LoginForm() {
           <form onSubmit={handleSubmit} className="space-y-4">
 
             <div>
-              <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wide"
+              <label htmlFor="login-email" className="block text-xs font-semibold mb-1.5 uppercase tracking-wide"
                 style={{ color: '#9CA3AF' }}>
                 E-mail
               </label>
               <input
+                id="login-email"
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
@@ -92,7 +93,7 @@ function LoginForm() {
 
             <div>
               <div className="flex justify-between items-center mb-1.5">
-                <label className="text-xs font-semibold uppercase tracking-wide"
+                <label htmlFor="login-password" className="text-xs font-semibold uppercase tracking-wide"
                   style={{ color: '#9CA3AF' }}>
                   Senha
                 </label>
@@ -103,6 +104,7 @@ function LoginForm() {
                 </button>
               </div>
               <input
+                id="login-password"
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}

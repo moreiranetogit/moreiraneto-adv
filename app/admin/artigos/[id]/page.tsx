@@ -18,7 +18,7 @@ const COLORS = {
   vermelho: '#EF4444',
 };
 
-const FONT_FAMILY = "'Sitka Text', Georgia, 'Times New Roman', serif";
+const FONT_SERIF = 'var(--font-serif)';
 
 export default function ArtigoReviewPage() {
   const params = useParams();
@@ -139,7 +139,7 @@ export default function ArtigoReviewPage() {
     <div style={{
       backgroundColor: COLORS.areia,
       color: COLORS.cinzaEscuro,
-      fontFamily: FONT_FAMILY,
+      fontFamily: FONT_SERIF,
       minHeight: '100vh',
     }}>
       {/* Header */}
@@ -325,7 +325,7 @@ export default function ArtigoReviewPage() {
                     lineHeight: 1.6,
                     minHeight: '280px',
                     boxSizing: 'border-box',
-                    fontFamily: FONT_FAMILY,
+                    fontFamily: FONT_SERIF,
                   }}
                   placeholder="Edite ou cole a análise jurídica gerada pela skill aqui..."
                 />

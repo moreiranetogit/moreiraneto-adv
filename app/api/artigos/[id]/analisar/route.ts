@@ -1,66 +1,41 @@
-import { createClient } from '@supabase/supabase-js';
-import { NextRequest, NextResponse } from 'next/server';
+import { requireRole } from '@/lib/auth'
+import { createClient } from '@/lib/supabase/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
-/**
- * POST /api/artigos/[id]/analisar
- * 
- * Chama a skill /legal-moreira:analise-juridica para gerar análise automática
- * sobre a notícia jurídica com viés para os clientes do escritório.
- * 
- * TODO: Implementar integração real com a skill via subprocess/API
- */
 export async function POST(
-  request: NextRequest,
+  _req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  try {
-    // 1. Buscar artigo
-    const { data: artigo, error: erroArtigo } = await supabase
-      .from('artigos')
-      .select('*')
-      .eq('id', parseInt(params.id))
-      .single();
+  await requireRole(['admin', 'editor'])
+  const supabase = await createClient()
 
-    if (erroArtigo) throw erroArtigo;
+  const { data: artigo, error: erroArtigo } = await supabase
+    .from('articles')
+    .select('id, title, excerpt, content, source_name, category')
+    .eq('id', params.id)
+    .single()
 
-    // 2. TODO: Chamar skill /legal-moreira:analise-juridica com os dados do artigo
-    // 
-    // Pseudo-código:
-    // const analise = await callSkill('legal-moreira:analise-juridica', {
-    //   titulo: artigo.titulo,
-    //   descricao: artigo.descricao,
-    //   conteudo: artigo.conteudo,
-    //   fonte_nome: artigo.fonte_nome,
-    //   categoria: artigo.categoria_nome,
-    //   instrucao: 'Gere uma análise jurídica sobre esta notícia com viés para...'
-    // });
-
-    // 3. Por enquanto, retornar placeholder
-    const analiseGerada = `[ANÁLISE GERADA AUTOMATICAMENTE]\n\nNotícia: ${artigo.titulo}\nFonte: ${artigo.fonte_nome}\nData: ${new Date().toLocaleDateString('pt-BR')}\n\nEstá análise será gerada pela skill /legal-moreira:analise-juridica`;
-
-    // 4. Atualizar artigo com análise
-    const { data, error } = await supabase
-      .from('artigos')
-      .update({
-        analise_texto: analiseGerada,
-        analise_gerada_em: new Date().toISOString(),
-        analise_editada_manualmente: false,
-      })
-      .eq('id', parseInt(params.id))
-      .select();
-
-    if (error) throw error;
-
-    return NextResponse.json({ 
-      artigo: data?.[0],
-      mensagem: 'Análise gerada com sucesso. Você pode editar antes de aprovar.'
-    });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  if (erroArtigo || !artigo) {
+    return NextResponse.json({ error: 'Artigo não encontrado' }, { status: 404 })
   }
+
+  // TODO: integrar skill /legal-moreira:analise-juridica
+  const analiseGerada = `[ANÁLISE PENDENTE]\n\nNotícia: ${artigo.title}\nFonte: ${artigo.source_name ?? 'desconhecida'}\nData: ${new Date().toLocaleDateString('pt-BR')}\n\nUse o painel de revisão para gerar a análise jurídica.`
+
+  const { data, error } = await supabase
+    .from('articles')
+    .update({
+      analise_texto: analiseGerada,
+      analise_editada_manualmente: false,
+    })
+    .eq('id', params.id)
+    .select()
+    .single()
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  return NextResponse.json({
+    artigo: data,
+    mensagem: 'Análise gerada. Edite antes de aprovar.',
+  })
 }

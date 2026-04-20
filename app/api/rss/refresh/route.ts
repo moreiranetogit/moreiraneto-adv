@@ -32,8 +32,8 @@ export async function GET(req: NextRequest) {
     // 1. Carregar fontes ativas
     const { data: fontes, error: fontesError } = await supabase
       .from('rss_sources')
-      .select('*')
-      .eq('ativo', true)
+      .select('id, name, url, category')
+      .eq('active', true)
 
     if (fontesError) throw fontesError
 
@@ -52,12 +52,6 @@ export async function GET(req: NextRequest) {
     // 2. Processar cada fonte
     for (const fonte of fontes) {
       try {
-        // Ignorar se tipo é web (necessitaria web scraping)
-        if (fonte.tipo === 'web') {
-          console.log(`[RSS] Pulando ${fonte.nome} (web scraping não implementado)`)
-          continue
-        }
-
         // Buscar feed RSS
         const feed = await parser.parseURL(fonte.url)
 
@@ -68,7 +62,7 @@ export async function GET(req: NextRequest) {
             .from('articles')
             .select('id')
             .eq('title', item.title || 'Sem título')
-            .eq('source_name', fonte.nome)
+            .eq('source_name', fonte.name)
             .single()
 
           if (existing) {
@@ -91,9 +85,9 @@ export async function GET(req: NextRequest) {
               slug: slug + '-' + Date.now(),
               excerpt: item.content?.slice(0, 200) || item.description?.slice(0, 200) || '',
               content: item.content || item.description || '',
-              source_name: fonte.nome,
+              source_name: fonte.name,
               source_url: item.link || '',
-              category: mapCategory(fonte.categoria_id),
+              category: fonte.category,
               image_url: null,
               status: 'pending',
               published_at: item.pubDate ? new Date(item.pubDate).toISOString() : new Date().toISOString(),
@@ -113,18 +107,18 @@ export async function GET(req: NextRequest) {
         // Atualizar última busca
         await supabase
           .from('rss_sources')
-          .update({ ultima_busca: new Date().toISOString() })
+          .update({ last_fetched: new Date().toISOString() })
           .eq('id', fonte.id)
 
         resultados.push({
-          fonte: fonte.nome,
+          fonte: fonte.name,
           status: 'ok',
           artigos_processados: Math.min(feed.items.length, 10),
         })
       } catch (err) {
-        console.error(`[RSS] Erro ao processar ${fonte.nome}:`, err)
+        console.error(`[RSS] Erro ao processar ${fonte.name}:`, err)
         resultados.push({
-          fonte: fonte.nome,
+          fonte: fonte.name,
           status: 'erro',
           erro: String(err),
         })
@@ -149,17 +143,3 @@ export async function GET(req: NextRequest) {
   }
 }
 
-/**
- * Mapear ID de categoria para slug
- */
-function mapCategory(categoria_id?: number | null): string {
-  const map: Record<number, string> = {
-    1: 'agrario',
-    2: 'civil',
-    3: 'trabalhista',
-    4: 'familia',
-    5: 'animal',
-    6: 'advocacia',
-  }
-  return map[categoria_id || 6] || 'advocacia'
-}

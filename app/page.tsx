@@ -16,23 +16,23 @@ const COLORS = {
   preto: '#000000',
 };
 
-const FONT_FAMILY = "'Sitka Text', Georgia, 'Times New Roman', serif";
+const FONT_SERIF = 'var(--font-serif)';
 
 interface Noticia {
   id: string;
-  titulo: string;
+  title: string;
   slug: string;
-  categoria: string;
-  data_publicacao: string;
+  category: string;
+  published_at: string;
 }
 
 const NAV_ITEMS = [
   { label: 'Início', href: '#home' },
   { label: 'Quem Somos', href: '#about' },
   { label: 'Áreas de Atuação', href: '#areas' },
-  { label: 'Radar Jurídico', href: '/radar-juridico' },
+  { label: 'Notícias e Opiniões', href: '/noticias-e-opinioes' },
   { label: 'Adoção AMAA', href: '/amaa' },
-  { label: 'Denúncia de Maus-Tratos', href: '/amaa/denuncia' },
+  { label: 'Denúncia de Maus-Tratos', href: '/amaa#denuncia' },
   { label: 'Contato', href: '#contact' },
 ];
 
@@ -86,7 +86,7 @@ export default function HomePage() {
       style={{
         backgroundColor: COLORS.areia,
         color: COLORS.cinzaEscuro,
-        fontFamily: FONT_FAMILY,
+        fontFamily: FONT_SERIF,
       }}
     >
       {/* ========== HEADER PREMIUM - CHUMBO ========== */}
@@ -291,7 +291,7 @@ export default function HomePage() {
                         flexShrink: 0,
                       }}
                     >
-                      • {noticia.titulo}
+                      • {noticia.title}
                     </span>
                   ))}
                   {noticias.map((noticia, idx) => (
@@ -303,7 +303,7 @@ export default function HomePage() {
                         flexShrink: 0,
                       }}
                     >
-                      • {noticia.titulo}
+                      • {noticia.title}
                     </span>
                   ))}
                 </>
@@ -494,7 +494,7 @@ export default function HomePage() {
               Buscamos soluções eficientes, dentro da lei e ajustadas à realidade de nossos clientes.
             </p>
             <Link
-              href="/radar-juridico"
+              href="/noticias-e-opinioes"
               style={{
                 display: 'inline-block',
                 padding: '12px 24px',
@@ -515,7 +515,7 @@ export default function HomePage() {
                 e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              Leia Radar Jurídico →
+              Notícias e Opiniões →
             </Link>
           </div>
 
@@ -812,7 +812,7 @@ export default function HomePage() {
             opacity: 0.6,
           }}
         >
-          <p>© 2024 O Moreira Neto Advocacia. Todos os direitos reservados.</p>
+          <p>© {new Date().getFullYear()} Moreira Neto Advocacia. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>

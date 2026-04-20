@@ -1,75 +1,151 @@
-'use client';
+import { requireRole } from '@/lib/auth'
+import { createClient } from '@/lib/supabase/server'
+import Link from 'next/link'
+import ArticleActions from './ArticleActions'
+import { CATEGORY_LABELS } from '@/types'
+import { formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+import type { Article } from '@/types'
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Plus, Search, Eye, Trash2 } from 'lucide-react';
+export const revalidate = 0
 
-const COLORS = {
-  dourado: '#E8941F',
-  branco: '#FFFFFF',
-  areia: '#F5E6D3',
-  cinzaClaro: '#D3D3D3',
-  cinzaEscuro: '#2D2D2D',
-  cinzaMedio: '#666666',
-  preto: '#000000',
-  vermelho: '#EF4444',
-  verde: '#10B981',
-};
+const STATUS_LABELS: Record<string, string> = {
+  pending:   'Pendente',
+  published: 'Publicado',
+  rejected:  'Rejeitado',
+}
 
-const FONT_FAMILY = "'Sitka Text', Georgia, 'Times New Roman', serif";
+const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
+  pending:   { bg: '#FEF3C7', text: '#92400E' },
+  published: { bg: '#D1FAE5', text: '#065F46' },
+  rejected:  { bg: '#FEE2E2', text: '#991B1B' },
+}
 
-export default function AdminArtigosPage() {
-  const [artigos, setArtigos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [adicionandoManual, setAdicionandoManual] = useState(false);
+export default async function AdminArtigosPage() {
+  await requireRole(['admin', 'editor'])
+  const supabase = await createClient()
 
-  useEffect(() => {
-    // TODO: Buscar artigos do Supabase
-    setLoading(false);
-  }, []);
+  const { data: artigos } = await supabase
+    .from('articles')
+    .select('id, title, category, status, source_name, published_at, created_at, read_count')
+    .order('created_at', { ascending: false })
+    .limit(100)
 
-  return (
-    <div style={{ backgroundColor: COLORS.areia, color: COLORS.cinzaEscuro, fontFamily: FONT_FAMILY, minHeight: '100vh' }}>
-      <header style={{ backgroundColor: COLORS.cinzaEscuro, color: COLORS.branco, padding: '20px', borderBottom: `3px solid ${COLORS.dourado}` }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-          <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '8px' }}>📰 Painel Editorial</h1>
-          <p style={{ fontSize: '14px', opacity: 0.8 }}>Gerencie notícias jurídicas e análises</p>
+  const pendentes = (artigos ?? []).filter(a => a.status === 'pending')
+  const publicados = (artigos ?? []).filter(a => a.status === 'published')
+  const rejeitados = (artigos ?? []).filter(a => a.status === 'rejected')
+
+  function ArtigoRow({ artigo }: { artigo: Article }) {
+    const statusColor = STATUS_COLORS[artigo.status] ?? STATUS_COLORS.pending
+    const categoryLabel = CATEGORY_LABELS[artigo.category as keyof typeof CATEGORY_LABELS] ?? artigo.category
+
+    return (
+      <div
+        className="flex items-center gap-4 py-3 px-4 border-b last:border-0"
+        style={{ borderColor: '#E5E7EB' }}
+      >
+        <div className="flex-1 min-w-0">
+          <Link
+            href={`/admin/artigos/${artigo.id}`}
+            className="font-semibold text-sm leading-snug hover:opacity-70 transition-opacity line-clamp-1"
+            style={{ color: '#2D2D2D' }}
+          >
+            {artigo.title}
+          </Link>
+          <p className="text-xs mt-0.5" style={{ color: '#666666' }}>
+            {artigo.source_name && <span>{artigo.source_name} · </span>}
+            <span
+              className="inline-block px-1.5 py-0.5 rounded text-xs font-medium mr-1"
+              style={{ backgroundColor: '#E8941F20', color: '#E8941F' }}
+            >
+              {categoryLabel}
+            </span>
+            {artigo.created_at && formatDistanceToNow(new Date(artigo.created_at), { locale: ptBR, addSuffix: true })}
+          </p>
         </div>
-      </header>
 
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '32px 20px' }}>
-        <div style={{ display: 'flex', gap: '16px', marginBottom: '32px' }}>
-          <button style={{ backgroundColor: COLORS.dourado, color: COLORS.cinzaEscuro, padding: '10px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px' }} onClick={() => setAdicionandoManual(!adicionandoManual)}>
-            <Plus size={18} /> Adicionar Notícia
-          </button>
-        </div>
+        <span
+          className="flex-shrink-0 text-xs font-semibold px-2 py-1 rounded-full"
+          style={{ backgroundColor: statusColor.bg, color: statusColor.text }}
+        >
+          {STATUS_LABELS[artigo.status] ?? artigo.status}
+        </span>
 
-        {adicionandoManual && (
-          <div style={{ backgroundColor: COLORS.branco, borderRadius: '8px', padding: '24px', marginBottom: '32px', border: `2px solid ${COLORS.dourado}` }}>
-            <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '16px' }}>Adicionar Notícia Manual</h2>
-            <form onSubmit={(e) => { e.preventDefault(); /* TODO: Enviar para API */ }}>
-              <div style={{ display: 'grid', gap: '16px' }}>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '4px', fontSize: '12px', fontWeight: '600' }}>Título</label>
-                  <input type="text" required style={{ width: '100%', padding: '10px 12px', border: `1px solid ${COLORS.cinzaClaro}`, borderRadius: '6px', fontSize: '14px', boxSizing: 'border-box' }} placeholder="Título da notícia" />
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '4px', fontSize: '12px', fontWeight: '600' }}>Descrição</label>
-                  <textarea style={{ width: '100%', padding: '10px 12px', border: `1px solid ${COLORS.cinzaClaro}`, borderRadius: '6px', fontSize: '14px', boxSizing: 'border-box', minHeight: '80px' }} placeholder="Resumo da notícia" />
-                </div>
-                <div style={{ display: 'flex', gap: '12px' }}>
-                  <button type="submit" style={{ backgroundColor: COLORS.verde, color: COLORS.branco, border: 'none', padding: '10px 20px', borderRadius: '6px', fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}>Adicionar</button>
-                  <button type="button" onClick={() => setAdicionandoManual(false)} style={{ backgroundColor: COLORS.cinzaClaro, color: COLORS.cinzaEscuro, border: 'none', padding: '10px 20px', borderRadius: '6px', fontSize: '14px', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        )}
-
-        <div style={{ backgroundColor: COLORS.branco, borderRadius: '8px', padding: '40px', textAlign: 'center', opacity: 0.6 }}>
-          {loading ? 'Carregando notícias...' : 'Nenhuma notícia encontrada. Adicione uma para começar!'}
+        <div className="flex-shrink-0">
+          <ArticleActions articleId={artigo.id} currentStatus={artigo.status} />
         </div>
       </div>
+    )
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-black" style={{ color: '#2D2D2D' }}>
+            Fila Editorial
+          </h1>
+          <p className="text-sm mt-1" style={{ color: '#666666' }}>
+            {pendentes.length} pendente{pendentes.length !== 1 ? 's' : ''} de revisão
+          </p>
+        </div>
+      </div>
+
+      {/* Pendentes */}
+      {pendentes.length > 0 && (
+        <div
+          className="rounded-xl border mb-6 overflow-hidden"
+          style={{ borderColor: '#E8941F40', backgroundColor: '#FFFFFF' }}
+        >
+          <div className="px-4 py-3 border-b" style={{ borderColor: '#E5E7EB', backgroundColor: '#FEF3C7' }}>
+            <h2 className="text-sm font-bold" style={{ color: '#92400E' }}>
+              Aguardando revisão ({pendentes.length})
+            </h2>
+          </div>
+          {pendentes.map(a => <ArtigoRow key={a.id} artigo={a as Article} />)}
+        </div>
+      )}
+
+      {pendentes.length === 0 && (
+        <div
+          className="rounded-xl border p-8 text-center mb-6"
+          style={{ borderColor: '#E5E7EB', backgroundColor: '#FFFFFF' }}
+        >
+          <p className="text-sm" style={{ color: '#666666' }}>
+            Nenhum artigo pendente. A fila está em dia.
+          </p>
+        </div>
+      )}
+
+      {/* Publicados recentes */}
+      {publicados.length > 0 && (
+        <div
+          className="rounded-xl border mb-6 overflow-hidden"
+          style={{ borderColor: '#E5E7EB', backgroundColor: '#FFFFFF' }}
+        >
+          <div className="px-4 py-3 border-b" style={{ borderColor: '#E5E7EB' }}>
+            <h2 className="text-sm font-bold" style={{ color: '#666666' }}>
+              Publicados recentemente ({publicados.length})
+            </h2>
+          </div>
+          {publicados.slice(0, 10).map(a => <ArtigoRow key={a.id} artigo={a as Article} />)}
+        </div>
+      )}
+
+      {/* Rejeitados */}
+      {rejeitados.length > 0 && (
+        <div
+          className="rounded-xl border overflow-hidden"
+          style={{ borderColor: '#E5E7EB', backgroundColor: '#FFFFFF' }}
+        >
+          <div className="px-4 py-3 border-b" style={{ borderColor: '#E5E7EB' }}>
+            <h2 className="text-sm font-bold" style={{ color: '#666666' }}>
+              Rejeitados ({rejeitados.length})
+            </h2>
+          </div>
+          {rejeitados.slice(0, 5).map(a => <ArtigoRow key={a.id} artigo={a as Article} />)}
+        </div>
+      )}
     </div>
-  );
+  )
 }

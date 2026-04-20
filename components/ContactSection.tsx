@@ -9,7 +9,7 @@ const COLORS = {
   cinzaMedio: '#666666',
 };
 
-const FONT_FAMILY = "'Sitka Text', Georgia, 'Times New Roman', serif";
+const FONT_SERIF = 'var(--font-serif)';
 const WHATSAPP_NUMBER = '5546999779865'; // Número real do escritório
 const EMAIL = 'contato@moreiraneto.adv.br';
 
@@ -34,7 +34,7 @@ export default function ContactSection({ subject }: ContactSectionProps) {
         backgroundColor: COLORS.cinzaEscuro,
         color: COLORS.branco,
         padding: '4rem 1rem',
-        fontFamily: FONT_FAMILY,
+        fontFamily: FONT_SERIF,
       }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>

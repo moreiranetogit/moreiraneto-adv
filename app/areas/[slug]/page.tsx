@@ -14,7 +14,7 @@ const COLORS = {
   preto: '#000000',
 };
 
-const FONT_FAMILY = "'Sitka Text', Georgia, 'Times New Roman', serif";
+const FONT_SERIF = 'var(--font-serif)';
 
 export default async function AreaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -31,7 +31,7 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
       style={{
         backgroundColor: COLORS.areia,
         color: COLORS.cinzaEscuro,
-        fontFamily: FONT_FAMILY,
+        fontFamily: FONT_SERIF,
       }}
     >
       {/* ========== HEADER ========== */}
