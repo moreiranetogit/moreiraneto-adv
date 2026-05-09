@@ -3,6 +3,27 @@ import { ChevronRight, Mail } from 'lucide-react';
 import { getAreaBySlug, getAllAreasSlug, AREAS } from '@/lib/conteudo-areas';
 import { notFound } from 'next/navigation';
 import ContactSection from '@/components/ContactSection';
+import type { Metadata } from 'next';
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> }
+): Promise<Metadata> {
+  const { slug } = await params;
+  const area = getAreaBySlug(slug);
+  if (!area) return { title: 'Área não encontrada' };
+
+  return {
+    title: `${area.titulo} — Moreira Neto Advocacia`,
+    description: area.descricaoCurta,
+    keywords: [area.titulo, 'advogado', 'advocacia', 'Realeza', 'Paraná', 'Moreira Neto'],
+    openGraph: {
+      title: `${area.titulo} | Moreira Neto Advocacia`,
+      description: area.descricaoCurta,
+      url: `https://moreiraneto.adv.br/areas/${slug}`,
+    },
+  };
+}
+
 
 const COLORS = {
   dourado: '#E8941F',
