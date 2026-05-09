@@ -3,11 +3,13 @@ import Link from 'next/link'
 import type { UserRole } from '@/types'
 
 const NAV_ITEMS: { href: string; label: string; icon: string; roles: UserRole[] }[] = [
-  { href: '/admin',         label: 'Dashboard',     icon: '📊', roles: ['admin', 'editor'] },
-  { href: '/admin/artigos', label: 'Fila de Artigos',icon: '📰', roles: ['admin', 'editor'] },
-  { href: '/admin/amaa',    label: 'AMAA — Animais', icon: '🐾', roles: ['admin', 'editor', 'voluntaria_amaa'] },
-  { href: '/admin/fontes',  label: 'Fontes RSS',     icon: '📡', roles: ['admin'] },
-  { href: '/admin/usuarios',label: 'Usuários',       icon: '👤', roles: ['admin'] },
+  { href: '/admin',                  label: 'Dashboard',          icon: '📊', roles: ['admin', 'editor'] },
+  { href: '/admin/artigos',          label: 'Fila de Artigos',    icon: '📰', roles: ['admin', 'editor'] },
+  { href: '/admin/amaa',             label: 'AMAA — Animais',     icon: '🐾', roles: ['admin', 'editor', 'voluntaria_amaa'] },
+  { href: '/admin/amaa/interests',   label: 'Interesses de Adoção',icon: '❤️', roles: ['admin', 'editor'] },
+  { href: '/admin/denuncias',        label: 'Denúncias',          icon: '⚠️', roles: ['admin', 'editor'] },
+  { href: '/admin/fontes',           label: 'Fontes RSS',         icon: '📡', roles: ['admin'] },
+  { href: '/admin/usuarios',         label: 'Usuários',           icon: '👤', roles: ['admin'] },
 ]
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
