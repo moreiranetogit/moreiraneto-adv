@@ -69,7 +69,7 @@ export default function ContactSection({ subject }: ContactSectionProps) {
               height="300"
               style={{ border: 0 }}
               loading="lazy"
-              allowFullScreen=""
+              allowFullScreen
               referrerPolicy="no-referrer-when-downgrade"
               src={mapsEmbed}
               title="Localização do Moreira Neto Advocacia"

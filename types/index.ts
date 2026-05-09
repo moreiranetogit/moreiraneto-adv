@@ -81,9 +81,11 @@ export interface Article {
   status:        ArticleStatus
   featured:      boolean
   read_count:    number
-  published_at:  string | null
-  created_at:    string
-  updated_at:    string
+  published_at:               string | null
+  created_at:                 string
+  updated_at:                 string
+  analise_texto:              string | null
+  analise_editada_manualmente: boolean | null
 }
 
 export interface RSSSource {

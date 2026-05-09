@@ -1,10 +1,12 @@
 import { createClient } from '@supabase/supabase-js'
+import { createClient as createServerClient } from '@/lib/supabase/server'
+import { requireRole } from '@/lib/auth'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Supabase client (public)
+// Cliente público (anon) — usado apenas no POST (submissão pública)
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
 // Configuração do WhatsApp
@@ -206,35 +208,18 @@ async function notificarAdminFallback(
  * GET /api/amaa/adoption-interests
  * Lista interesses (apenas para admin/editor)
  */
-export async function GET(request: NextRequest) {
-  try {
-    // Verificar autenticação (implementar via proxy.ts)
-    const authorization = request.headers.get('authorization')
-    if (!authorization) {
-      return NextResponse.json(
-        { error: 'Não autorizado' },
-        { status: 401 }
-      )
-    }
+export async function GET(_request: NextRequest) {
+  await requireRole(['admin', 'editor'])
 
-    const { data: interests, error } = await supabase
-      .from('interesses_adocao')
-      .select('*')
-      .order('created_at', { ascending: false })
+  const serverSupabase = await createServerClient()
+  const { data: interests, error } = await serverSupabase
+    .from('interesses_adocao')
+    .select('*')
+    .order('created_at', { ascending: false })
 
-    if (error) {
-      return NextResponse.json(
-        { error: 'Erro ao buscar interesses' },
-        { status: 500 }
-      )
-    }
-
-    return NextResponse.json(interests)
-  } catch (error) {
-    console.error('Erro ao buscar interesses:', error)
-    return NextResponse.json(
-      { error: 'Erro ao processar requisição' },
-      { status: 500 }
-    )
+  if (error) {
+    return NextResponse.json({ error: 'Erro ao buscar interesses' }, { status: 500 })
   }
+
+  return NextResponse.json(interests)
 }

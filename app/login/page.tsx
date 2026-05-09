@@ -17,6 +17,8 @@ function LoginForm() {
   const [error, setError] = useState(
     errorParam === 'conta_inativa' ? 'Conta desativada. Contate o administrador.' : ''
   )
+  const [resetMode, setResetMode] = useState(false)
+  const [resetSent, setResetSent] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -35,9 +37,39 @@ function LoginForm() {
       return
     }
 
-    // Middleware vai redirecionar baseado na role
     router.push(redirect)
     router.refresh()
+  }
+
+  async function handleResetPassword(e: React.FormEvent) {
+    e.preventDefault()
+    if (!email.trim()) {
+      setError('Digite seu e-mail para receber o link de recuperação.')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    const supabase = createClient()
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(
+      email.trim(),
+      { redirectTo: `${window.location.origin}/login?reset=true` }
+    )
+
+    setLoading(false)
+
+    if (resetError) {
+      setError('Erro ao enviar e-mail. Tente novamente.')
+      return
+    }
+
+    setResetSent(true)
+  }
+
+  const inputStyle = {
+    background: '#09090B',
+    border: '1.5px solid #3F3F46',
   }
 
   return (
@@ -66,82 +98,155 @@ function LoginForm() {
           background: '#18181B',
           border: '1px solid #3F3F46',
         }}>
-          <form onSubmit={handleSubmit} className="space-y-4">
 
-            <div>
-              <label htmlFor="login-email" className="block text-xs font-semibold mb-1.5 uppercase tracking-wide"
-                style={{ color: '#9CA3AF' }}>
-                E-mail
-              </label>
-              <input
-                id="login-email"
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                autoComplete="email"
-                placeholder="seu@email.com"
-                className="w-full px-3 py-2.5 rounded-lg text-sm text-white outline-none transition-all"
-                style={{
-                  background: '#09090B',
-                  border: '1.5px solid #3F3F46',
-                }}
-                onFocus={e => e.target.style.borderColor = '#E8941F'}
-                onBlur={e => e.target.style.borderColor = '#3F3F46'}
-              />
+          {/* ── Recuperação enviada ── */}
+          {resetSent ? (
+            <div className="text-center space-y-4">
+              <div className="text-4xl">📬</div>
+              <p className="text-white font-semibold">Link enviado!</p>
+              <p className="text-sm" style={{ color: '#9CA3AF' }}>
+                Verifique sua caixa de entrada em <strong className="text-white">{email}</strong>.
+                O link expira em 1 hora.
+              </p>
+              <button
+                onClick={() => { setResetSent(false); setResetMode(false) }}
+                className="text-sm hover:underline"
+                style={{ color: '#E8941F' }}
+              >
+                ← Voltar ao login
+              </button>
             </div>
 
-            <div>
-              <div className="flex justify-between items-center mb-1.5">
-                <label htmlFor="login-password" className="text-xs font-semibold uppercase tracking-wide"
+          /* ── Modo recuperação de senha ── */
+          ) : resetMode ? (
+            <form onSubmit={handleResetPassword} className="space-y-4">
+              <div>
+                <p className="text-sm text-white font-semibold mb-3">Recuperar senha</p>
+                <label htmlFor="reset-email" className="block text-xs font-semibold mb-1.5 uppercase tracking-wide"
                   style={{ color: '#9CA3AF' }}>
-                  Senha
+                  Seu e-mail
                 </label>
-                {/* TODO: implementar recuperação de senha */}
-                <button type="button" className="text-xs hover:underline"
-                  style={{ color: '#E8941F' }}>
-                  Esqueci a senha
-                </button>
+                <input
+                  id="reset-email"
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                  placeholder="seu@email.com"
+                  className="w-full px-3 py-2.5 rounded-lg text-sm text-white outline-none transition-all"
+                  style={inputStyle}
+                  onFocus={e => e.target.style.borderColor = '#E8941F'}
+                  onBlur={e => e.target.style.borderColor = '#3F3F46'}
+                />
               </div>
-              <input
-                id="login-password"
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                autoComplete="current-password"
-                placeholder="••••••••"
-                className="w-full px-3 py-2.5 rounded-lg text-sm text-white outline-none transition-all"
+
+              {error && (
+                <div className="rounded-lg px-3 py-2.5 text-sm"
+                  style={{ background: '#FEE2E2', color: '#991B1B' }}>
+                  ⚠️ {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 rounded-lg text-sm font-bold transition-all"
                 style={{
-                  background: '#09090B',
-                  border: '1.5px solid #3F3F46',
+                  background: loading ? '#92400E' : '#E8941F',
+                  color: '#fff',
+                  cursor: loading ? 'not-allowed' : 'pointer',
                 }}
-                onFocus={e => e.target.style.borderColor = '#E8941F'}
-                onBlur={e => e.target.style.borderColor = '#3F3F46'}
-              />
-            </div>
+              >
+                {loading ? 'Enviando...' : 'Enviar link de recuperação'}
+              </button>
 
-            {error && (
-              <div className="rounded-lg px-3 py-2.5 text-sm"
-                style={{ background: '#FEE2E2', color: '#991B1B' }}>
-                ⚠️ {error}
+              <button
+                type="button"
+                onClick={() => { setResetMode(false); setError('') }}
+                className="w-full text-sm hover:underline"
+                style={{ color: '#6B7280' }}
+              >
+                ← Voltar ao login
+              </button>
+            </form>
+
+          /* ── Login normal ── */
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+
+              <div>
+                <label htmlFor="login-email" className="block text-xs font-semibold mb-1.5 uppercase tracking-wide"
+                  style={{ color: '#9CA3AF' }}>
+                  E-mail
+                </label>
+                <input
+                  id="login-email"
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                  placeholder="seu@email.com"
+                  className="w-full px-3 py-2.5 rounded-lg text-sm text-white outline-none transition-all"
+                  style={inputStyle}
+                  onFocus={e => e.target.style.borderColor = '#E8941F'}
+                  onBlur={e => e.target.style.borderColor = '#3F3F46'}
+                />
               </div>
-            )}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-2.5 rounded-lg text-sm font-bold transition-all"
-              style={{
-                background: loading ? '#92400E' : '#E8941F',
-                color: '#fff',
-                cursor: loading ? 'not-allowed' : 'pointer',
-              }}
-            >
-              {loading ? 'Entrando...' : 'Entrar'}
-            </button>
+              <div>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label htmlFor="login-password" className="text-xs font-semibold uppercase tracking-wide"
+                    style={{ color: '#9CA3AF' }}>
+                    Senha
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => { setResetMode(true); setError('') }}
+                    className="text-xs hover:underline"
+                    style={{ color: '#E8941F' }}
+                  >
+                    Esqueci a senha
+                  </button>
+                </div>
+                <input
+                  id="login-password"
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  className="w-full px-3 py-2.5 rounded-lg text-sm text-white outline-none transition-all"
+                  style={inputStyle}
+                  onFocus={e => e.target.style.borderColor = '#E8941F'}
+                  onBlur={e => e.target.style.borderColor = '#3F3F46'}
+                />
+              </div>
 
-          </form>
+              {error && (
+                <div className="rounded-lg px-3 py-2.5 text-sm"
+                  style={{ background: '#FEE2E2', color: '#991B1B' }}>
+                  ⚠️ {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 rounded-lg text-sm font-bold transition-all"
+                style={{
+                  background: loading ? '#92400E' : '#E8941F',
+                  color: '#fff',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                }}
+              >
+                {loading ? 'Entrando...' : 'Entrar'}
+              </button>
+
+            </form>
+          )}
         </div>
 
         {/* Voltar ao site */}
