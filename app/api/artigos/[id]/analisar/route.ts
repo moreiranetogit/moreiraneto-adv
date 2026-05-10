@@ -16,15 +16,16 @@ const CATEGORY_LABEL: Record<ArticleCategory, string> = {
 
 export async function POST(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await requireRole(['admin', 'editor'])
   const supabase = await createClient()
+  const { id } = await params
 
   const { data: artigo, error: erroArtigo } = await supabase
     .from('articles')
     .select('id, title, excerpt, content, source_name, category')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (erroArtigo || !artigo) {
@@ -74,7 +75,7 @@ ${conteudo.slice(0, 3000)}
         analise_texto: analiseGerada,
         analise_editada_manualmente: false,
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single()
 
