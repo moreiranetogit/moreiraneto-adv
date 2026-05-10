@@ -27,7 +27,7 @@ export default async function AdminArtigosPage() {
 
   const { data: artigos } = await supabase
     .from('articles')
-    .select('id, title, category, status, source_name, published_at, created_at, read_count')
+    .select('id, title, category, status, source_name, published_at, created_at, read_count, origem')
     .order('created_at', { ascending: false })
     .limit(100)
 
@@ -52,14 +52,22 @@ export default async function AdminArtigosPage() {
           >
             {artigo.title}
           </Link>
-          <p className="text-xs mt-0.5" style={{ color: '#666666' }}>
+          <p className="text-xs mt-0.5 flex items-center gap-1.5 flex-wrap" style={{ color: '#666666' }}>
             {artigo.source_name && <span>{artigo.source_name} · </span>}
             <span
-              className="inline-block px-1.5 py-0.5 rounded text-xs font-medium mr-1"
+              className="inline-block px-1.5 py-0.5 rounded text-xs font-medium"
               style={{ backgroundColor: '#E8941F20', color: '#E8941F' }}
             >
               {categoryLabel}
             </span>
+            {(artigo as Article & { origem?: string }).origem === 'paa_radar' && (
+              <span
+                className="inline-block px-1.5 py-0.5 rounded text-xs font-bold"
+                style={{ backgroundColor: '#7C3AED20', color: '#7C3AED' }}
+              >
+                🤖 PAA/Radar
+              </span>
+            )}
             {artigo.created_at && formatDistanceToNow(new Date(artigo.created_at), { locale: ptBR, addSuffix: true })}
           </p>
         </div>

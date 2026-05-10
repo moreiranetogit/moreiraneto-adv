@@ -6,6 +6,8 @@ export type UserRole = 'admin' | 'editor' | 'voluntaria_amaa'
 
 export type ArticleStatus = 'pending' | 'published' | 'rejected'
 
+export type ArticleOrigem = 'rss' | 'paa_radar' | 'manual'
+
 export type AnimalStatus = 'pending' | 'published' | 'adopted' | 'rejected'
 
 export type DenunciaStatus = 'nova' | 'em_apuracao' | 'encerrada'
@@ -86,6 +88,13 @@ export interface Article {
   updated_at:                 string
   analise_texto:              string | null
   analise_editada_manualmente: boolean | null
+  // Campos PAA/Radar
+  origem:               ArticleOrigem | null
+  tags:                 string[] | null
+  destaque:             boolean | null
+  comentario_editorial: string | null
+  status_fonte:         string | null
+  status_etica:         string | null
 }
 
 export interface RSSSource {
