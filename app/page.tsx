@@ -39,12 +39,12 @@ const NAV_ITEMS = [
 // AREAS importado de lib/conteudo-areas.ts
 
 const DIFERENCIAIS = [
-  'Experiência de 20+ anos em Direito Agrário e Agronegócio',
-  'Equipe especializada em conformidade rural',
-  'Atendimento personalizado e estratégico',
-  'Soluções criativas dentro da lei',
-  'Foco em eficiência e redução de custos',
-  'Conhecimento profundo do mercado local',
+  'Direito Agrário e do Agronegócio, com vivência real do campo',
+  'Trabalhista, Civil, Família e Direito Animal',
+  'Assessoria empresarial — do contrato à estratégia',
+  'IA e tecnologia aplicadas à pesquisa jurídica',
+  'Raízes locais no Sudoeste do Paraná',
+  'Atendimento em inglês para questões internacionais',
 ];
 
 export default function HomePage() {
@@ -468,7 +468,7 @@ export default function HomePage() {
                 letterSpacing: '-1px',
               }}
             >
-              Seja bem vindo ao Moreira Neto Advocacia
+              Advocacia com raízes no campo.
             </h2>
             <p
               style={{
@@ -478,9 +478,9 @@ export default function HomePage() {
                 lineHeight: 1.7,
               }}
             >
-              Somos um escritório de advocacia especializado em Direito Agrário, Agronegócio e assessoria jurídica
-              completa. Desde nossa fundação, atendemos produtores rurais, cooperativas e empresas com soluções
-              estratégicas e criativas.
+              Fomos formados nos tribunais de Brasília e nos corredores das grandes Varas. Quando optamos por viver
+              no interior, o contato com produtores rurais, empresários e famílias do Sudoeste do Paraná nos mostrou
+              o que o Direito pode ser quando sai do papel e encontra a vida real — especialmente a vida do campo.
             </p>
             <p
               style={{
@@ -490,8 +490,9 @@ export default function HomePage() {
                 lineHeight: 1.7,
               }}
             >
-              Nossa abordagem combina profundo conhecimento do mercado local com expertise jurídica de alto nível.
-              Buscamos soluções eficientes, dentro da lei e ajustadas à realidade de nossos clientes.
+              Hoje combinamos essa vivência local com ferramentas de inteligência artificial e pesquisa jurídica de
+              ponta, levando a cada caso a precisão técnica que antes era privilégio dos grandes escritórios das
+              capitais.
             </p>
             <Link
               href="/noticias-e-opinioes"
@@ -740,7 +741,7 @@ export default function HomePage() {
               O Moreira Neto
             </h4>
             <p style={{ fontSize: '14px', opacity: 0.8, lineHeight: 1.6 }}>
-              Advocacia especializada em Direito Agrário, Agronegócio e assessoria jurídica completa.
+              Advocacia no Sudoeste do Paraná, com experiência em Direito Agrário, Trabalhista, Civil, de Família, Animal e Empresarial.
             </p>
           </div>
 
