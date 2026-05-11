@@ -59,7 +59,7 @@ export default function HomePage() {
 
   const carregarNoticias = async () => {
     try {
-      const res = await fetch('/api/noticias?limit=5');
+      const res = await fetch('/api/noticias?limit=4');
       if (res.ok) {
         const data = await res.json();
         setNoticias(data);
