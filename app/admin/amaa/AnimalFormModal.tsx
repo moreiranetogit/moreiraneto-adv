@@ -291,4 +291,16 @@ export default function AnimalFormModal() {
                     Cancelar
                   </button>
                   <button type="submit" disabled={saving}
-                    className="flex-1 bg-emerald-700 hover:bg-emerald-600 disabled:bg-emeral
+                    className="flex-1 bg-emerald-700 hover:bg-emerald-600 disabled:bg-emerald-900 disabled:opacity-60 text-white font-semibold py-3 rounded-xl text-sm transition-colors">
+                    {saving ? '⏳ Salvando...' : '✓ Cadastrar Animal'}
+                  </button>
+                </div>
+
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  )
+}

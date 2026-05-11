@@ -32,7 +32,7 @@ const NAV_ITEMS = [
   { label: 'Áreas de Atuação', href: '#areas' },
   { label: 'Notícias e Opiniões', href: '/noticias-e-opinioes' },
   { label: 'Adoção AMAA', href: '/amaa' },
-  { label: 'Denúncia de Maus-Tratos', href: '/amaa#denuncia' },
+  { label: 'Denúncia de Maus-Tratos', href: '/denuncia' },
   { label: 'Contato', href: '#contact' },
 ];
 
@@ -59,7 +59,7 @@ export default function HomePage() {
 
   const carregarNoticias = async () => {
     try {
-      const res = await fetch('/api/noticias?limit=5');
+      const res = await fetch('/api/noticias?limit=4');
       if (res.ok) {
         const data = await res.json();
         setNoticias(data);

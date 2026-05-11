@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import type { Metadata } from 'next'
 import {
   CATEGORY_LABELS,
   CATEGORY_COLORS,
@@ -14,6 +15,25 @@ import {
 
 export const revalidate = 300
 
+export async function generateMetadata(
+  { params }: { params: Promise<{ categoria: string }> }
+): Promise<Metadata> {
+  const { categoria } = await params
+  const category = CATEGORY_SLUGS[categoria] as ArticleCategory | undefined
+  if (!category) return { title: 'Categoria não encontrada' }
+
+  const label = CATEGORY_LABELS[category]
+  return {
+    title: `${label} — Notícias e Opiniões | Moreira Neto Advocacia`,
+    description: `Notícias, análises e atualizações jurídicas sobre ${label}. Portal de conteúdo da Moreira Neto Advocacia.`,
+    openGraph: {
+      title: `${label} | Notícias e Opiniões — MNA`,
+      description: `Acompanhe as últimas notícias sobre ${label}.`,
+      url: `https://moreiraneto.adv.br/noticias-e-opinioes/${categoria}`,
+    },
+  }
+}
+
 interface Props {
   params: Promise<{ categoria: string }>
   searchParams: Promise<{ page?: string }>
@@ -23,15 +43,6 @@ export async function generateStaticParams() {
   return Object.keys(CATEGORY_SLUGS).map(slug => ({ categoria: slug }))
 }
 
-export async function generateMetadata({ params }: Props) {
-  const { categoria } = await params
-  const category = CATEGORY_SLUGS[categoria]
-  if (!category) return {}
-  return {
-    title: CATEGORY_LABELS[category],
-    description: `Notícias jurídicas sobre ${CATEGORY_LABELS[category]} — Despacho, por MNA`,
-  }
-}
 
 const PAGE_SIZE = 18
 

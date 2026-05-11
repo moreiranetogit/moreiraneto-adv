@@ -6,10 +6,11 @@ const VALID_CATEGORIES = new Set(['agrario', 'civil', 'trabalhista', 'familia', 
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await requireRole(['admin'])
   const supabase = await createClient()
+  const { id } = await params
   const body = await req.json()
   const { name, url, site_url, category, active } = body
 
@@ -28,7 +29,7 @@ export async function PATCH(
   const { data, error } = await supabase
     .from('rss_sources')
     .update(updateData)
-    .eq('id', params.id)
+    .eq('id', id)
     .select()
     .single()
 
@@ -42,14 +43,15 @@ export async function PATCH(
 
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await requireRole(['admin'])
   const supabase = await createClient()
+  const { id } = await params
   const { error } = await supabase
     .from('rss_sources')
     .delete()
-    .eq('id', params.id)
+    .eq('id', id)
 
   if (error) {
     console.error('[DELETE /api/rss/fontes/[id]]', error)

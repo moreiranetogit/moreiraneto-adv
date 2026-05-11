@@ -6,14 +6,15 @@ const VALID_STATUSES = new Set(['pending', 'published', 'rejected'])
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await requireRole(['admin', 'editor'])
   const supabase = await createClient()
+  const { id } = await params
   const { data, error } = await supabase
     .from('articles')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
   if (error || !data) return NextResponse.json({ error: 'Artigo não encontrado' }, { status: 404 })
   return NextResponse.json(data)
@@ -21,10 +22,11 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await requireRole(['admin', 'editor'])
   const supabase = await createClient()
+  const { id } = await params
   const body = await req.json()
 
   const updates: Record<string, unknown> = {}
@@ -42,7 +44,7 @@ export async function PATCH(
   const { data, error } = await supabase
     .from('articles')
     .update(updates)
-    .eq('id', params.id)
+    .eq('id', id)
     .select()
     .single()
 
@@ -52,14 +54,15 @@ export async function PATCH(
 
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await requireRole(['admin', 'editor'])
   const supabase = await createClient()
+  const { id } = await params
   const { error } = await supabase
     .from('articles')
     .update({ status: 'rejected' })
-    .eq('id', params.id)
+    .eq('id', id)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json({ success: true })

@@ -163,7 +163,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
       {/* ── BANNER AMAA ── */}
       <div className="text-center text-xs font-bold py-1.5 tracking-wide"
         style={{ background: '#DC2626', color: '#fff' }}>
-        <Link href="/amaa#denuncia" className="hover:underline">
+        <Link href="/denuncia" className="hover:underline">
           🚨 DENUNCIE MAUS-TRATOS A ANIMAIS — Anônimo · Gratuito · 24h &rarr; Saiba como
         </Link>
       </div>

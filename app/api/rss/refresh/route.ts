@@ -17,13 +17,18 @@ const parser = new Parser()
  */
 export async function GET(req: NextRequest) {
   try {
-    // Verificar secret (proteção básica contra uso não autorizado)
-    const secret = req.nextUrl.searchParams.get('secret')
     if (!process.env.CRON_SECRET) {
       console.error('[RSS Refresh] CRON_SECRET não configurado!')
       return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
     }
-    if (secret !== process.env.CRON_SECRET) {
+
+    // Aceita ?secret= (uso manual) ou Authorization: Bearer (Vercel Cron)
+    const querySecret = req.nextUrl.searchParams.get('secret')
+    const authHeader = req.headers.get('authorization')
+    const bearerSecret = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
+    const valid = querySecret === process.env.CRON_SECRET || bearerSecret === process.env.CRON_SECRET
+
+    if (!valid) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
