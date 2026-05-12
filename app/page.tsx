@@ -39,11 +39,11 @@ const NAV_ITEMS = [
 // AREAS importado de lib/conteudo-areas.ts
 
 const DIFERENCIAIS = [
-  'Direito Agrário e do Agronegócio, com vivência real do campo',
+  'Direito Agrário, Agronegócio e relações com o campo',
   'Trabalhista, Civil, Família e Direito Animal',
-  'Assessoria empresarial — do contrato à estratégia',
+  'Assessoria empresarial e patronal',
   'IA e tecnologia aplicadas à pesquisa jurídica',
-  'Raízes locais no Sudoeste do Paraná',
+  'Comunicação direta — sem juridiquês',
   'Atendimento em inglês para questões internacionais',
 ];
 
@@ -468,7 +468,7 @@ export default function HomePage() {
                 letterSpacing: '-1px',
               }}
             >
-              Advocacia com raízes no campo.
+              Advocacia estratégica, comunicação sem juridiquês.
             </h2>
             <p
               style={{
@@ -478,9 +478,10 @@ export default function HomePage() {
                 lineHeight: 1.7,
               }}
             >
-              Fomos formados nos tribunais de Brasília e nos corredores das grandes Varas. Quando optamos por viver
-              no interior, o contato com produtores rurais, empresários e famílias do Sudoeste do Paraná nos mostrou
-              o que o Direito pode ser quando sai do papel e encontra a vida real — especialmente a vida do campo.
+              Com trajetória iniciada nos tribunais de Brasília e consolidada no Sudoeste do Paraná, aprendemos
+              que cada problema jurídico tem uma história — e que entender essa história é o que permite encontrar
+              o caminho mais inteligente. Atendemos produtores rurais, empresários e famílias que precisam de
+              orientação clara, não de pareceres ininteligíveis.
             </p>
             <p
               style={{
@@ -490,9 +491,9 @@ export default function HomePage() {
                 lineHeight: 1.7,
               }}
             >
-              Hoje combinamos essa vivência local com ferramentas de inteligência artificial e pesquisa jurídica de
-              ponta, levando a cada caso a precisão técnica que antes era privilégio dos grandes escritórios das
-              capitais.
+              A estratégia é desenvolvida caso a caso. O suporte de inteligência artificial e pesquisa jurídica de
+              ponta garante que nenhum detalhe seja deixado de lado — e que você receba a melhor orientação
+              disponível, aqui mesmo no interior.
             </p>
             <Link
               href="/noticias-e-opinioes"
