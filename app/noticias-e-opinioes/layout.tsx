@@ -53,7 +53,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-14">
 
-            {/* Logo + Nome */}
+            {/* Logo + Wordmark */}
             <Link href="/noticias-e-opinioes" className="flex items-center gap-3">
               {/* Monograma MN */}
               <div className="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-black"
@@ -61,11 +61,15 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                 <span style={{ color: '#9CA3AF' }}>M</span>
                 <span style={{ color: '#E8941F' }}>N</span>
               </div>
-              <div>
-                <span className="font-black text-base tracking-tight"
-                  style={{ color: 'var(--header-text)' }}>
-                  Notícias e Opiniões
-                </span>
+              <div className="leading-tight">
+                <div className="font-black text-sm tracking-widest uppercase"
+                  style={{ color: 'var(--header-text)', letterSpacing: '0.12em' }}>
+                  RADAR JURÍDICO
+                </div>
+                <div className="text-xs font-semibold tracking-wide"
+                  style={{ color: '#E8941F' }}>
+                  por MNA
+                </div>
               </div>
             </Link>
 
@@ -160,14 +164,6 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         )}
       </header>
 
-      {/* ── BANNER AMAA ── */}
-      <div className="text-center text-xs font-bold py-1.5 tracking-wide"
-        style={{ background: '#DC2626', color: '#fff' }}>
-        <Link href="/denuncia" className="hover:underline">
-          🚨 DENUNCIE MAUS-TRATOS A ANIMAIS — Anônimo · Gratuito · 24h &rarr; Saiba como
-        </Link>
-      </div>
-
       {/* ── CONTEÚDO ── */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         {children}
@@ -178,7 +174,10 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         className="mt-12 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <p className="text-sm font-bold mb-1" style={{ color: '#E8941F' }}>
-            Despacho, por MNA
+            Radar Jurídico MNA
+          </p>
+          <p className="text-xs mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>
+            Inteligência jurídica para o sudoeste paranaense
           </p>
           <p className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>
             Portal de notícias jurídicas da Moreira Neto Advocacia · Realeza/PR ·{' '}

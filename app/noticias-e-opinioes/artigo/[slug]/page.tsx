@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// Página de Artigo Individual — Portal Despacho
+// Página de Artigo Individual — Radar Jurídico MNA
 // moreiraneto.adv.br/noticias-e-opinioes/artigo/[slug]
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -64,10 +64,10 @@ async function getRelacionados(category: string, excludeId: string): Promise<Art
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const artigo = await getArtigo(params.slug)
-  if (!artigo) return { title: 'Artigo não encontrado — Despacho' }
+  if (!artigo) return { title: 'Artigo não encontrado — Radar Jurídico MNA' }
 
   return {
-    title: `${artigo.title} — Despacho, por MNA`,
+    title: `${artigo.title} — Radar Jurídico MNA`,
     description: artigo.excerpt ?? undefined,
     openGraph: {
       title: artigo.title,
@@ -129,7 +129,7 @@ export default async function ArtigoPage({ params }: Params) {
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm mb-6" style={{ color: 'var(--color-muted)' }}>
           <Link href="/noticias-e-opinioes" className="hover:text-accent transition-colors">
-            Despacho
+            Radar Jurídico
           </Link>
           <span>/</span>
           <Link
@@ -210,8 +210,7 @@ export default async function ArtigoPage({ params }: Params) {
             {/* Conteúdo do artigo */}
             {artigo.content ? (
               <div
-                className="prose prose-sm max-w-none"
-                style={{ color: 'var(--color-text)' }}
+                className="radar-prose"
                 dangerouslySetInnerHTML={{ __html: htmlContent }}
               />
             ) : (
@@ -325,7 +324,7 @@ export default async function ArtigoPage({ params }: Params) {
               </div>
             )}
 
-            {/* Box Despacho */}
+            {/* Box Radar Jurídico MNA */}
             <div
               className="rounded-xl p-4 text-center border"
               style={{
@@ -337,16 +336,16 @@ export default async function ArtigoPage({ params }: Params) {
                 className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-black text-lg mx-auto mb-3"
                 style={{ backgroundColor: '#E8941F' }}
               >
-                M
+                R
               </div>
               <p
                 className="text-sm font-bold mb-1"
                 style={{ color: 'var(--color-text)' }}
               >
-                Despacho, por MNA
+                Radar Jurídico MNA
               </p>
               <p className="text-xs mb-3" style={{ color: 'var(--color-muted)' }}>
-                Notícias jurídicas selecionadas para o sudoeste paranaense.
+                Inteligência jurídica para o sudoeste paranaense.
               </p>
               <Link
                 href="/noticias-e-opinioes"

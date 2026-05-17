@@ -113,6 +113,180 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   PORTAL — RADAR PROSE (article body typography)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.radar-prose {
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--color-text);
+}
+.radar-prose p { margin-bottom: 1.25em; }
+.radar-prose h2 {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: 1.3rem;
+  margin: 1.8em 0 0.6em;
+  color: var(--color-text);
+}
+.radar-prose h3 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 1.5em 0 0.5em;
+  color: var(--color-text);
+}
+.radar-prose blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--color-muted);
+  margin: 1.5em 0;
+}
+.radar-prose ul,
+.radar-prose ol {
+  padding-left: 1.5em;
+  margin-bottom: 1.25em;
+}
+.radar-prose li { margin-bottom: 0.4em; }
+.radar-prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.radar-prose img {
+  border-radius: 8px;
+  margin: 1.5em 0;
+  max-width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PORTAL — RADAR ARTICLE META (source/date line)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.radar-article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  margin-bottom: 1.5rem;
+}
+
+.radar-article-meta .meta-sep {
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: var(--color-border);
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PORTAL — SECTION DIVIDER with label
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.radar-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.radar-section-header .accent-bar {
+  display: block;
+  width: 4px;
+  height: 1.25rem;
+  border-radius: 9999px;
+  background-color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.radar-section-header h2 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PORTAL — NEWS CARD image overlay gradient
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.news-card-img-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.news-card-img-wrap .category-badge-overlay {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PORTAL — BREADCRUMB
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.radar-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.radar-breadcrumb a {
+  color: var(--color-muted);
+  transition: color 0.15s;
+}
+
+.radar-breadcrumb a:hover {
+  color: var(--color-accent);
+}
+
+.radar-breadcrumb .sep {
+  color: var(--color-border);
+  user-select: none;
+}
+
+.radar-breadcrumb .current {
+  color: var(--color-text);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 260px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PORTAL — SECTION HEADER (orange left-border label)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 1.25rem;
+  border-radius: 9999px;
+  background-color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    ADMIN PANEL
    ═══════════════════════════════════════════════════════════════════════════ */
 

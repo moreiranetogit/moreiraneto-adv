@@ -24,10 +24,10 @@ export async function generateMetadata(
 
   const label = CATEGORY_LABELS[category]
   return {
-    title: `${label} — Notícias e Opiniões | Moreira Neto Advocacia`,
-    description: `Notícias, análises e atualizações jurídicas sobre ${label}. Portal de conteúdo da Moreira Neto Advocacia.`,
+    title: `${label} — Radar Jurídico MNA | Moreira Neto Advocacia`,
+    description: `Notícias, análises e atualizações jurídicas sobre ${label}. Radar Jurídico MNA — inteligência jurídica para o sudoeste paranaense.`,
     openGraph: {
-      title: `${label} | Notícias e Opiniões — MNA`,
+      title: `${label} | Radar Jurídico MNA`,
       description: `Acompanhe as últimas notícias sobre ${label}.`,
       url: `https://moreiraneto.adv.br/noticias-e-opinioes/${categoria}`,
     },

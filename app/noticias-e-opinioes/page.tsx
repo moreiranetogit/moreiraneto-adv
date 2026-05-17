@@ -66,9 +66,12 @@ function timeAgo(dateStr: string | null) {
 }
 
 function CategoryBadge({ category }: { category: ArticleCategory }) {
+  const color = CATEGORY_COLORS[category]
   return (
-    <span className="category-badge text-white text-xs"
-      style={{ background: CATEGORY_COLORS[category] }}>
+    <span
+      className="category-badge"
+      style={{ backgroundColor: color + '22', color }}
+    >
       {CATEGORY_LABELS[category].replace('Direito ', '')}
     </span>
   )
@@ -77,20 +80,21 @@ function CategoryBadge({ category }: { category: ArticleCategory }) {
 function NewsCard({ article, size = 'md' }: { article: Article; size?: 'lg' | 'md' | 'sm' }) {
   const isLg = size === 'lg'
   const isSm = size === 'sm'
+  const color = CATEGORY_COLORS[article.category]
 
   return (
     <Link href={`/noticias-e-opinioes/artigo/${article.slug ?? article.id}`} className="news-card block group">
       {!isSm && (
-        <div className="relative overflow-hidden" style={{ aspectRatio: isLg ? '16/7' : '16/9' }}>
+        <div className="news-card-img-wrap" style={{ aspectRatio: isLg ? '16/7' : '16/9' }}>
           {article.image_url ? (
             <Image src={article.image_url} alt={article.title} fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
               sizes={isLg ? '800px' : '400px'} />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-4xl"
-              style={{ background: CATEGORY_COLORS[article.category] + '20' }}>📰</div>
+              style={{ background: color + '18' }}>📰</div>
           )}
-          <div className="absolute top-3 left-3">
+          <div className="category-badge-overlay">
             <CategoryBadge category={article.category} />
           </div>
         </div>
@@ -98,14 +102,16 @@ function NewsCard({ article, size = 'md' }: { article: Article; size?: 'lg' | 'm
       <div className={`p-4 ${isSm ? 'flex gap-3 items-start' : ''}`}>
         {isSm && (
           <div style={{ width: 8, height: 8, borderRadius: '50%',
-            background: CATEGORY_COLORS[article.category], marginTop: 6, flexShrink: 0 }} />
+            background: color, marginTop: 6, flexShrink: 0 }} />
         )}
-        <div>
+        <div className="flex-1 min-w-0">
           {isSm && <CategoryBadge category={article.category} />}
-          <h3 className={`font-bold leading-snug mt-1 mb-2 group-hover:text-amber-600 transition-colors
-            ${isLg ? 'text-xl' : isSm ? 'text-sm' : 'text-base'}`}
-            style={{ color: 'var(--color-text)' }}>
-            {article.title}
+          <h3
+            className={`font-bold leading-snug mt-1 mb-2 transition-colors
+              ${isLg ? 'text-xl' : isSm ? 'text-sm' : 'text-base'}`}
+            style={{ color: 'var(--color-text)' }}
+          >
+            <span className="group-hover:opacity-75 transition-opacity">{article.title}</span>
           </h3>
           {!isSm && article.excerpt && (
             <p className="text-sm leading-relaxed line-clamp-2 mb-3" style={{ color: 'var(--color-muted)' }}>
@@ -113,8 +119,8 @@ function NewsCard({ article, size = 'md' }: { article: Article; size?: 'lg' | 'm
             </p>
           )}
           <div className="flex items-center justify-between text-xs" style={{ color: 'var(--color-muted)' }}>
-            <span>{article.source_name}</span>
-            <span>{timeAgo(article.published_at)}</span>
+            <span className="truncate mr-2">{article.source_name}</span>
+            <span className="flex-shrink-0">{timeAgo(article.published_at)}</span>
           </div>
         </div>
       </div>
@@ -194,8 +200,11 @@ export default async function PortalHomePage({ searchParams }: Props) {
         {/* DESTAQUES */}
         {featured.length > 0 && (
           <section>
-            <h2 className="text-xs font-bold uppercase tracking-widest mb-4"
-              style={{ color: 'var(--color-muted)' }}>Em Destaque</h2>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-1 h-5 rounded-full" style={{ background: '#E8941F' }} />
+              <h2 className="text-sm font-bold uppercase tracking-widest"
+                style={{ color: 'var(--color-text)' }}>Em Destaque</h2>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {featured[0] && (
                 <div className="md:col-span-2">
@@ -249,7 +258,7 @@ export default async function PortalHomePage({ searchParams }: Props) {
         {Object.keys(byCategory).length === 0 && (
           <div className="text-center py-20">
             <p className="text-4xl mb-4">📰</p>
-            <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>Portal em configuração</h2>
+            <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>Radar Jurídico MNA em configuração</h2>
             <p className="text-sm" style={{ color: 'var(--color-muted)' }}>
               As notícias aparecerão aqui após a primeira sincronização RSS.
             </p>
