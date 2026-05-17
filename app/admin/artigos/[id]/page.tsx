@@ -94,7 +94,7 @@ export default function ArtigoReviewPage() {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          status: 'publicado',
+          status: 'published',
           analise_texto: analise,
           analise_editada_manualmente: true,
         }),
@@ -386,6 +386,67 @@ export default function ArtigoReviewPage() {
                   </p>
                 </div>
               </div>
+
+              {/* Card PAA/Radar — só aparece quando origem = paa_radar */}
+              {artigo.origem === 'paa_radar' && (
+                <div style={{
+                  backgroundColor: '#F5F3FF',
+                  borderRadius: '8px',
+                  padding: '16px',
+                  marginBottom: '16px',
+                  border: '1px solid #DDD6FE',
+                }}>
+                  <p style={{
+                    fontSize: '11px', fontWeight: '700', textTransform: 'uppercase',
+                    letterSpacing: '0.08em', color: '#7C3AED', marginBottom: '10px',
+                  }}>
+                    🤖 Enviado pelo Radar/PAA
+                  </p>
+                  {artigo.comentario_editorial && (
+                    <div style={{ marginBottom: '10px' }}>
+                      <p style={{ fontSize: '11px', fontWeight: '600', color: '#6D28D9', marginBottom: '4px' }}>
+                        Comentário do agente:
+                      </p>
+                      <p style={{ fontSize: '13px', lineHeight: 1.6, color: '#1F1A24' }}>
+                        {artigo.comentario_editorial}
+                      </p>
+                    </div>
+                  )}
+                  {artigo.tags && artigo.tags.length > 0 && (
+                    <div style={{ marginBottom: '10px' }}>
+                      <p style={{ fontSize: '11px', fontWeight: '600', color: '#6D28D9', marginBottom: '4px' }}>Tags:</p>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                        {artigo.tags.map((tag: string) => (
+                          <span key={tag} style={{
+                            background: '#EDE9FE', color: '#5B21B6', fontSize: '11px',
+                            fontWeight: '600', padding: '2px 8px', borderRadius: '999px',
+                          }}>{tag}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                    {artigo.status_fonte && (
+                      <div>
+                        <p style={{ fontSize: '10px', color: '#7C3AED', fontWeight: '700', marginBottom: '2px' }}>Fonte</p>
+                        <span style={{
+                          fontSize: '12px', fontWeight: '600',
+                          color: artigo.status_fonte === 'aprovado' ? '#065F46' : '#92400E',
+                        }}>{artigo.status_fonte}</span>
+                      </div>
+                    )}
+                    {artigo.status_etica && (
+                      <div>
+                        <p style={{ fontSize: '10px', color: '#7C3AED', fontWeight: '700', marginBottom: '2px' }}>Ética</p>
+                        <span style={{
+                          fontSize: '12px', fontWeight: '600',
+                          color: artigo.status_etica === 'aprovado' ? '#065F46' : '#92400E',
+                        }}>{artigo.status_etica}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Card de Ações */}
               <div style={{
