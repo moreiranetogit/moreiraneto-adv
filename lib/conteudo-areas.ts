@@ -28,13 +28,13 @@ export const AREAS: Area[] = [
     id: '1',
     slug: 'direito-agrario',
     titulo: 'Direito Agrário',
-    descricaoCurta: 'Assessoria completa em negócios rurais, arrendamento, parceria agrícola e financiamento.',
+    descricaoCurta: 'Arrendamento, financiamento rural, compra e venda de terras — e saídas estratégicas quando a dívida aperta.',
     imagem: '/mna-direito-agrario.png',
     cor: '#8B7355',
     introducao: [
       'O Direito Agrário é a especialidade que sustenta a economia rural e o desenvolvimento do agronegócio. Para produtores, cooperativas e empresas rurais, ter uma assessoria jurídica especializada não é luxo — é necessidade. No Moreira Neto, entendemos os desafios únicos do produtor rural: desde a negociação de contratos até a gestão de dívidas em momentos de crise, passando por financiamentos complexos e parcerias que precisam estar blindadas legalmente.',
       'Nossa abordagem é estratégica: buscamos soluções antes do litígio. Quando as dificuldades aparecem — e aparecem — oferecemos desde renegociações extrajudiciais até processos de recuperação judicial, sempre focando em manter seu negócio em funcionamento. Não é sobre vencer em juízo; é sobre garantir que você continue produzindo.',
-      'Há mais de 20 anos atuamos nessa área, conhecendo cada detalhe da legislação rural, as jurisprudências que mais impactam produtores e as estratégias que funcionam na prática. Somos locais, entendemos a realidade de Realeza e região.',
+      'Conhecemos a legislação rural em detalhe, as jurisprudências que mais impactam produtores e as estratégias que funcionam na prática. Atuamos em Realeza e entendemos a realidade da região.',
     ],
     questoes: [
       {
@@ -103,7 +103,7 @@ export const AREAS: Area[] = [
     id: '2',
     slug: 'direito-civil',
     titulo: 'Direito Civil',
-    descricaoCurta: 'Consultoria em contratos, sucessões, responsabilidade civil e questões patrimoniais.',
+    descricaoCurta: 'Contratos, heranças, responsabilidade civil e patrimônio — orientação clara antes que o problema vire processo.',
     imagem: '/mna-area-civil-web.jpg',
     cor: '#4A90E2',
     introducao: [
@@ -173,11 +173,11 @@ export const AREAS: Area[] = [
     id: '3',
     slug: 'direito-trabalho',
     titulo: 'Direito do Trabalho',
-    descricaoCurta: 'Defesa trabalhista, cumprimento de NR-31 e conformidade regulatória rural.',
+    descricaoCurta: 'Conformidade trabalhista, defesa em ações e relações de trabalho — para empresa e para o trabalhador.',
     imagem: '/mna-area-trabalhista.jpg',
     cor: '#F5A623',
     introducao: [
-      'No meio rural, a relação entre patrão e empregado é especial: muitas vezes são gerações de trabalho junto, relações de confiança que vão além do contrato. Mas confiança não substitui legalidade. Conformidade com leis trabalhistas — especialmente a NR-31 (norma de segurança do trabalho rural) — é obrigatória e complexa.',
+      'Relações de trabalho no campo têm especificidades próprias: sazonalidade, trabalho eventual, NR-31, vínculos de longa data que cruzam a linha do formal e do informal. Conformidade é obrigatória — e mais complexa do que parece.',
       'Para o produtor ou empresa rural, estar em dia com trabalhadores significa: menos ações trabalhistas, menos multas, menos stress. Para o trabalhador rural, ter direitos reconhecidos é dignidade. No Moreira Neto, atuamos nos dois lados com inteligência: ajudamos empresas a se regularizarem sem quebrantar, e defendemos trabalhadores quando necessário.',
       'Nossa abordagem é sempre estratégica: antes de ir a juízo, tentamos resolver pela negociação. Um acordo bem feito economiza custas e permite que ambos saiam da relação de forma respeitosa.',
     ],
@@ -231,7 +231,7 @@ export const AREAS: Area[] = [
         descricao: 'Quando precisamos processar, sabemos os caminhos rápidos. Recursos bem estruturados, argumentação clara, documentação impecável.',
       },
       {
-        titulo: 'Especialização em Contexto Rural',
+        titulo: 'Conhecimento do contexto rural',
         descricao: 'NR-31, relações especiais do trabalho rural, particularidades da zona agrícola. Não somos generalistas.',
       },
       {
@@ -244,7 +244,7 @@ export const AREAS: Area[] = [
     id: '4',
     slug: 'direito-familia',
     titulo: 'Direito de Família',
-    descricaoCurta: 'Assistência em separações, heranças, guarda e acordos familiares.',
+    descricaoCurta: 'Separações, guarda de filhos, pensão e herança — resolvidos com estratégia, sem transformar família em campo de batalha.',
     imagem: '/mna-area-familia-web.jpg',
     cor: '#E94B3C',
     introducao: [
@@ -319,11 +319,11 @@ export const AREAS: Area[] = [
     id: '5',
     slug: 'direito-animal',
     titulo: 'Direito Animal',
-    descricaoCurta: 'Proteção animal, denúncia de maus-tratos e conformidade legal com bem-estar animal.',
+    descricaoCurta: 'Denúncia de maus-tratos, guarda de pets e proteção jurídica para animais e seus responsáveis.',
     imagem: '/mna-area-animal-web.jpg',
     cor: '#7ED321',
     introducao: [
-      'Proteção animal não é luxo nem sentimentalismo — é questão de lei, dignidade e responsabilidade. No Brasil, maus-tratos a animais são crime (Lei Araçoiaba, Lei de Proteção Animal). Para donos de pets, criar e cuidar de animais de estimação é privilégio que vem com obrigações legais.',
+      'Proteção animal não é luxo nem sentimentalismo — é questão de lei, dignidade e responsabilidade. No Brasil, maus-tratos a animais são crime, com pena de reclusão para o abusador. Para donos de pets, cuidar bem é direito — e obrigação legal.',
       'O Moreira Neto, ao lado da AMAA (Associação de Amigos dos Animais de Realeza/PR), oferece assessoria jurídica completa em direito animal: desde denúncia estratégica de maus-tratos até suporte a vítimas de abusos contra seus pets, passando por regulamentação de guarda e ações de indenização.',
     ],
     questoes: [
@@ -368,7 +368,7 @@ export const AREAS: Area[] = [
     ],
     diferenciais: [
       {
-        titulo: 'Especialização + Sensibilidade',
+        titulo: 'Conhecimento técnico e sensibilidade',
         descricao: 'Não tratamos animal como propriedade desimportante. Entendemos que é ser vivo que merece proteção legal.',
       },
       {
@@ -389,7 +389,7 @@ export const AREAS: Area[] = [
     id: '6',
     slug: 'direito-geral',
     titulo: 'Direito Geral',
-    descricaoCurta: 'Consultoria em diversos temas jurídicos e assessoria administrativa.',
+    descricaoCurta: 'Orientação jurídica clara para situações que não cabem em uma categoria — do consumidor ao empresário.',
     imagem: '/mna-area-geral-web.jpg',
     cor: '#9B59B6',
     introducao: [
