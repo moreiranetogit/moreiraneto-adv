@@ -127,19 +127,12 @@ export default async function ArtigoPage({ params }: Params) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
 
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm mb-6" style={{ color: 'var(--color-muted)' }}>
-          <Link href="/noticias-e-opinioes" className="hover:text-accent transition-colors">
-            Radar Jurídico
-          </Link>
-          <span>/</span>
-          <Link
-            href={`/noticias-e-opinioes/${artigo.category}`}
-            className="hover:text-accent transition-colors"
-          >
-            {categoryLabel}
-          </Link>
-          <span>/</span>
-          <span className="truncate max-w-xs">{artigo.title}</span>
+        <nav className="radar-breadcrumb">
+          <Link href="/noticias-e-opinioes">Radar Jurídico</Link>
+          <span className="sep">/</span>
+          <Link href={`/noticias-e-opinioes/${artigo.category}`}>{categoryLabel}</Link>
+          <span className="sep">/</span>
+          <span className="current">{artigo.title}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-10">
@@ -166,33 +159,48 @@ export default async function ArtigoPage({ params }: Params) {
             </h1>
 
             {/* Meta: data, fonte, leituras */}
-            <div className="flex flex-wrap items-center gap-4 mb-6 text-sm" style={{ color: 'var(--color-muted)' }}>
+            <div className="radar-article-meta">
               {publishedAt && (
                 <time dateTime={artigo.published_at ?? ''} title={publishedAt}>
                   📅 {timeAgo}
                 </time>
               )}
+              {publishedAt && artigo.source_name && <span className="meta-sep" />}
               {artigo.source_name && (
                 <span>
-                  📰 {artigo.source_name}
+                  {artigo.source_url ? (
+                    <a
+                      href={artigo.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline"
+                      style={{ color: 'var(--color-accent)' }}
+                    >
+                      {artigo.source_name}
+                    </a>
+                  ) : artigo.source_name}
                 </span>
               )}
               {artigo.read_count > 0 && (
-                <span>👁️ {artigo.read_count.toLocaleString('pt-BR')} leituras</span>
+                <>
+                  <span className="meta-sep" />
+                  <span>👁 {artigo.read_count.toLocaleString('pt-BR')} leituras</span>
+                </>
               )}
             </div>
 
             {/* Excerpt em destaque */}
             {artigo.excerpt && (
-              <div
-                className="text-base leading-relaxed border-l-4 pl-4 mb-6 italic"
+              <blockquote
+                className="text-base leading-relaxed border-l-4 pl-4 mb-6 italic rounded-r-lg py-2"
                 style={{
                   borderColor: categoryColor,
                   color: 'var(--color-muted)',
+                  background: categoryColor + '08',
                 }}
               >
                 {artigo.excerpt}
-              </div>
+              </blockquote>
             )}
 
             {/* Imagem principal */}

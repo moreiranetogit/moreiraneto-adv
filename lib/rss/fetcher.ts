@@ -14,7 +14,7 @@ const parser = new Parser({
   },
   timeout: 10000,
   headers: {
-    'User-Agent': 'Despacho/MNA RSS Reader (+https://moreiraneto.adv.br)',
+    'User-Agent': 'RadarJuridico/MNA RSS Reader (+https://moreiraneto.adv.br)',
   },
 })
 

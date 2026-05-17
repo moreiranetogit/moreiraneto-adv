@@ -46,7 +46,7 @@ export default async function AdminDashboard() {
           Dashboard Editorial
         </h1>
         <p className="text-sm mt-1" style={{ color: 'var(--color-muted, #6B7280)' }}>
-          Despacho, por MNA — visão geral do portal
+          Radar Jurídico MNA — visão geral do portal
         </p>
       </div>
 

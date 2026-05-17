@@ -38,7 +38,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               <span style={{ color: '#E8941F' }}>N</span>
             </div>
             <div>
-              <p className="text-sm font-bold text-white leading-none">Despacho</p>
+              <p className="text-sm font-bold text-white leading-none">Radar Jurídico</p>
               <p className="text-xs" style={{ color: '#E8941F' }}>por MNA</p>
             </div>
           </Link>

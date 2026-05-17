@@ -71,21 +71,28 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
 
   return (
     <div>
+      {/* Breadcrumb */}
+      <nav className="radar-breadcrumb">
+        <Link href="/noticias-e-opinioes">Radar Jurídico</Link>
+        <span className="sep">/</span>
+        <span className="current">{label}</span>
+      </nav>
+
       {/* Cabeçalho */}
-      <div className="mb-8 pb-4" style={{ borderBottom: `3px solid ${color}` }}>
+      <div className="mb-8 pb-5" style={{ borderBottom: `3px solid ${color}` }}>
         <div className="flex items-center gap-2 mb-1">
-          <div className="w-3 h-3 rounded-full" style={{ background: color }} />
+          <div className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />
           <span className="text-xs font-bold uppercase tracking-wider"
             style={{ color: 'var(--color-muted)' }}>
-            Categoria
+            Radar Jurídico MNA
           </span>
         </div>
-        <h1 className="text-3xl font-black" style={{ color: 'var(--color-text)' }}>
+        <h1 className="text-3xl font-black mt-1" style={{ color: 'var(--color-text)' }}>
           {label}
         </h1>
         {count !== null && (
           <p className="text-sm mt-1" style={{ color: 'var(--color-muted)' }}>
-            {count} notícias publicadas
+            {count} {count === 1 ? 'notícia publicada' : 'notícias publicadas'}
           </p>
         )}
       </div>
@@ -100,20 +107,30 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
                 href={`/noticias-e-opinioes/artigo/${article.slug ?? article.id}`}
                 className="news-card block group"
               >
-                {article.image_url ? (
-                  <div className="relative" style={{ aspectRatio: '16/9' }}>
+                <div className="news-card-img-wrap" style={{ aspectRatio: '16/9' }}>
+                  {article.image_url ? (
                     <Image src={article.image_url} alt={article.title}
                       fill className="object-cover transition-transform group-hover:scale-105" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-3xl"
+                      style={{ background: color + '15' }}>
+                      📰
+                    </div>
+                  )}
+                  <div className="category-badge-overlay">
+                    <span
+                      className="category-badge"
+                      style={{ backgroundColor: color + '22', color }}
+                    >
+                      {label.replace('Direito ', '')}
+                    </span>
                   </div>
-                ) : (
-                  <div className="flex items-center justify-center text-3xl"
-                    style={{ aspectRatio: '16/9', background: color + '15' }}>
-                    📰
-                  </div>
-                )}
+                </div>
                 <div className="p-4">
-                  <h2 className="font-bold text-base leading-snug mb-2 group-hover:text-amber-600 transition-colors line-clamp-3"
-                    style={{ color: 'var(--color-text)' }}>
+                  <h2
+                    className="font-bold text-base leading-snug mb-2 line-clamp-3 transition-opacity group-hover:opacity-75"
+                    style={{ color: 'var(--color-text)' }}
+                  >
                     {article.title}
                   </h2>
                   {article.excerpt && (
@@ -124,8 +141,8 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
                   )}
                   <div className="flex justify-between text-xs"
                     style={{ color: 'var(--color-muted)' }}>
-                    <span>{article.source_name}</span>
-                    <span>
+                    <span className="truncate mr-2">{article.source_name}</span>
+                    <span className="flex-shrink-0">
                       {article.published_at
                         ? formatDistanceToNow(new Date(article.published_at),
                             { addSuffix: true, locale: ptBR })
@@ -139,7 +156,7 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
 
           {/* Paginação */}
           {totalPages > 1 && (
-            <div className="flex justify-center gap-2">
+            <nav className="flex items-center justify-center gap-2 py-6" aria-label="Paginação">
               {page > 1 && (
                 <Link href={`/noticias-e-opinioes/${categoria}?page=${page - 1}`}
                   className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
@@ -151,8 +168,12 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
                   ← Anterior
                 </Link>
               )}
-              <span className="px-4 py-2 rounded-lg text-sm"
-                style={{ color: 'var(--color-muted)' }}>
+              <span className="px-4 py-2 rounded-lg text-sm font-medium"
+                style={{
+                  background: 'var(--color-surface2)',
+                  color: 'var(--color-muted)',
+                  border: '1px solid var(--color-border)',
+                }}>
                 {page} / {totalPages}
               </span>
               {page < totalPages && (
@@ -165,7 +186,7 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
                   Próxima →
                 </Link>
               )}
-            </div>
+            </nav>
           )}
         </>
       ) : (
@@ -175,8 +196,15 @@ export default async function CategoriaPage({ params, searchParams }: Props) {
             Nenhuma notícia ainda
           </h2>
           <p className="text-sm" style={{ color: 'var(--color-muted)' }}>
-            As notícias de {label} aparecerão aqui após a primeira sincronização RSS.
+            As notícias de <strong>{label}</strong> aparecerão aqui após a primeira sincronização RSS.
           </p>
+          <Link
+            href="/noticias-e-opinioes"
+            className="inline-block mt-6 text-sm font-semibold transition-colors hover:opacity-80"
+            style={{ color: 'var(--color-accent)' }}
+          >
+            ← Voltar ao Radar Jurídico
+          </Link>
         </div>
       )}
     </div>

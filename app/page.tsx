@@ -30,7 +30,7 @@ const NAV_ITEMS = [
   { label: 'Início', href: '#home' },
   { label: 'Quem Somos', href: '#about' },
   { label: 'Áreas de Atuação', href: '#areas' },
-  { label: 'Notícias e Opiniões', href: '/noticias-e-opinioes' },
+  { label: 'Radar Jurídico', href: '/noticias-e-opinioes' },
   { label: 'Adoção AMAA', href: '/amaa' },
   { label: 'Denúncia de Maus-Tratos', href: '/denuncia' },
   { label: 'Contato', href: '#contact' },
@@ -517,7 +517,7 @@ export default function HomePage() {
                 e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              Notícias e Opiniões →
+              Radar Jurídico MNA →
             </Link>
           </div>
 

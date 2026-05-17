@@ -1,6 +1,6 @@
 'use client'
 // ═══════════════════════════════════════════════════════════════════════════
-// NewsTicker — Barra de rolagem horizontal com últimas notícias do Despacho
+// NewsTicker — Barra de rolagem horizontal com últimas notícias do Radar Jurídico MNA
 // Recebe array de { title, slug } do Server Component (page.tsx)
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -17,7 +17,7 @@ interface NewsTickerProps {
 
 // Fallback para quando o banco ainda não tem artigos
 const PLACEHOLDER: NoticiaItem[] = [
-  { title: 'Portal Despacho em breve — notícias jurídicas selecionadas para você', slug: '' },
+  { title: 'Radar Jurídico MNA em breve — notícias jurídicas selecionadas para você', slug: '' },
   { title: 'Acompanhe as novidades do Direito Agrário, Civil, Trabalhista e Ambiental', slug: '' },
   { title: 'Moreira Neto Advocacia — Realeza/PR', slug: '' },
 ]
@@ -39,7 +39,7 @@ export default function NewsTicker({ noticias }: NewsTickerProps) {
         href="/noticias-e-opinioes"
         className="flex-shrink-0 bg-gray-900 text-[#E8941F] font-black text-xs uppercase tracking-wider px-4 h-full flex items-center hover:bg-gray-800 transition-colors whitespace-nowrap"
       >
-        📰 Despacho MNA
+        📰 Radar Jurídico
       </Link>
 
       {/* Separador */}

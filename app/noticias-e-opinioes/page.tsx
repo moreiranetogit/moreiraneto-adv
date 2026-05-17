@@ -200,10 +200,9 @@ export default async function PortalHomePage({ searchParams }: Props) {
         {/* DESTAQUES */}
         {featured.length > 0 && (
           <section>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-1 h-5 rounded-full" style={{ background: '#E8941F' }} />
-              <h2 className="text-sm font-bold uppercase tracking-widest"
-                style={{ color: 'var(--color-text)' }}>Em Destaque</h2>
+            <div className="radar-section-header">
+              <span className="accent-bar" />
+              <h2>Em Destaque</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {featured[0] && (
@@ -227,12 +226,12 @@ export default async function PortalHomePage({ searchParams }: Props) {
           return (
             <section key={cat}>
               <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-1 h-5 rounded-full" style={{ background: color }} />
-                  <h2 className="text-base font-bold" style={{ color: 'var(--color-text)' }}>{label}</h2>
+                <div className="radar-section-header mb-0">
+                  <span className="accent-bar" style={{ background: color }} />
+                  <h2 className="text-base font-bold" style={{ color: 'var(--color-text)', letterSpacing: 'normal', textTransform: 'none' }}>{label}</h2>
                 </div>
                 <Link href={`/noticias-e-opinioes/${cat}`}
-                  className="text-xs font-semibold hover:underline" style={{ color }}>
+                  className="text-xs font-semibold hover:underline ml-4" style={{ color }}>
                   Ver todas →
                 </Link>
               </div>
@@ -276,15 +275,16 @@ export default async function PortalHomePage({ searchParams }: Props) {
       {/* Cabeçalho */}
       <div className="flex items-center justify-between mb-6">
         <div>
+          <div className="radar-breadcrumb mb-2">
+            <Link href="/noticias-e-opinioes">Radar Jurídico</Link>
+            <span className="sep">/</span>
+            <span className="current">Todas as notícias</span>
+          </div>
           <h1 className="text-2xl font-black" style={{ color: 'var(--color-text)' }}>Todas as notícias</h1>
           <p className="text-sm mt-0.5" style={{ color: 'var(--color-muted)' }}>
-            {total} notícias publicadas
+            {total} {total === 1 ? 'notícia publicada' : 'notícias publicadas'}
           </p>
         </div>
-        <Link href="/noticias-e-opinioes"
-          className="text-xs font-medium hover:underline" style={{ color: 'var(--color-muted)' }}>
-          ← Página inicial
-        </Link>
       </div>
 
       {/* Grid */}
